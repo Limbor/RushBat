@@ -14,6 +14,7 @@ public class PlayerAnimation : MonoBehaviour
     private int verticalVelocity;
     private int slide;
     private int attack;
+    private int dash;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class PlayerAnimation : MonoBehaviour
         verticalVelocity = Animator.StringToHash("verticalVelocity");
         slide = Animator.StringToHash("slide");
         attack = Animator.StringToHash("attack");
+        dash = Animator.StringToHash("dash");
     }
 
     // Update is called once per frame
@@ -35,9 +37,10 @@ public class PlayerAnimation : MonoBehaviour
     {
         animator.SetFloat(speed, Mathf.Abs(player.xVelocity));
         animator.SetBool(ground, player.isOnGround);
-        animator.SetBool(jump, player.isJumping);
+        animator.SetBool(jump, player.isDoubleJumping);
         animator.SetFloat(verticalVelocity, rb.velocity.y);
         animator.SetBool(slide, player.isSliding);
         animator.SetBool(attack, player.isAttacking);
+        animator.SetBool(dash, player.isDashing);
     }
 }

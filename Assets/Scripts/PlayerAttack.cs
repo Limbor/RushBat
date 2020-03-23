@@ -7,27 +7,15 @@ public class PlayerAttack : MonoBehaviour
     public Transform damagePoint;
     public LayerMask enemyLayer;
 
-    private float scope = 0.5f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private float scope = 0.2f;
 
     public void Damage()
     {
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, scope, enemyLayer);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(damagePoint.position, scope, enemyLayer);
         foreach (Collider2D enemy in enemies)
         {
             // TODO
-            enemy.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            Debug.Log("damage");
         }
     }
 }

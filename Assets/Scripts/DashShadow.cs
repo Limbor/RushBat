@@ -29,7 +29,7 @@ public class DashShadow : MonoBehaviour
         transform.rotation = playerTransform.rotation;
 
         alpha = alphaInit;
-        render.color = new Color(0.5f, 0.5f, 1f, alpha);
+        render.color = new Color(0f, 0f, 0f, alpha);
         activeStart = Time.time;
     }
 
@@ -38,12 +38,12 @@ public class DashShadow : MonoBehaviour
     {
         if(Time.time >= activeStart + activeTime)
         {
-            PoolManager.getInstance().ReturnPool(gameObject);
+            PoolManager.GetInstance().ReturnShadowPool(gameObject);
         }
         else
         {
             alpha *= alphaMultiplier;
-            render.color = new Color(0.5f, 0.5f, 1f, alpha);
+            render.color = new Color(0f, 0f, 0f, alpha);
         }
     }
 }

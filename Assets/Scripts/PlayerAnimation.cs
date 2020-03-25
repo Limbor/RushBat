@@ -15,6 +15,8 @@ public class PlayerAnimation : MonoBehaviour
     private int slide;
     private int attack;
     private int dash;
+    private int skill3;
+    private int skill2;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,8 @@ public class PlayerAnimation : MonoBehaviour
         slide = Animator.StringToHash("slide");
         attack = Animator.StringToHash("attack");
         dash = Animator.StringToHash("dash");
+        skill3 = Animator.StringToHash("skill3");
+        skill2 = Animator.StringToHash("skill2");
     }
 
     // Update is called once per frame
@@ -42,5 +46,15 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool(slide, player.isSliding);
         animator.SetBool(attack, player.isAttacking);
         animator.SetBool(dash, player.isDashing);
+    }
+
+    public void StartSkill3()
+    {
+        animator.SetTrigger(skill3);
+    }
+
+    public void StartSkill2()
+    {
+        animator.SetTrigger(skill2);
     }
 }

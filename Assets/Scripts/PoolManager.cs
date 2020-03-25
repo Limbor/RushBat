@@ -7,49 +7,95 @@ public class PoolManager : MonoBehaviour
     private static PoolManager poolManager;
 
     public GameObject shadowPrefab;
+    public GameObject dustPrefab;
+    public Transform moveDust;
+    public Transform slideDust;
 
     private int shadowCount = 10;
-    private Queue<GameObject> pool;
-
+    private int dustCount = 5;
+    private Queue<GameObject> shadowPool;
+    private Queue<GameObject> dustPool;
 
     private void Awake()
     {
         if (poolManager == null)
         {
             poolManager = this;
-            pool = new Queue<GameObject>();
-            FillPool();
+            shadowPool = new Queue<GameObject>();
+            dustPool = new Queue<GameObject>();
+            FillShadowPool();
+            FillDustPool();
         }
     }
 
-    public static PoolManager getInstance()
+    public static PoolManager GetInstance()
     {
         return poolManager;
     }
 
-    public void FillPool()
+    public void FillShadowPool()
     {
         for (int i = 0; i < shadowCount; i++)
         {
             GameObject gameObject = Instantiate(shadowPrefab);
             gameObject.transform.SetParent(transform);
-            ReturnPool(gameObject);
+            ReturnShadowPool(gameObject);
         }
     }
 
-    public void ReturnPool(GameObject gameObject)
+    public void ReturnShadowPool(GameObject gameObject)
     {
         gameObject.SetActive(false);
-        pool.Enqueue(gameObject);
+        shadowPool.Enqueue(gameObject);
     }
 
-    public void GetObject()
+    public void GetShadowObject()
     {
-        if(pool.Count == 0)
+        if(shadowPool.Count == 0)
         {
-            FillPool();
+            FillShadowPool();
         }
-        GameObject gameObject = pool.Dequeue();
+        GameObject gameObject = shadowPool.Dequeue();
         gameObject.SetActive(true);
-    } 
+    }
+
+    public void FillDustPool()
+    {
+        for (int i = 0; i < dustCount; i++)
+        {
+            GameObject gameObject = Instantiate(dustPrefab);
+            gameObject.transform.SetParent(transform);
+            ReturnDustPool(gameObject);
+        }
+    }
+
+    public void ReturnDustPool(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+        dustPool.Enqueue(gameObject);
+    }
+
+    public void GetDustObject(bool move)
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (dustPool.Count == 0)
+        {
+            FillDustPool();
+        }
+        GameObject gameObject = dustPool.Dequeue();
+        if (move)
+        {
+            gameObject.transform.position = moveDust.transform.position;
+            gameObject.transform.rotation = moveDust.transform.rotation;
+            gameObject.transform.localScale = player.transform.localScale;
+        }
+        else
+        {
+            gameObject.transform.position = slideDust.transform.position;
+            gameObject.transform.rotation = slideDust.transform.rotation;
+            gameObject.transform.localScale = new Vector3(player.transform.localScale.x,
+                slideDust.transform.localScale.y, slideDust.transform.localScale.z);
+        }
+        gameObject.SetActive(true);
+    }
 }

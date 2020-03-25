@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ladder
+  - Treasure
   layers:
   - Default
   - TransparentFX
@@ -47,6 +48,9 @@ TagManager:
     locked: 0
   - name: Environment
     uniqueID: 2605810617
+    locked: 0
+  - name: Enemy
+    uniqueID: 3506969907
     locked: 0
   - name: Player
     uniqueID: 2725101851

@@ -12,16 +12,52 @@ public class PlayerAttack : MonoBehaviour
     public GameObject dart;
 
     private float scope = 0.2f;
+    private bool slowDown = false;
+    private bool isSlashing = false;
+    private float slowDownTime = 0.3f;
     private PlayerMovement player;
+    private Rigidbody2D rb;
+
+    private List<GameObject> damagesEnemies;
 
     //private void OnDrawGizmos()
     //{
-    //    Gizmos.DrawWireSphere(damagePoint.position, scope);
+    //    Gizmos.DrawWireSphere(transform.position, 0.35f);
     //}
 
     private void Start()
     {
         player = GetComponent<PlayerMovement>();
+        rb = GetComponent<Rigidbody2D>();
+
+        damagesEnemies = new List<GameObject>();
+    }
+
+    private void Update()
+    {
+        if(slowDown && Mathf.Abs(rb.velocity.x) >= 0.1f)
+        {
+            rb.velocity = new Vector2(Mathf.Lerp(0f, rb.velocity.x, (slowDownTime-Time.deltaTime)/0.3f), 0);
+        }
+        else if(slowDown)
+        {
+            slowDown = false;
+            slowDownTime = 0.3f;
+        }
+
+        if (isSlashing)
+        {
+            Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, 0.35f, enemyLayer);
+            foreach (Collider2D enemy in enemies)
+            {
+                if (!damagesEnemies.Contains(enemy.gameObject))
+                {
+                    damagesEnemies.Add(enemy.gameObject);
+                    // TODO
+                    Debug.Log("damage");
+                }
+            }
+        }
     }
 
     public void Attack()
@@ -45,5 +81,24 @@ public class PlayerAttack : MonoBehaviour
     {
         dart.transform.position = dartPoint.position;
         dart.SetActive(true);
+    }
+
+    public void Slash()
+    {
+        rb.velocity = new Vector2(player.transform.localScale.x * 5f, 0);
+        isSlashing = true;
+    }
+
+    public void SlashEnd()
+    {
+        slowDown = true;
+        isSlashing = false;
+        damagesEnemies.Clear();
+    }
+
+    public void Recover()
+    {
+        player.canMove = true;
+        player.gameObject.GetComponent<Rigidbody2D>().gravityScale = 1f;
     }
 }

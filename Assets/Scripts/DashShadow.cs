@@ -7,7 +7,7 @@ public class DashShadow : MonoBehaviour
     private Transform playerTransform;
     private SpriteRenderer render;
 
-    public float activeTime = 1f;
+    public float activeTime = 1.5f;
     private float activeStart = 0f;
 
     public float alphaInit;

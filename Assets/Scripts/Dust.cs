@@ -6,6 +6,6 @@ public class Dust : MonoBehaviour
 {
     public void Disappear()
     {
-        gameObject.SetActive(false);
+        PoolManager.GetInstance().ReturnDustPool(gameObject);
     }
 }

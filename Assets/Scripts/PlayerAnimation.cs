@@ -12,11 +12,15 @@ public class PlayerAnimation : MonoBehaviour
     private int ground;
     private int jump;
     private int verticalVelocity;
+    private int ySpeed;
     private int slide;
     private int attack;
     private int dash;
+    private int glide;
+    private int climb;
     private int skill3;
     private int skill2;
+    private int skill4;
 
     // Start is called before the first frame update
     void Start()
@@ -29,11 +33,15 @@ public class PlayerAnimation : MonoBehaviour
         ground = Animator.StringToHash("ground");
         jump = Animator.StringToHash("jump");
         verticalVelocity = Animator.StringToHash("verticalVelocity");
+        ySpeed = Animator.StringToHash("ySpeed");
         slide = Animator.StringToHash("slide");
         attack = Animator.StringToHash("attack");
         dash = Animator.StringToHash("dash");
+        glide = Animator.StringToHash("glide");
+        climb = Animator.StringToHash("climb");
         skill3 = Animator.StringToHash("skill3");
         skill2 = Animator.StringToHash("skill2");
+        skill4 = Animator.StringToHash("skill4");
     }
 
     // Update is called once per frame
@@ -43,9 +51,12 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool(ground, player.isOnGround);
         animator.SetBool(jump, player.isDoubleJumping);
         animator.SetFloat(verticalVelocity, rb.velocity.y);
+        animator.SetFloat(ySpeed, player.yVelocity);
         animator.SetBool(slide, player.isSliding);
         animator.SetBool(attack, player.isAttacking);
         animator.SetBool(dash, player.isDashing);
+        animator.SetBool(glide, player.isGliding);
+        animator.SetBool(climb, player.isClimbing);
     }
 
     public void StartSkill3()
@@ -56,5 +67,10 @@ public class PlayerAnimation : MonoBehaviour
     public void StartSkill2()
     {
         animator.SetTrigger(skill2);
+    }
+
+    public void StartSkill4()
+    {
+        animator.SetTrigger(skill4);
     }
 }

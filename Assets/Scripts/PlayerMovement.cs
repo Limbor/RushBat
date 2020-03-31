@@ -250,8 +250,16 @@ public class PlayerMovement : MonoBehaviour
     private void FlipDirection()
     {
         float direction = rb.velocity.x == 0f ? 0f : (rb.velocity.x > 0 ? 1f : -1f);
-        if(direction != 0)
+        if (direction != 0)
+        {
             transform.localScale = new Vector3(direction, 1, 1);
+        }
+        else
+        {
+            direction = xVelocity == 0f ? 0f : (xVelocity > 0 ? 1f : -1f);
+            if(direction != 0)
+                transform.localScale = new Vector3(direction, 1, 1);
+        }
     }
 
     private void AirMove()

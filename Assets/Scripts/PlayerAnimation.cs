@@ -21,6 +21,9 @@ public class PlayerAnimation : MonoBehaviour
     private int skill3;
     private int skill2;
     private int skill4;
+    private int die;
+
+    public GameObject smoke;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +45,7 @@ public class PlayerAnimation : MonoBehaviour
         skill3 = Animator.StringToHash("skill3");
         skill2 = Animator.StringToHash("skill2");
         skill4 = Animator.StringToHash("skill4");
+        die = Animator.StringToHash("die");
     }
 
     // Update is called once per frame
@@ -72,5 +76,15 @@ public class PlayerAnimation : MonoBehaviour
     public void StartSkill4()
     {
         animator.SetTrigger(skill4);
+    }
+
+    public void Die()
+    {
+        animator.SetTrigger(die);
+    }
+
+    public void StartSmoke()
+    {
+        smoke.SetActive(true);
     }
 }

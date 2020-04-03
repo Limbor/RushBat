@@ -12,16 +12,16 @@ public class PlayerMovement : MonoBehaviour
     private int jumpCount;
 
     private float lastDashTime = -10f;
-    private float dashCoolDown = 2f;
+    private float dashCoolDown;
     private float dashTime = 0.15f;
     private float dashTimeLeft;
 
     private float lastSkill3Time = -10f;
-    private float skill3CoolDown = 5f;
+    private float skill3CoolDown;
     private float lastSkill2Time = -10f;
-    private float skill2CoolDown = 3f;
+    private float skill2CoolDown;
     private float lastSkill4Time = -12f;
-    private float skill4CoolDown = 10f;
+    private float skill4CoolDown;
 
     private bool jumpPressed = false;
     private float jumpPressTime;
@@ -66,6 +66,11 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<PlayerAnimation>();
 
+        dashCoolDown = Player.GetInstance().dashCoolDown;
+        skill2CoolDown = Player.GetInstance().skill1CoolDown;
+        skill3CoolDown = Player.GetInstance().skill2CoolDown;
+        skill4CoolDown = Player.GetInstance().skill3CoolDown;
+
         jumpCount = doubleJump ? 2 : 1;
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"));
     }
@@ -73,10 +78,14 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Player.GetInstance().isDead) return;
         GetMoveButton();
         GetSkillButton();
 
-        UIManager.GetInstance().SetDashTime(1.0f / dashCoolDown * Time.deltaTime);
+        if (Input.GetMouseButtonDown(1))
+        {
+            Player.GetInstance().SetHealth(-1);
+        }
     }
 
     private void GetSkillButton()
@@ -84,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
         if (isDashing || !canMove || isSliding || isGliding || isClimbing) return;
         if (Input.GetButtonDown("Skill3") && Time.time > lastSkill3Time + skill3CoolDown)
         {
+            UIManager.GetInstance().ResetSkillTime(1);
             rb.velocity = new Vector2(0, rb.velocity.y);
             canMove = false;
             anim.StartSkill3();
@@ -91,11 +101,13 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetButtonDown("Skill2") && Time.time > lastSkill2Time + skill2CoolDown)
         {
+            UIManager.GetInstance().ResetSkillTime(0);
             anim.StartSkill2();
             lastSkill2Time = Time.time;
         }
         if (Input.GetButtonDown("Skill4") && Time.time > lastSkill4Time + skill4CoolDown)
         {
+            UIManager.GetInstance().ResetSkillTime(2);
             rb.velocity = new Vector2(0, 0);
             canMove = false;
             anim.StartSkill4();
@@ -126,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (Player.GetInstance().isDead) return;
         airSpeed = rb.velocity.y;
         EnvironmentCheck();
         Climb();
@@ -163,6 +176,8 @@ public class PlayerMovement : MonoBehaviour
         {
             UIManager.GetInstance().ResetDashTime();
             PoolManager.GetInstance().GetDustObject(true);
+            Camera.main.GetComponent<CameraController>().Shake();
+            Camera.main.GetComponent<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
             lastDashTime = Time.time;
             dashTimeLeft = dashTime;
             float direction = transform.localScale.x;
@@ -275,7 +290,10 @@ public class PlayerMovement : MonoBehaviour
         }
         if (jumpPressed && jumpCount > 0)
         {
-            if (doubleJump && jumpCount == 1) isDoubleJumping = true;
+            if (doubleJump && jumpCount == 1)
+            {
+                isDoubleJumping = true;
+            }
             Jump();
         }
         if (isDoubleJumping && glideHeld && rb.velocity.y < -1f)

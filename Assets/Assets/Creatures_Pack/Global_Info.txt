@@ -1,0 +1,30 @@
+ ___        __       
+|_ _|_ __  / _| ___  
+ | || '_ \| |_ / _ \ 
+ | || | | |  _| (_) |
+|___|_| |_|_|  \___/ 
+
+
+--######### Important info about "Creatures Pixel art Pack" if you want to use his scripts: ----------------
+
+-- The creatures are in 3 different groups:
+       - Unarmed. (no sword, no shield)
+       - Shield1. (sword + shield1)
+       - Shield2. (sword + shield2)
+       
+-- Each creature has 6 different bodies:
+    #-(0,1,2,3,4,5) keys to select the body.
+
+-- Creatures Keys:
+	#-(a,s, space): left, right, jump.
+	#-(Left mouse): attack.
+	#-(Right mouse): shield mode.
+	#-(k) for test dying.
+
+-The character cant move in shield mode.
+
+-- Scripts associated:
+	#-"Creatures_Character_Controller.cs"
+	
+-- Also included "the different heads, bodies, shields and the sword" in a separate folder (for use in different layers) at:
+    - Creatures_Pack/ Characters_Images/ Separated_Character_Parts ... subfolder.

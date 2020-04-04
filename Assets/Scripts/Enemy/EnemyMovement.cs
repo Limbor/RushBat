@@ -17,7 +17,7 @@ public class EnemyMovement : MonoBehaviour
 
     //怪物状态
     protected bool faceright;
-    protected bool jumping;
+    //protected bool jumping;
     protected bool isdead;
     protected bool attacking;
     protected bool ground;
@@ -38,7 +38,7 @@ public class EnemyMovement : MonoBehaviour
         bloodGroove.GetComponent<Image>().fillAmount=1;
         
 
-        jumping = false;
+        //jumping = false;
         isdead = false;
         attacking = false;
         ground = false;
@@ -55,9 +55,10 @@ public class EnemyMovement : MonoBehaviour
     // 当接触到地面时，设置跳跃条件为假
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.tag == "Ground")
+        if (coll.gameObject.layer == 9)
         {
-            jumping = false;
+            //jumping = false;
+            Debug.Log("On Ground!");
             ground = true;
             anim.SetBool("jump", false);
         }
@@ -99,6 +100,8 @@ public class EnemyMovement : MonoBehaviour
             blood -= damage;
             bloodGroove.GetComponent<Image>().fillAmount = blood / 100;
             Debug.Log("Current health: " + blood);
+
+            //transform.GetComponent<SpriteRenderer>().color;
         }
         
     }

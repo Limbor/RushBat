@@ -11,6 +11,8 @@ public class AxeMovement : EnemyMovement
     private float startx;
     private float endx;
 
+    //private bool walking;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +28,7 @@ public class AxeMovement : EnemyMovement
         walkspeed = 100f;
         waittime = 1f;
         faceright = true;
+        //walking = true;
     }
 
     // Update is called once per frame
@@ -35,7 +38,7 @@ public class AxeMovement : EnemyMovement
 
         Attack();
         //testAttack();
-        Move();
+      
     }
     //public bool attack;
     //void testAttack()
@@ -50,7 +53,7 @@ public class AxeMovement : EnemyMovement
     //}
     void FixedUpdate()
     {
-        
+        Move();
     }
     void Move()
     {
@@ -61,6 +64,7 @@ public class AxeMovement : EnemyMovement
             //Debug.Log(rb.velocity);
             return;
         }
+        
         
         //到起点和终点的距离
         float edis = endx - transform.position.x;
@@ -131,7 +135,7 @@ public class AxeMovement : EnemyMovement
 
     void Attack()
     {
-        if (!isdead && !jumping)
+        if (!isdead && ground)
         {
             //根据和玩家的距离进行攻击
             float distance = player.transform.position.x - transform.position.x;
@@ -139,25 +143,23 @@ public class AxeMovement : EnemyMovement
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
             if (faceright && distance > 0 && distance < 0.65 && heightdis < 0.5)
             {
-                //Debug.Log("Attack!");
+                Debug.Log("Attack!");
                 attacking = true;
-              
+
                 anim.SetBool("walk", false);
                 anim.SetBool("attack", true);
+            
             }
             else if (!faceright && distance < 0 && distance > -0.65 && heightdis < 0.5)
             {
-                //Debug.Log("Attack!");
+                Debug.Log("Attack!");
                 attacking = true;
-            
+
                 anim.SetBool("walk", false);
                 anim.SetBool("attack", true);
+                
             }
-            //else
-            //{
-            //    anim.SetBool("attack", false);
-            //    attacking = false;
-            //}
+          
         }
     }
 

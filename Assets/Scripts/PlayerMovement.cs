@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool doubleJump = true;
     private int jumpCount;
+    private bool avoidDamage = false;
 
     private float lastDashTime = -10f;
     private float dashCoolDown;
@@ -59,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isDashing;
     public bool isClimbing;
     public bool isOnLadder;
+    public bool isHurting;
 
     // Start is called before the first frame update
     void Start()
@@ -84,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            Hurt();
             Player.GetInstance().SetHealth(-1);
         }
     }
@@ -148,8 +151,20 @@ public class PlayerMovement : MonoBehaviour
         AirMove();
     }
 
+    private void Hurt()
+    {
+        if (avoidDamage) return;
+        isHurting = true;
+        anim.Hurt();
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        canMove = true;
+        rb.gravityScale = 1f;
+        StartCoroutine(Recover());
+    }
+
     private void Climb()
     {
+        if (!canMove || isDashing || isHurting) return;
         if(isOnLadder && isOnGround)
         {
             if(!isClimbing && yVelocity != 0)
@@ -171,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
-        if (isSliding || isGliding || isClimbing) return;
+        if (isSliding || isGliding || isClimbing || isHurting) return;
         if (dashPressed && Time.time > lastDashTime + dashCoolDown && canMove)
         {
             UIManager.GetInstance().ResetDashTime();
@@ -185,6 +200,7 @@ public class PlayerMovement : MonoBehaviour
             dashPressed = false;
             rb.velocity = new Vector2(direction * Time.fixedDeltaTime * dashSpeed, 0);
             rb.gravityScale = 0f;
+            avoidDamage = true;
         }
         if (isDashing)
         {
@@ -192,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 isDashing = false;
                 rb.gravityScale = 1f;
+                avoidDamage = false;
             }
             dashTimeLeft -= Time.fixedDeltaTime;
             PoolManager.GetInstance().GetShadowObject();
@@ -200,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Attack()
     {
-        if (isSliding || isDashing || isClimbing) return;
+        if (isSliding || isDashing || isClimbing || isHurting) return;
         isAttacking = attackHeld;
     }
 
@@ -222,7 +239,8 @@ public class PlayerMovement : MonoBehaviour
             Vector2.right * direction, groundDistance, groundLayer);
         RaycastHit2D footCheck = Raycast(new Vector2(direction * handOffset, -footHeight),
             Vector2.right * direction, groundDistance, groundLayer);
-        if (!isOnGround && !isAttacking && !isDashing && headCheck && handCheck && footCheck && rb.velocity.y < 0f)
+        if (!isOnGround && !isAttacking && !isDashing && !isHurting
+            && headCheck && handCheck && footCheck && rb.velocity.y < 0f)
         {
             if (!isSliding)
             {
@@ -246,14 +264,13 @@ public class PlayerMovement : MonoBehaviour
         {
             
             isSliding = false;
-            jumpCount = doubleJump ? 2 : 1;
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
     }
 
     private void GroundMove()
     {
-        if (isSliding || isDashing || !canMove) return;
+        if (isSliding || isDashing || !canMove || isHurting) return;
         if (isAttacking && isOnGround)
         {
             rb.velocity = new Vector2(0f, rb.velocity.y);
@@ -279,7 +296,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void AirMove()
     {
-        if (isDashing || isClimbing) return;
+        if (isDashing || isClimbing || isHurting) return;
         if (isSliding)
         {
             if (jumpPressed)
@@ -304,7 +321,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isGliding = false;
-            rb.gravityScale = 1f;
+            if(rb.gravityScale != 0f) rb.gravityScale = 1f;
         }
     }
 
@@ -367,5 +384,11 @@ public class PlayerMovement : MonoBehaviour
             PoolManager.GetInstance().GetDustObject(false);
             yield return new WaitForSeconds(duration);
         }while (isSliding) ;
+    }
+
+    IEnumerator Recover()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isHurting = false;
     }
 }

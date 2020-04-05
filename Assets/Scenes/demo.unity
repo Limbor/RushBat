@@ -1074,6 +1074,63 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 35649233}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &81223973
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 100000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_Name
+      value: Knight1_Axe (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.135
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 355b3d640473dd94f83c175e37943f09, type: 3}
 --- !u!1 &75750417
 GameObject:
   m_ObjectHideFlags: 0
@@ -2127,7 +2184,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &687983545
 PrefabInstance:
@@ -2688,7 +2745,7 @@ Transform:
   m_Children:
   - {fileID: 1867902246}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &839184420
 GameObject:
@@ -5426,12 +5483,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1600, y: 1100}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -6191,10 +6248,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f54c2fa08789a47a8b5507003164cb29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 1, z: -10}
+  offset: {x: 0, y: 0, z: -10}
   speed: 2
-  xOffset: 1.5
-  yOffset: 0
+  xOffset: 2
+  yOffset: 1
 --- !u!114 &2001867360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6312,9 +6369,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  refractionStrength: 0.5
+  refractionStrength: 0.2
   reflectionColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  reflectionStrength: 0.7
+  reflectionStrength: 0.2
   waveSpeed: 1.25
   dropInterval: 0.5
   shader: {fileID: 4800000, guid: 162fe242d486f4dab90ed53db15b9c19, type: 3}
@@ -6622,7 +6679,7 @@ PrefabInstance:
     - target: {fileID: 8223924298357443391, guid: dadafca4e8e7e471795e3a2e70cf3d12,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.98
+      value: -5.941
       objectReference: {fileID: 0}
     - target: {fileID: 8223924298357443391, guid: dadafca4e8e7e471795e3a2e70cf3d12,
         type: 3}

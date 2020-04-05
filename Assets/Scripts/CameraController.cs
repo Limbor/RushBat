@@ -15,16 +15,18 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
+        position = target.position + offset;
     }
 
 
     private void Update()
     {
-        position = target.position + offset;
-        if (Mathf.Abs(position.x - transform.position.x) <= xOffset &&
-            Mathf.Abs(position.y - transform.position.y) <= yOffset)
-            return;
-        this.transform.position = Vector3.Lerp(this.transform.position, position, speed * Time.deltaTime);
+        if (!(Mathf.Abs((target.position + offset).x - transform.position.x) <= xOffset &&
+            Mathf.Abs((target.position + offset).y - transform.position.y) <= yOffset))
+        {
+            position = target.position + offset;
+        }
+        transform.position = Vector3.Lerp(transform.position, position, speed * Time.deltaTime);
     }
 
     public void Shake()

@@ -2849,7 +2849,7 @@ GameObject:
   m_Component:
   - component: {fileID: 861628295}
   m_Layer: 10
-  m_Name: Goblin_Sword
+  m_Name: MoveRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2863,13 +2863,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861628294}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.950308, y: 0.8215184, z: 3.295119}
+  m_LocalPosition: {x: -0.67499995, y: 0.52400005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1657096958}
   - {fileID: 935706593}
-  m_Father: {fileID: 1005054676}
-  m_RootOrder: 1
+  m_Father: {fileID: 1434563124}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &876079528
 GameObject:
@@ -3111,38 +3111,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 985146920}
   m_CullTransparentMesh: 0
---- !u!1 &1005054675
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1005054676}
-  m_Layer: 0
-  m_Name: EnemyRange
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!4 &1005054676
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005054675}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.322692, y: -0.2975184, z: -3.295119}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1024858809}
-  - {fileID: 861628295}
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1024858808
 GameObject:
   m_ObjectHideFlags: 0
@@ -3153,7 +3121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1024858809}
   m_Layer: 10
-  m_Name: Knight1_Axe
+  m_Name: MoveRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3167,13 +3135,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024858808}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.3623079, y: 0.1855184, z: 3.295119}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1194870539}
   - {fileID: 1885995273}
-  m_Father: {fileID: 1005054676}
-  m_RootOrder: 0
+  m_Father: {fileID: 1184084935}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1098925362
 PrefabInstance:
@@ -4139,7 +4107,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 2017087755}
-  player: {fileID: 1524317528}
   startPos: {fileID: 1194870539}
   endPos: {fileID: 1885995273}
 --- !u!114 &1184084933
@@ -4781,7 +4748,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1413897757}
-  player: {fileID: 1524317528}
   startPos: {fileID: 1657096958}
   endPos: {fileID: 935706593}
 --- !u!1001 &1487509894
@@ -4920,12 +4886,6 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &1524317528 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8223924298357443385, guid: dadafca4e8e7e471795e3a2e70cf3d12,
-    type: 3}
-  m_PrefabInstance: {fileID: 8223924298373472667}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1587001487
 GameObject:
   m_ObjectHideFlags: 0

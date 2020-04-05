@@ -21,11 +21,13 @@ public class EnemyMovement : MonoBehaviour
     protected bool isdead;
     protected bool attacking;
     protected bool ground;
-    //画布和血条
+    //画布和血条,血量,显示时间
     public GameObject canvas;
     protected Transform bloodGroove;
+    protected Transform bloodVolume;
+    protected float bloodtime;
     //玩家
-    public GameObject player;
+    protected GameObject player;
     
 
     // Start is called before the first frame update
@@ -34,14 +36,28 @@ public class EnemyMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
-        bloodGroove = transform.Find("Canvas/BloodGroove/Blood");
-        bloodGroove.GetComponent<Image>().fillAmount=1;
-        
+        player = GameObject.FindGameObjectWithTag("Player");
+        bloodGroove = transform.Find("Canvas/BloodGroove");
+        bloodVolume = transform.Find("Canvas/BloodGroove/Blood");
+        bloodVolume.GetComponent<Image>().fillAmount=1;
+        bloodtime = 0;
+        bloodGroove.GetComponent<Image>().color = new Color(
+            bloodGroove.GetComponent<Image>().color.r,
+            bloodGroove.GetComponent<Image>().color.g,
+            bloodGroove.GetComponent<Image>().color.b,
+            0);
+        bloodVolume.GetComponent<Image>().color = new Color(
+            bloodVolume.GetComponent<Image>().color.r,
+            bloodVolume.GetComponent<Image>().color.g,
+            bloodVolume.GetComponent<Image>().color.b,
+            0);
+
 
         //jumping = false;
         isdead = false;
         attacking = false;
         ground = false;
+
         //transform.position = startPos.position;
     }
 
@@ -76,7 +92,7 @@ public class EnemyMovement : MonoBehaviour
         transform.Find("Canvas/BloodGroove").localScale = bloodScale;
     }
 
-    //判断是否存活
+    //判断是否存活，并显示血条
     void Alive()
     {
         if (blood <= 0)
@@ -86,6 +102,22 @@ public class EnemyMovement : MonoBehaviour
             canvas.SetActive(false);
             
         }
+        else
+        {
+            bloodtime -= Time.deltaTime;
+            bloodGroove.GetComponent<Image>().color = new Color(
+                bloodGroove.GetComponent<Image>().color.r,
+                bloodGroove.GetComponent<Image>().color.g,
+                bloodGroove.GetComponent<Image>().color.b,
+                bloodtime / 2);
+                
+            bloodVolume.GetComponent<Image>().color = new Color(
+                bloodVolume.GetComponent<Image>().color.r,
+                bloodVolume.GetComponent<Image>().color.g,
+                bloodVolume.GetComponent<Image>().color.b,
+                bloodtime / 2);
+        }
+        
     }
 
     public bool isDead()
@@ -93,17 +125,22 @@ public class EnemyMovement : MonoBehaviour
         return isdead;
     }
 
+    //收到伤害，改变血条
     public void getDamage(float damage)
     {
         if (!isdead)
         {
             blood -= damage;
-            bloodGroove.GetComponent<Image>().fillAmount = blood / 100;
+            bloodVolume.GetComponent<Image>().fillAmount = blood / 100;
             Debug.Log("Current health: " + blood);
 
             //transform.GetComponent<SpriteRenderer>().color;
+            
+            bloodtime = 2;
+
         }
         
     }
+
 
 }

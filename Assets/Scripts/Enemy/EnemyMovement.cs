@@ -26,6 +26,7 @@ public class EnemyMovement : MonoBehaviour
     protected Transform bloodGroove;
     protected Transform bloodVolume;
     protected float bloodtime;
+    protected float hurttime;   //受伤会变红，并暂停动画0.5秒
     //玩家
     protected GameObject player;
     
@@ -41,6 +42,7 @@ public class EnemyMovement : MonoBehaviour
         bloodVolume = transform.Find("Canvas/BloodGroove/Blood");
         bloodVolume.GetComponent<Image>().fillAmount=1;
         bloodtime = 0;
+        hurttime = 0;
         bloodGroove.GetComponent<Image>().color = new Color(
             bloodGroove.GetComponent<Image>().color.r,
             bloodGroove.GetComponent<Image>().color.g,
@@ -92,7 +94,7 @@ public class EnemyMovement : MonoBehaviour
         transform.Find("Canvas/BloodGroove").localScale = bloodScale;
     }
 
-    //判断是否存活，并显示血条
+    //判断是否存活，并显示血条, 受伤时会变红，并暂停动画0.5s
     void Alive()
     {
         if (blood <= 0)
@@ -116,6 +118,19 @@ public class EnemyMovement : MonoBehaviour
                 bloodVolume.GetComponent<Image>().color.g,
                 bloodVolume.GetComponent<Image>().color.b,
                 bloodtime / 2);
+
+            hurttime -= Time.deltaTime;
+            if (hurttime > 0)
+            {
+                transform.GetComponent<SpriteRenderer>().color = Color.red;
+                anim.speed = 0;
+            }
+            else
+            {
+                transform.GetComponent<SpriteRenderer>().color = Color.white;
+                anim.speed = 1;
+            }
+
         }
         
     }
@@ -137,6 +152,11 @@ public class EnemyMovement : MonoBehaviour
             //transform.GetComponent<SpriteRenderer>().color;
             
             bloodtime = 2;
+
+            if (hurttime <= 0)
+            {
+                hurttime = 0.5f;
+            }
 
         }
         

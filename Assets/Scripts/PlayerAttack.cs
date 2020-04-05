@@ -19,6 +19,8 @@ public class PlayerAttack : MonoBehaviour
     private Rigidbody2D rb;
 
     private List<GameObject> damagesEnemies;
+    private float pauseTime = 0f;
+    private bool isTimeSlow = false;
 
     //private void OnDrawGizmos()
     //{
@@ -52,6 +54,13 @@ public class PlayerAttack : MonoBehaviour
             {
                 if (!damagesEnemies.Contains(enemy.gameObject))
                 {
+                    pauseTime += 0.01f;
+                    if (!isTimeSlow)
+                    {
+                        isTimeSlow = true;
+                        Time.timeScale = 0.1f;
+                        StartCoroutine(TimeStart());
+                    }
                     damagesEnemies.Add(enemy.gameObject);
                     // TODO
                     Debug.Log("damage");
@@ -85,8 +94,11 @@ public class PlayerAttack : MonoBehaviour
 
     public void Slash()
     {
-        rb.velocity = new Vector2(player.transform.localScale.x * 5f, 0);
+        rb.velocity = new Vector2(player.transform.localScale.x * 8f, 0);
         isSlashing = true;
+        PoolManager.GetInstance().GetDustObject(true);
+        Camera.main.GetComponent<CameraController>().Shake();
+        Camera.main.GetComponent<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }
 
     public void SlashEnd()
@@ -100,5 +112,12 @@ public class PlayerAttack : MonoBehaviour
     {
         player.canMove = true;
         player.gameObject.GetComponent<Rigidbody2D>().gravityScale = 1f;
+    }
+
+    IEnumerator TimeStart()
+    {
+        yield return new WaitForSeconds(pauseTime);
+        Time.timeScale = 1f;
+        isTimeSlow = false;
     }
 }

@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
         currentHealth += change;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentHealth < 0) currentHealth = 0;
-        if(currentHealth == 0)
+        if (currentHealth == 0)
         {
             GetComponent<PlayerAnimation>().Die();
             isDead = true;

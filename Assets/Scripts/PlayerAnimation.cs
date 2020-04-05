@@ -22,6 +22,7 @@ public class PlayerAnimation : MonoBehaviour
     private int skill2;
     private int skill4;
     private int die;
+    private int hurt;
 
     public GameObject smoke;
 
@@ -46,6 +47,7 @@ public class PlayerAnimation : MonoBehaviour
         skill2 = Animator.StringToHash("skill2");
         skill4 = Animator.StringToHash("skill4");
         die = Animator.StringToHash("die");
+        hurt = Animator.StringToHash("hurt");
     }
 
     // Update is called once per frame
@@ -86,5 +88,10 @@ public class PlayerAnimation : MonoBehaviour
     public void StartSmoke()
     {
         smoke.SetActive(true);
+    }
+
+    public void Hurt()
+    {
+        animator.SetTrigger(hurt);
     }
 }

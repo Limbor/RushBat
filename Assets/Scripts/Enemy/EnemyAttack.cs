@@ -18,7 +18,7 @@ public class EnemyAttack : MonoBehaviour
             // TODO
             
             Debug.Log("Enemy take damage, Amount: "+players.Length);
-            GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyMovement>().GetDamage(30);
+            GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyMovement>().getDamage(30);
             break;
         }
     }

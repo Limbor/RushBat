@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private static Player player;
-
     [Header("Skill CD")]
     public float dashCoolDown = 2f;
     public float skill2CoolDown = 5f;
@@ -17,13 +15,9 @@ public class Player : MonoBehaviour
     public int maxHealth = 16;
     private int currentHealth;
 
-    void Awake()
+    void Start()
     {
-        if (player == null)
-        {
-            player = this;
-            currentHealth = maxHealth;
-        }
+        currentHealth = maxHealth;
     }
 
     private void Update()
@@ -46,10 +40,4 @@ public class Player : MonoBehaviour
             isDead = true;
         }
     }
-
-    public static Player GetInstance()
-    {
-        return player;
-    }
-
 }

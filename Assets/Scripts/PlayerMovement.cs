@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool doubleJump = true;
     private int jumpCount;
-    private bool avoidDamage = false;
+    public bool avoidDamage = false;
 
     private float lastDashTime = -10f;
     private float dashCoolDown;
@@ -68,10 +68,10 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<PlayerAnimation>();
 
-        dashCoolDown = Player.GetInstance().dashCoolDown;
-        skill2CoolDown = Player.GetInstance().skill1CoolDown;
-        skill3CoolDown = Player.GetInstance().skill2CoolDown;
-        skill4CoolDown = Player.GetInstance().skill3CoolDown;
+        dashCoolDown = GetComponent<Player>().dashCoolDown;
+        skill2CoolDown = GetComponent<Player>().skill1CoolDown;
+        skill3CoolDown = GetComponent<Player>().skill2CoolDown;
+        skill4CoolDown = GetComponent<Player>().skill3CoolDown;
 
         jumpCount = doubleJump ? 2 : 1;
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"));
@@ -80,14 +80,13 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Player.GetInstance().isDead) return;
+        if (GetComponent<Player>().isDead) return;
         GetMoveButton();
         GetSkillButton();
 
         if (Input.GetMouseButtonDown(1))
         {
-            Hurt();
-            Player.GetInstance().SetHealth(-1);
+            Hurt(1, new Vector2(0, 0));
         }
     }
 
@@ -141,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Player.GetInstance().isDead) return;
+        if (GetComponent<Player>().isDead) return;
         airSpeed = rb.velocity.y;
         EnvironmentCheck();
         Climb();
@@ -151,14 +150,16 @@ public class PlayerMovement : MonoBehaviour
         AirMove();
     }
 
-    private void Hurt()
+    private void Hurt(int damage, Vector2 foece)
     {
         if (avoidDamage) return;
+        GetComponent<Player>().SetHealth(-damage);
         isHurting = true;
         anim.Hurt();
         rb.bodyType = RigidbodyType2D.Dynamic;
         canMove = true;
         rb.gravityScale = 1f;
+        avoidDamage = true;
         StartCoroutine(Recover());
     }
 
@@ -390,5 +391,6 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         isHurting = false;
+        avoidDamage = false;
     }
 }

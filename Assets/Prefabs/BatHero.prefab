@@ -233,7 +233,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1569865445
   m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: c1e968b992f88484eb2fe7270d4c156b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -339,6 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612d186f17fb5494190754e8925dd639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avoidDamage: 0
   speed: 150
   dashSpeed: 800
   climbSpeed: 100
@@ -365,6 +366,7 @@ MonoBehaviour:
   isDashing: 0
   isClimbing: 0
   isOnLadder: 0
+  isHurting: 0
 --- !u!114 &1791258010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,6 +416,8 @@ MonoBehaviour:
   skill2CoolDown: 5
   skill1CoolDown: 3
   skill3CoolDown: 10
+  isDead: 0
+  maxHealth: 16
 --- !u!1 &9195437687672585485
 GameObject:
   m_ObjectHideFlags: 0

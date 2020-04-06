@@ -10,7 +10,7 @@ public class EnemyAttack : MonoBehaviour
     protected float normalDamage;
     protected float normalScope;
 
-    protected void normalAttack()
+    protected void NormalAttack()
     {
         Collider2D[] players = Physics2D.OverlapCircleAll(damagePoint.position, normalScope, playerLayer);
         foreach (Collider2D player in players)
@@ -18,7 +18,7 @@ public class EnemyAttack : MonoBehaviour
             // TODO
             
             Debug.Log("Enemy take damage, Amount: "+players.Length);
-            GameObject.FindGameObjectWithTag("Enemy").GetComponent<AxeMovement>().getDamage(30);
+            GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyMovement>().GetDamage(30);
             break;
         }
     }

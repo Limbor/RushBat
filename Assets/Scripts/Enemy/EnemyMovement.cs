@@ -48,7 +48,6 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
-        
         Alive();
     }
 
@@ -88,12 +87,12 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    public bool isDead()
+    public bool IsDead()
     {
         return isdead;
     }
 
-    public void getDamage(float damage)
+    public void GetDamage(float damage)
     {
         if (!isdead)
         {

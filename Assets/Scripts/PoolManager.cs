@@ -8,13 +8,16 @@ public class PoolManager : MonoBehaviour
 
     public GameObject shadowPrefab;
     public GameObject dustPrefab;
+    public GameObject tearPrefab;
     public Transform moveDust;
     public Transform slideDust;
 
     private int shadowCount = 10;
     private int dustCount = 5;
+    private int tearCount = 3;
     private Queue<GameObject> shadowPool;
     private Queue<GameObject> dustPool;
+    private Queue<GameObject> tearPool;
 
     private void Awake()
     {
@@ -23,8 +26,10 @@ public class PoolManager : MonoBehaviour
             poolManager = this;
             shadowPool = new Queue<GameObject>();
             dustPool = new Queue<GameObject>();
+            tearPool = new Queue<GameObject>();
             FillShadowPool();
             FillDustPool();
+            FillTearPool();
         }
     }
 
@@ -96,6 +101,33 @@ public class PoolManager : MonoBehaviour
             gameObject.transform.localScale = new Vector3(player.transform.localScale.x,
                 slideDust.transform.localScale.y, slideDust.transform.localScale.z);
         }
+        gameObject.SetActive(true);
+    }
+
+    public void FillTearPool()
+    {
+        for (int i = 0; i < tearCount; i++)
+        {
+            GameObject gameObject = Instantiate(tearPrefab);
+            gameObject.transform.SetParent(transform);
+            ReturnTearPool(gameObject);
+        }
+    }
+
+    public void ReturnTearPool(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+        tearPool.Enqueue(gameObject);
+    }
+
+    public void GetTearObject(Vector3 position)
+    {
+        if (tearPool.Count == 0)
+        {
+            FillTearPool();
+        }
+        GameObject gameObject = tearPool.Dequeue();
+        gameObject.transform.position = position;
         gameObject.SetActive(true);
     }
 }

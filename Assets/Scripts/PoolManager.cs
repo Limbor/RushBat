@@ -9,15 +9,19 @@ public class PoolManager : MonoBehaviour
     public GameObject shadowPrefab;
     public GameObject dustPrefab;
     public GameObject tearPrefab;
+    public GameObject firePrefab;
+
     public Transform moveDust;
     public Transform slideDust;
 
     private int shadowCount = 10;
     private int dustCount = 5;
     private int tearCount = 3;
+    private int fireCount = 5;
     private Queue<GameObject> shadowPool;
     private Queue<GameObject> dustPool;
     private Queue<GameObject> tearPool;
+    private Queue<GameObject> firePool;
 
     private void Awake()
     {
@@ -27,9 +31,11 @@ public class PoolManager : MonoBehaviour
             shadowPool = new Queue<GameObject>();
             dustPool = new Queue<GameObject>();
             tearPool = new Queue<GameObject>();
+            firePool = new Queue<GameObject>();
             FillShadowPool();
             FillDustPool();
             FillTearPool();
+            FillFirePool();
         }
     }
 
@@ -128,6 +134,34 @@ public class PoolManager : MonoBehaviour
         }
         GameObject gameObject = tearPool.Dequeue();
         gameObject.transform.position = position;
+        gameObject.SetActive(true);
+    }
+
+    public void FillFirePool()
+    {
+        for (int i = 0; i < fireCount; i++)
+        {
+            GameObject gameObject = Instantiate(firePrefab);
+            gameObject.transform.SetParent(transform);
+            ReturnFirePool(gameObject);
+        }
+    }
+
+    public void ReturnFirePool(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+        firePool.Enqueue(gameObject);
+    }
+
+    public void GetFireObject(Vector3 position, float direction)
+    {
+        if (firePool.Count == 0)
+        {
+            FillFirePool();
+        }
+        GameObject gameObject = firePool.Dequeue();
+        gameObject.transform.position = position;
+        gameObject.transform.localScale = new Vector3(1, direction, 1);
         gameObject.SetActive(true);
     }
 }

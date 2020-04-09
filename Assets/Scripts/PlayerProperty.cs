@@ -7,6 +7,7 @@ public class PlayerProperty : MonoBehaviour
 {
     [Header("State Icon")]
     public Sprite poison;
+    public Sprite burn;
 
     [Header("Skill CD")]
     public float dashCoolDown = 2f;
@@ -19,14 +20,17 @@ public class PlayerProperty : MonoBehaviour
     public bool isDead = false;
     public int maxHealth = 16;
     public bool isPoisoned = false;
+    public bool isBurnt = false;
 
     private int currentHealth;
     private int lastPoisonedTime;
+    private int lastBurntTime;
 
     void Start()
     {
         currentHealth = maxHealth;
         lastPoisonedTime = 0;
+        lastBurntTime = 0;
     }
 
     private void Update()
@@ -39,6 +43,10 @@ public class PlayerProperty : MonoBehaviour
         if (isPoisoned)
         {
             state.GetComponent<SpriteRenderer>().sprite = poison;
+        }
+        else if (isBurnt)
+        {
+            state.GetComponent<SpriteRenderer>().sprite = burn;
         }
         else
         {
@@ -62,6 +70,7 @@ public class PlayerProperty : MonoBehaviour
 
     public void GetPoisoned(int time)
     {
+        if (GetComponent<PlayerMovement>().avoidDamage) return;
         lastPoisonedTime += time;
         if (!isPoisoned)
         {
@@ -74,12 +83,36 @@ public class PlayerProperty : MonoBehaviour
         isPoisoned = true;
         while(lastPoisonedTime != 0)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             GetComponent<SpriteRenderer>().color = new Color(0.153f, 0.255f, 0.176f);
-            GetComponent<SpriteRenderer>().DOColor(Color.white, 0.5f);
+            GetComponent<SpriteRenderer>().DOColor(Color.white, 0.8f);
             SetHealth(-1);
             lastPoisonedTime -= 1;
         }
         isPoisoned = false;
+    }
+
+    public void GetBurnt(int time)
+    {
+        if (GetComponent<PlayerMovement>().avoidDamage) return;
+        lastBurntTime += time;
+        if (!isBurnt)
+        {
+            StartCoroutine(Burnt());
+        }
+    }
+
+    IEnumerator Burnt()
+    {
+        isBurnt = true;
+        while (lastBurntTime != 0)
+        {
+            yield return new WaitForSeconds(1f);
+            GetComponent<SpriteRenderer>().color = new Color(0.416f, 0.125f, 0.180f);
+            GetComponent<SpriteRenderer>().DOColor(Color.white, 0.8f);
+            SetHealth(-1);
+            lastBurntTime -= 1;
+        }
+        isBurnt = false;
     }
 }

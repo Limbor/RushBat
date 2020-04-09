@@ -155,8 +155,9 @@ public class PlayerMovement : MonoBehaviour
         GetComponent<PlayerProperty>().SetHealth(-damage);
         if (!GetComponent<PlayerProperty>().isDead)
         {
-            anim.Hurt();
             isHurting = true;
+            anim.Hurt();
+            Camera.main.GetComponent<CameraController>().Shake();
             canMove = true;
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 1f;

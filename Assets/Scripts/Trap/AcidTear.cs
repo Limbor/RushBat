@@ -25,7 +25,7 @@ public class AcidTear : MonoBehaviour
         if (splash) return;
         speed += 30f * Time.deltaTime;
         transform.position += Vector3.down * speed * Time.deltaTime;
-        if (Physics2D.OverlapCircle(transform.position + new Vector3(coll.offset.x, coll.offset.y, 0f), 0.03f, groundLayer) != null)
+        if (Physics2D.OverlapCircle(transform.position + new Vector3(coll.offset.x, coll.offset.y, 0f), 0.05f, groundLayer) != null)
         {
             anim.SetTrigger("splash");
             splash = true;

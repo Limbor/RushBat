@@ -85,13 +85,13 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetTrigger(die);
     }
 
-    public void StartSmoke()
-    {
-        smoke.SetActive(true);
-    }
-
     public void Hurt()
     {
         animator.SetTrigger(hurt);
+    }
+
+    public void StartSmoke()
+    {
+        smoke.SetActive(true);
     }
 }

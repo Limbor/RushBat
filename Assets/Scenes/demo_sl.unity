@@ -3950,6 +3950,8 @@ MonoBehaviour:
     type: 3}
   dustPrefab: {fileID: 3954774351853265707, guid: 57a9360abcf8240f295264c372bc9312,
     type: 3}
+  tearPrefab: {fileID: 0}
+  firePrefab: {fileID: 0}
   moveDust: {fileID: 230413263}
   slideDust: {fileID: 1883695693}
 --- !u!4 &1281265747
@@ -6015,6 +6017,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Goblin_Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 7070216867693794332, guid: ba6501d0ce5414b42a638207c9279c7a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba6501d0ce5414b42a638207c9279c7a, type: 3}

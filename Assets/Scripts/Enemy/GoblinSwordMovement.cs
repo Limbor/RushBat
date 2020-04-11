@@ -197,7 +197,7 @@ public class GoblinSwordMovement : EnemyMovement
         }
     }
 
-    public void FinishAttack()
+    public void finishAttack()
     {
         anim.SetBool("attack", false);
         attacking = false;

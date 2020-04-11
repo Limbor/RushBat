@@ -95,7 +95,7 @@ public class EnemyMovement : MonoBehaviour
         transform.Find("Canvas/BloodGroove").localScale = bloodScale;
     }
 
-    //判断是否存活，并显示血条, 受伤时会变白闪烁，后退
+    //判断是否存活，并显示血条, 受伤时会变白闪烁
     void Alive()
     {
         if (blood <= 0)
@@ -124,7 +124,7 @@ public class EnemyMovement : MonoBehaviour
             hurttime -= Time.deltaTime;
             if (hurttime > 0)
             {
-                render.material.SetFloat("_FlashAmount", hurttime/0.5f);
+                render.material.SetFloat("_FlashAmount", 1);
                 //transform.GetComponent<SpriteRenderer>().color = Color.red;
                 //anim.speed = 0;
             }
@@ -139,12 +139,13 @@ public class EnemyMovement : MonoBehaviour
         
     }
 
-    public bool IsDead()
+    public bool Direction()
     {
-        return isdead;
+        return faceright;
     }
 
-    public void getDamage(float damage)
+    //怪物受伤，指定伤害和后退方向，血条改变
+    public void getDamage(float damage, int direction)
     {
         if (!isdead)
         {
@@ -159,8 +160,13 @@ public class EnemyMovement : MonoBehaviour
             if (hurttime <= 0)
             {
                 //怪物受伤闪烁时间，
-                hurttime = 0.5f;
+                hurttime = 0.1f;
             }
+
+            float backDis = direction * 0.2f;
+            //怪物受伤后退
+            transform.position = new Vector2(transform.position.x + backDis, transform.position.y);
+          
 
         }
         

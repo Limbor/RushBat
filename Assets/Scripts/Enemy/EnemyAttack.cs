@@ -10,7 +10,7 @@ public class EnemyAttack : MonoBehaviour
     protected float normalDamage;
     protected float normalScope;
 
-    protected void normalAttack()
+    protected void NormalAttack()
     {
         Collider2D[] players = Physics2D.OverlapCircleAll(damagePoint.position, normalScope, playerLayer);
         foreach (Collider2D player in players)

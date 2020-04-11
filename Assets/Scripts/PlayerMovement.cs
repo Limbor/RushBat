@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool doubleJump = true;
     private int jumpCount;
-    private bool avoidDamage = false;
+    public bool avoidDamage = false;
 
     private float lastDashTime = -10f;
     private float dashCoolDown;
@@ -68,26 +68,24 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<PlayerAnimation>();
 
-        dashCoolDown = Player.GetInstance().dashCoolDown;
-        skill2CoolDown = Player.GetInstance().skill1CoolDown;
-        skill3CoolDown = Player.GetInstance().skill2CoolDown;
-        skill4CoolDown = Player.GetInstance().skill3CoolDown;
+        dashCoolDown = GetComponent<PlayerProperty>().dashCoolDown;
+        skill2CoolDown = GetComponent<PlayerProperty>().skill1CoolDown;
+        skill3CoolDown = GetComponent<PlayerProperty>().skill2CoolDown;
+        skill4CoolDown = GetComponent<PlayerProperty>().skill3CoolDown;
 
-        jumpCount = doubleJump ? 2 : 1;
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Player.GetInstance().isDead) return;
+        if (GetComponent<PlayerProperty>().isDead) return;
         GetMoveButton();
         GetSkillButton();
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(2))
         {
-            Hurt();
-            Player.GetInstance().SetHealth(-1);
+            Hurt(1, new Vector2(-transform.localScale.x * 1f, 0));
         }
     }
 
@@ -141,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Player.GetInstance().isDead) return;
+        if (GetComponent<PlayerProperty>().isDead) return;
         airSpeed = rb.velocity.y;
         EnvironmentCheck();
         Climb();
@@ -151,15 +149,23 @@ public class PlayerMovement : MonoBehaviour
         AirMove();
     }
 
-    private void Hurt()
+    public void Hurt(int damage, Vector2 force)
     {
         if (avoidDamage) return;
-        isHurting = true;
-        anim.Hurt();
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        canMove = true;
-        rb.gravityScale = 1f;
-        StartCoroutine(Recover());
+        GetComponent<PlayerProperty>().SetHealth(-damage);
+        if (!GetComponent<PlayerProperty>().isDead)
+        {
+            isHurting = true;
+            anim.Hurt();
+            Camera.main.GetComponent<CameraController>().Shake();
+            canMove = true;
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.gravityScale = 1f;
+            rb.velocity = new Vector2(0, 0);
+            rb.AddForce(force, ForceMode2D.Impulse);
+            avoidDamage = true;
+            StartCoroutine(Recover());
+        }
     }
 
     private void Climb()
@@ -390,5 +396,6 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         isHurting = false;
+        avoidDamage = false;
     }
 }

@@ -19,7 +19,7 @@ TagManager:
   - Player
   - Ground
   - Enemy
-  - 
+  - Trap
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Environment
     uniqueID: 2605810617
+    locked: 0
+  - name: Trap&Item
+    uniqueID: 4244842025
     locked: 0
   - name: Enemy
     uniqueID: 3506969907

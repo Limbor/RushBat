@@ -5,14 +5,14 @@ using UnityEngine;
 public class BatEnergy : MonoBehaviour
 {
     private CircleCollider2D coll;
-    private Rigidbody2D rb;
     private Animator animator;
     private float startTime;
     private float direction;
+    private bool collide;
 
     public LayerMask groundLayer;
     public float flySpeed;
-    public bool powerful = false;
+    public bool powerful;
     public float changeTime;
 
     private void OnEnable()
@@ -25,19 +25,24 @@ public class BatEnergy : MonoBehaviour
         coll = GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
         startTime = Time.time;
+        powerful = false;
+        collide = false;
     }
 
     private void Update()
     {
+        if (collide) return;
         transform.position = new Vector2(transform.position.x + flySpeed * Time.deltaTime * direction, transform.position.y);
         if(Time.time >= startTime + changeTime)
         {
+            powerful = true;
             animator.SetTrigger("change");
             coll.radius = 0.21f;
         }
         if (Physics2D.OverlapCircle(transform.position, 0.1f, groundLayer) != null)
         {
-            gameObject.SetActive(false);
+            animator.SetTrigger("collide");
+            collide = true;
         }
     }
 
@@ -47,5 +52,10 @@ public class BatEnergy : MonoBehaviour
         {
             Debug.Log("damage");
         }
+    }
+
+    public void Disappear()
+    {
+        gameObject.SetActive(false);
     }
 }

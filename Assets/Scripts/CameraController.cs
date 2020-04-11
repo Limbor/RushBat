@@ -32,6 +32,6 @@ public class CameraController : MonoBehaviour
     public void Shake()
     {
         transform.DOComplete();
-        transform.DOShakePosition(0.2f, 0.5f, 14, 90, false,true);
+        transform.DOShakePosition(0.1f, 0.3f, 14, 90, false,true);
     }
 }

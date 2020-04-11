@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     //组件
     protected Rigidbody2D rb; 
     protected Animator anim;
+    protected SpriteRenderer render;
     //怪物数据
     protected float walkspeed;
     protected float waittime;
@@ -36,6 +37,7 @@ public class EnemyMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        render = GetComponent<SpriteRenderer>();
 
         player = GameObject.FindGameObjectWithTag("Player");
         bloodGroove = transform.Find("Canvas/BloodGroove");
@@ -94,18 +96,19 @@ public class EnemyMovement : MonoBehaviour
         transform.Find("Canvas/BloodGroove").localScale = bloodScale;
     }
 
-    //判断是否存活，并显示血条, 受伤时会变红，并暂停动画0.5s
+    //判断是否存活，并显示血条, 受伤时会变白闪烁，后退
     void Alive()
     {
         if (blood <= 0)
         {
+            //死亡后血条瞬间消失
             isdead = true;
             anim.SetBool("dead", true);
             canvas.SetActive(false);
-            
         }
         else
         {
+            //血条逐渐消失
             bloodtime -= Time.deltaTime;
             bloodGroove.GetComponent<Image>().color = new Color(
                 bloodGroove.GetComponent<Image>().color.r,
@@ -122,13 +125,15 @@ public class EnemyMovement : MonoBehaviour
             hurttime -= Time.deltaTime;
             if (hurttime > 0)
             {
-                transform.GetComponent<SpriteRenderer>().color = Color.red;
-                anim.speed = 0;
+                render.material.SetFloat("_FlashAmount", hurttime/0.5f);
+                //transform.GetComponent<SpriteRenderer>().color = Color.red;
+                //anim.speed = 0;
             }
             else
             {
-                transform.GetComponent<SpriteRenderer>().color = Color.white;
-                anim.speed = 1;
+                render.material.SetFloat("_FlashAmount", 0);
+                //transform.GetComponent<SpriteRenderer>().color = Color.white;
+                //anim.speed = 1;
             }
 
         }
@@ -151,10 +156,11 @@ public class EnemyMovement : MonoBehaviour
 
             //transform.GetComponent<SpriteRenderer>().color;
             
-            bloodtime = 2;
+            bloodtime = 2;         //血条显示时间
 
             if (hurttime <= 0)
             {
+                //怪物受伤闪烁时间，
                 hurttime = 0.5f;
             }
 

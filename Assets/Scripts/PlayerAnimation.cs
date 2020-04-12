@@ -24,6 +24,8 @@ public class PlayerAnimation : MonoBehaviour
     private int die;
     private int hurt;
 
+    private float fade;
+
     public GameObject smoke;
 
     // Start is called before the first frame update
@@ -48,6 +50,8 @@ public class PlayerAnimation : MonoBehaviour
         skill4 = Animator.StringToHash("skill4");
         die = Animator.StringToHash("die");
         hurt = Animator.StringToHash("hurt");
+
+        fade = 1f;
     }
 
     // Update is called once per frame
@@ -93,5 +97,23 @@ public class PlayerAnimation : MonoBehaviour
     public void StartSmoke()
     {
         smoke.SetActive(true);
+    }
+
+    public void Disappear()
+    {
+        StartCoroutine(FadeOut());
+    }
+
+    IEnumerator FadeOut()
+    {
+        Material material = GetComponent<SpriteRenderer>().material;
+        do
+        {
+            yield return new WaitForSeconds(0.1f);
+            fade -= 0.1f;
+            material.SetFloat("_Fade", fade);
+        } while (fade > 0);
+        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        gameObject.GetComponent<Collider2D>().enabled = false;
     }
 }

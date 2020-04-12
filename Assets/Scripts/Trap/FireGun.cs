@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FireGun : MonoBehaviour
 {
-    private float lastFireTime = 0f;
+    public float lastFireTime = 0f;
     private float coolDown = 3f;
 
     private void Update()

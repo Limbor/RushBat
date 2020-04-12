@@ -21,6 +21,11 @@ public class FireBall : MonoBehaviour
     {
         if (boom) return;
         transform.position += new Vector3(speed * direction * Time.deltaTime, 0, 0);
+    }
+
+    private void FixedUpdate()
+    {
+        if (boom) return;
         if (Physics2D.OverlapCircle(transform.position, 0.1f, 1 << LayerMask.NameToLayer("Ground")) != null)
         {
             GetComponent<Animator>().SetTrigger("boom");

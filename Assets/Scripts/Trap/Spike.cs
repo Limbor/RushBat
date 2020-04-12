@@ -5,19 +5,23 @@ using UnityEngine;
 public class Spike : MonoBehaviour
 {
     private Animator anim;
+    private float coolDown = 3f;
+
+    public float lastStabTime = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
-        StartCoroutine(Stab());
     }
 
-    IEnumerator Stab()
+    private void Update()
     {
-        yield return new WaitForSeconds(3);
-        anim.SetTrigger("spike");
-        StartCoroutine(Stab());
+        if(Time.time > lastStabTime + coolDown)
+        {
+            anim.SetTrigger("spike");
+            lastStabTime = Time.time;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

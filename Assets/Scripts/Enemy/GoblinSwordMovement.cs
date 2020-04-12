@@ -84,7 +84,8 @@ public class GoblinSwordMovement : EnemyMovement
             }
             else
             {
-                anim.SetBool("walk", true);
+                //Debug.Log("");
+                //anim.SetBool("walk", true);
                 rb.velocity = new Vector2(walkspeed * Time.deltaTime, rb.velocity.y);
             }
         }
@@ -196,7 +197,7 @@ public class GoblinSwordMovement : EnemyMovement
         }
     }
 
-    public void FinishAttack()
+    public void finishAttack()
     {
         anim.SetBool("attack", false);
         attacking = false;

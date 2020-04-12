@@ -7,18 +7,28 @@ public class EnemyAttack : MonoBehaviour
     public LayerMask playerLayer;
     public Transform damagePoint;
 
-    protected float normalDamage;
+    protected int normalDamage;
     protected float normalScope;
 
-    protected void NormalAttack()
+    protected void normalAttack()
     {
         Collider2D[] players = Physics2D.OverlapCircleAll(damagePoint.position, normalScope, playerLayer);
         foreach (Collider2D player in players)
         {
-            // TODO
+            //根据怪物朝向施加力度
+            float direction;
+            if (GetComponent<EnemyMovement>().Direction())
+            {
+                direction = 1;
+            }
+            else
+            {
+                direction = -1;
+            }
             
             Debug.Log("Enemy take damage, Amount: "+players.Length);
-            GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyMovement>().getDamage(30);
+            GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyMovement>().getDamage(30, (int)(-1*direction));
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction, 0));
             break;
         }
     }

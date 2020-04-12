@@ -50,7 +50,7 @@ public class BatEnergy : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            Debug.Log("damage");
+            collision.GetComponent<EnemyMovement>().getDamage(30, (int)(transform.localScale.x));
         }
     }
 

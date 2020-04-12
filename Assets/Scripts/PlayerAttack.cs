@@ -62,7 +62,7 @@ public class PlayerAttack : MonoBehaviour
                         StartCoroutine(TimeStart());
                     }
                     damagesEnemies.Add(enemy.gameObject);
-                    // TODO
+                    enemy.GetComponent<EnemyMovement>().getDamage(30, (int)transform.localScale.x);
                     Debug.Log("damage");
                 }
             }
@@ -74,7 +74,8 @@ public class PlayerAttack : MonoBehaviour
         Collider2D[] enemies = Physics2D.OverlapCircleAll(damagePoint.position, scope, enemyLayer);
         foreach (Collider2D enemy in enemies)
         {
-            // TODO
+            int direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
+            enemy.GetComponent<EnemyMovement>().getDamage(30, direction);
             Debug.Log("damage");
         }
     }

@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player
-  m_Shader: {fileID: -6465566751694194690, guid: 3b334f77d154c458f945858ec173a493,
+  m_Name: PLayerUnlit
+  m_Shader: {fileID: -6465566751694194690, guid: f21ca0936cc8f4dfd9e09e7b7dd37ce6,
     type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
@@ -28,6 +28,5 @@ Material:
     - _Fade: 1
     - _Scale: 40
     m_Colors:
-    - _Color: {r: 0, g: 4.209459, b: 4.483848, a: 0}
-    - _EyeColor: {r: 3.9999995, g: 0, b: 3.3255172, a: 0}
-    - _FadeColor: {r: 0, g: 4.209459, b: 4.483848, a: 0}
+    - _EyeColor: {r: 4.237095, g: 0.13310245, b: 0, a: 0}
+    - _FadeColor: {r: 0, g: 2.8235295, b: 2.9960785, a: 0}

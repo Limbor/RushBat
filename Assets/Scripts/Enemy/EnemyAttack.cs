@@ -13,6 +13,7 @@ public class EnemyAttack : MonoBehaviour
     protected void normalAttack()
     {
         Collider2D[] players = Physics2D.OverlapCircleAll(damagePoint.position, normalScope, playerLayer);
+        
         foreach (Collider2D player in players)
         {
             //根据怪物朝向施加力度

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
     public float airSpeed;
     public bool canMove = true;
     public bool isDoubleJumping;
+    public bool isInAir;
     public bool isOnGround;
     public bool isSliding;
     public bool isGliding;
@@ -141,6 +143,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (GetComponent<PlayerProperty>().isDead) return;
         airSpeed = rb.velocity.y;
+        if (Mathf.Abs(airSpeed) >= 3f) isInAir = true;
         EnvironmentCheck();
         Climb();
         Dash();
@@ -153,11 +156,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (avoidDamage) return;
         GetComponent<PlayerProperty>().SetHealth(-damage);
+        UIManager.GetInstance().Hurt();
+        Camera.main.GetComponent<CameraController>().Shake();
         if (!GetComponent<PlayerProperty>().isDead)
         {
             isHurting = true;
             anim.Hurt();
-            Camera.main.GetComponent<CameraController>().Shake();
             canMove = true;
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 1f;
@@ -234,6 +238,11 @@ public class PlayerMovement : MonoBehaviour
         isOnGround = (leftCheck || rightCheck);
         if (isOnGround && airSpeed < 0.1f)
         {
+            if(isInAir)
+            {
+                isInAir = false;
+                PoolManager.GetInstance().GetDustObject(true);
+            }
             isDoubleJumping = false;
             jumpCount = doubleJump ? 2 : 1;
         }
@@ -245,7 +254,7 @@ public class PlayerMovement : MonoBehaviour
             Vector2.right * direction, groundDistance, groundLayer);
         RaycastHit2D footCheck = Raycast(new Vector2(direction * handOffset, -footHeight),
             Vector2.right * direction, groundDistance, groundLayer);
-        if (!isOnGround && !isAttacking && !isDashing && !isHurting
+        if (!isOnGround && !isAttacking && !isDashing && !isHurting && canMove
             && headCheck && handCheck && footCheck && rb.velocity.y < 0f)
         {
             if (!isSliding)
@@ -368,6 +377,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Trap"))
+        {
+            if (!avoidDamage)
+            {
+                Hurt(1, (Vector2.up + new Vector2(-transform.localScale.x, 0)).normalized * 2f);
+            }
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Ladder"))
@@ -396,6 +416,24 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         isHurting = false;
+        StartCoroutine(Blink());
+    }
+
+    IEnumerator Blink()
+    {
+        float a = 0f;
+        float duration = 2f;
+        float interval = 0.15f;
+        while(duration >= 0 && avoidDamage)
+        {
+            yield return new WaitForSeconds(interval);
+            Color color = GetComponent<SpriteRenderer>().color;
+            GetComponent<SpriteRenderer>().color = new Color(color.r, color.g, color.b, a);
+            a = -a + 1;
+            duration -= interval;
+        }
+        Color color1 = GetComponent<SpriteRenderer>().color;
+        GetComponent<SpriteRenderer>().color = new Color(color1.r, color1.g, color1.b, 1);
         avoidDamage = false;
     }
 }

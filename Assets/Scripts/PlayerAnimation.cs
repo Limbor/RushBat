@@ -115,5 +115,6 @@ public class PlayerAnimation : MonoBehaviour
         } while (fade > 0);
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         gameObject.GetComponent<Collider2D>().enabled = false;
+        GameManager.GetInstance().Restart();
     }
 }

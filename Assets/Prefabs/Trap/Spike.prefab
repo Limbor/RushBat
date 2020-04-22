@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 740110030401738221}
   - component: {fileID: 740110030401738220}
   - component: {fileID: 740110030401738219}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,3 +144,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4fcf2877678e4b6a9bdc50d622b2cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastStabTime: 0

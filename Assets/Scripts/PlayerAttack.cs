@@ -8,8 +8,10 @@ public class PlayerAttack : MonoBehaviour
     public Transform energyPoint;
     public Transform dartPoint;
     public LayerMask enemyLayer;
-    public GameObject energy;
-    public GameObject dart;
+
+    private GameObject energy;
+    private GameObject dart;
+    private GameObject bigDust;
 
     private float scope = 0.2f;
     private bool slowDown = false;
@@ -22,15 +24,14 @@ public class PlayerAttack : MonoBehaviour
     private float pauseTime = 0f;
     private bool isTimeSlow = false;
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawWireSphere(transform.position, 0.35f);
-    //}
-
     private void Start()
     {
         player = GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody2D>();
+
+        energy = PoolManager.GetInstance().transform.GetChild(0).gameObject;
+        dart = PoolManager.GetInstance().transform.GetChild(1).gameObject;
+        bigDust = PoolManager.GetInstance().transform.GetChild(2).gameObject;
 
         damagesEnemies = new List<GameObject>();
     }
@@ -98,7 +99,9 @@ public class PlayerAttack : MonoBehaviour
         player.avoidDamage = true;
         rb.velocity = new Vector2(player.transform.localScale.x * 8f, 0);
         isSlashing = true;
-        PoolManager.GetInstance().GetDustObject(true);
+        bigDust.SetActive(true);
+        bigDust.transform.position = transform.position;
+        bigDust.transform.localScale = transform.localScale;
         Camera.main.GetComponent<CameraController>().Shake();
         Camera.main.GetComponent<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }

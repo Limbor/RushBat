@@ -8,20 +8,22 @@ public class PoolManager : MonoBehaviour
 
     public GameObject shadowPrefab;
     public GameObject dustPrefab;
+    public GameObject wallDustPrefab;
     public GameObject tearPrefab;
     public GameObject firePrefab;
-
-    public Transform moveDust;
-    public Transform slideDust;
+    public GameObject woodSpikePrefab;
 
     private int shadowCount = 10;
-    private int dustCount = 5;
+    private int dustCount = 3;
     private int tearCount = 3;
-    private int fireCount = 5;
+    private int fireCount = 3;
+    private int spikeCount = 3;
     private Queue<GameObject> shadowPool;
     private Queue<GameObject> dustPool;
+    private Queue<GameObject> wallDustPool;
     private Queue<GameObject> tearPool;
     private Queue<GameObject> firePool;
+    private Queue<GameObject> spikePool;
 
     private void Awake()
     {
@@ -30,13 +32,19 @@ public class PoolManager : MonoBehaviour
             poolManager = this;
             shadowPool = new Queue<GameObject>();
             dustPool = new Queue<GameObject>();
+            wallDustPool = new Queue<GameObject>();
             tearPool = new Queue<GameObject>();
             firePool = new Queue<GameObject>();
+            spikePool = new Queue<GameObject>();
             FillShadowPool();
-            FillDustPool();
+            FillDustPool(true);
+            FillDustPool(false);
             FillTearPool();
             FillFirePool();
+            FillSpikePool();
+            return;
         }
+        Destroy(gameObject);
     }
 
     public static PoolManager GetInstance()
@@ -70,42 +78,54 @@ public class PoolManager : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void FillDustPool()
+    public void FillDustPool(bool move)
     {
-        for (int i = 0; i < dustCount; i++)
+        if (move)
         {
-            GameObject gameObject = Instantiate(dustPrefab);
-            gameObject.transform.SetParent(transform);
-            ReturnDustPool(gameObject);
+            for (int i = 0; i < dustCount; i++)
+            {
+                GameObject gameObject = Instantiate(dustPrefab);
+                gameObject.transform.SetParent(transform);
+                ReturnDustPool(gameObject, move);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < dustCount; i++)
+            {
+                GameObject gameObject = Instantiate(wallDustPrefab);
+                gameObject.transform.SetParent(transform);
+                ReturnDustPool(gameObject, move);
+            }
         }
     }
 
-    public void ReturnDustPool(GameObject gameObject)
+    public void ReturnDustPool(GameObject gameObject, bool move)
     {
         gameObject.SetActive(false);
-        dustPool.Enqueue(gameObject);
+        if (move) dustPool.Enqueue(gameObject);
+        else wallDustPool.Enqueue(gameObject);
     }
 
     public void GetDustObject(bool move)
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (dustPool.Count == 0)
-        {
-            FillDustPool();
-        }
-        GameObject gameObject = dustPool.Dequeue();
+        GameObject gameObject;
         if (move)
         {
-            gameObject.transform.position = moveDust.transform.position;
-            gameObject.transform.rotation = moveDust.transform.rotation;
+            if (dustPool.Count == 0) FillDustPool(move);
+            gameObject = dustPool.Dequeue();
+            gameObject.transform.position = player.transform.position;
+            gameObject.transform.rotation = player.transform.rotation;
             gameObject.transform.localScale = player.transform.localScale;
         }
         else
         {
-            gameObject.transform.position = slideDust.transform.position;
-            gameObject.transform.rotation = slideDust.transform.rotation;
-            gameObject.transform.localScale = new Vector3(player.transform.localScale.x,
-                slideDust.transform.localScale.y, slideDust.transform.localScale.z);
+            if (wallDustPool.Count == 0) FillDustPool(move);
+            gameObject = wallDustPool.Dequeue();
+            gameObject.transform.position = player.transform.position;
+            gameObject.transform.rotation = player.transform.rotation;
+            gameObject.transform.localScale = player.transform.localScale;
         }
         gameObject.SetActive(true);
     }
@@ -162,6 +182,34 @@ public class PoolManager : MonoBehaviour
         GameObject gameObject = firePool.Dequeue();
         gameObject.transform.position = position;
         gameObject.transform.localScale = new Vector3(1, direction, 1);
+        gameObject.SetActive(true);
+    }
+
+    public void FillSpikePool()
+    {
+        for (int i = 0; i < spikeCount; i++)
+        {
+            GameObject gameObject = Instantiate(woodSpikePrefab);
+            gameObject.transform.SetParent(transform);
+            ReturnSpikePool(gameObject);
+        }
+    }
+
+    public void ReturnSpikePool(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+        spikePool.Enqueue(gameObject);
+    }
+
+    public void GetSpikeObject(Transform transform)
+    {
+        if (spikePool.Count == 0)
+        {
+            FillSpikePool();
+        }
+        GameObject gameObject = spikePool.Dequeue();
+        gameObject.transform.position = transform.position;
+        gameObject.transform.localScale = transform.localScale;
         gameObject.SetActive(true);
     }
 }

@@ -4027,7 +4027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1238985426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.88, y: -2.47, z: 0}
+  m_LocalPosition: {x: 1.764, y: -1.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1319682399}
@@ -6151,7 +6151,7 @@ PrefabInstance:
     - target: {fileID: 1390128418054485363, guid: cf1681e8828a02d48b07f9eee3655436,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.685
+      value: -2.614
       objectReference: {fileID: 0}
     - target: {fileID: 1390128418054485363, guid: cf1681e8828a02d48b07f9eee3655436,
         type: 3}
@@ -6211,7 +6211,7 @@ PrefabInstance:
     - target: {fileID: 1390128418054973779, guid: cf1681e8828a02d48b07f9eee3655436,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf1681e8828a02d48b07f9eee3655436, type: 3}
@@ -6351,6 +6351,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knight5_Sword
       objectReference: {fileID: 0}
+    - target: {fileID: 7028972151027759319, guid: 8f20bfc75da54dd4abac03eea1cc7d00,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7028972152315861547, guid: 8f20bfc75da54dd4abac03eea1cc7d00,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -6368,12 +6373,12 @@ PrefabInstance:
     - target: {fileID: 7070216867693492788, guid: ba6501d0ce5414b42a638207c9279c7a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.598
+      value: -2.62
       objectReference: {fileID: 0}
     - target: {fileID: 7070216867693492788, guid: ba6501d0ce5414b42a638207c9279c7a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.089
       objectReference: {fileID: 0}
     - target: {fileID: 7070216867693492788, guid: ba6501d0ce5414b42a638207c9279c7a,
         type: 3}
@@ -6428,7 +6433,7 @@ PrefabInstance:
     - target: {fileID: 7070216867693794332, guid: ba6501d0ce5414b42a638207c9279c7a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba6501d0ce5414b42a638207c9279c7a, type: 3}

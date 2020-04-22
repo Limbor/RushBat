@@ -147,11 +147,13 @@ public class MinotaurMovement : EnemyMovement
         if (attackType)
         {
             anim.SetBool("stab", true);
+            stab = true;
             attackType = !attackType;
         }
         else
         {
             anim.SetBool("rotate", true);
+            rotate = true;
             attackType = !attackType;
         }
     }
@@ -163,5 +165,13 @@ public class MinotaurMovement : EnemyMovement
         {
             blood = 300;
         }
+    }
+
+    void finishAttack()
+    {
+        anim.SetBool("stab", false);
+        stab = false;
+        anim.SetBool("rotate", false);
+        rotate = false;
     }
 }

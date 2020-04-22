@@ -27,7 +27,9 @@ public class AxeMovement : EnemyMovement
         blood = 100;
         walkspeed = 100f;
         waittime = 1f;
+        length = 0.31f;
         faceright = true;
+        //length = 0.375f;
         //walking = true;
     }
 
@@ -76,7 +78,7 @@ public class AxeMovement : EnemyMovement
             if (player.transform.position.x > startx && player.transform.position.x < transform.position.x)
             {
                 //玩家在身后，转身
-                if (!attacking && hdis < 0.5) 
+                if (!attacking && hdis < 0.5 && !block) 
                 {
                     Flip();
                 }
@@ -85,6 +87,17 @@ public class AxeMovement : EnemyMovement
             {
                 anim.SetBool("walk", true);
                 rb.velocity = new Vector2(walkspeed * Time.deltaTime, rb.velocity.y);
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, length + 0.05f, groundLayer.value);
+                if (hit)
+                {
+                    block = true;
+                    Flip();
+                    rb.velocity = new Vector2(-1 * walkspeed * Time.deltaTime, rb.velocity.y);
+                }
+                else
+                {
+                    block = false;
+                }
             }
         }
         else if (faceright && edis <= 0)
@@ -106,7 +119,7 @@ public class AxeMovement : EnemyMovement
         {
             if (player.transform.position.x > transform.position.x && player.transform.position.x < endx)
             {
-                if (!attacking && hdis < 0.5) 
+                if (!attacking && hdis < 0.5 && !block) 
                 {
                     Flip();
                 }
@@ -115,6 +128,17 @@ public class AxeMovement : EnemyMovement
             {
                 anim.SetBool("walk", true);
                 rb.velocity = new Vector2(-1 * walkspeed * Time.deltaTime, rb.velocity.y);
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, length + 0.05f, groundLayer.value);
+                if (hit)
+                {
+                    block = true;
+                    Flip();
+                    rb.velocity = new Vector2(walkspeed * Time.deltaTime, rb.velocity.y);
+                }
+                else
+                {
+                    block = false;
+                }
             }
         }
         else
@@ -135,7 +159,7 @@ public class AxeMovement : EnemyMovement
 
     void Attack()
     {
-        if (!isdead && ground)
+        if (!isdead && ground && !hurt)
         {
             //根据和玩家的距离进行攻击
             float distance = player.transform.position.x - transform.position.x;

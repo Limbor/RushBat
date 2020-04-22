@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,14 +11,34 @@ public class UIManager : MonoBehaviour
     public Image[] skill;
     public Image[] health;
     public Sprite[] hearts;
+    public Image hurt;
+    public RawImage fader;
 
     private void Awake()
     {
         if(manager == null)
         {
             manager = this;
+            return;
         }
+        Destroy(gameObject);
     }
+
+    public void Hurt()
+    {
+        hurt.DOComplete();
+        Tweener tween = hurt.DOFade(1f, 0.3f);
+        tween.OnComplete(() =>
+        {
+            hurt.DOFade(0f, 0.3f);
+        });
+    }
+
+    public void EndScene()
+    {
+        fader.GetComponent<SceneFader>().EndScene();
+    }
+
 
     public void SetPlayerHealth(int health)
     {

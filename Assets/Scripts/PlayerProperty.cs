@@ -6,8 +6,8 @@ using DG.Tweening;
 public class PlayerProperty : MonoBehaviour
 {
     [Header("State Icon")]
-    public Sprite poison;
-    public Sprite burn;
+    public GameObject poisonPartical;
+    public GameObject burnPartical;
 
     [Header("Skill CD")]
     public float dashCoolDown = 2f;
@@ -16,7 +16,7 @@ public class PlayerProperty : MonoBehaviour
     public float skill3CoolDown = 10f;
 
     [Header("Player State")]
-    public GameObject state;
+    public SpriteRenderer state;
     public bool isDead = false;
     public int maxHealth = 16;
     public bool isPoisoned = false;
@@ -40,18 +40,6 @@ public class PlayerProperty : MonoBehaviour
         UIManager.GetInstance().SetSkillTime(0, 1.0f / skill1CoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(1, 1.0f / skill2CoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(2, 1.0f / skill3CoolDown * Time.deltaTime);
-        if (isPoisoned)
-        {
-            state.GetComponent<SpriteRenderer>().sprite = poison;
-        }
-        else if (isBurnt)
-        {
-            state.GetComponent<SpriteRenderer>().sprite = burn;
-        }
-        else
-        {
-            state.GetComponent<SpriteRenderer>().sprite = null;
-        }
     }
 
     public void SetHealth(int change)
@@ -72,6 +60,7 @@ public class PlayerProperty : MonoBehaviour
     {
         if (GetComponent<PlayerMovement>().avoidDamage) return;
         lastPoisonedTime += time;
+        poisonPartical.SetActive(true);
         if (!isPoisoned)
         {
             StartCoroutine(Poisoned());
@@ -84,18 +73,19 @@ public class PlayerProperty : MonoBehaviour
         while(lastPoisonedTime != 0)
         {
             yield return new WaitForSeconds(1f);
-            GetComponent<SpriteRenderer>().color = new Color(0.153f, 0.255f, 0.176f);
-            GetComponent<SpriteRenderer>().DOColor(Color.white, 0.8f);
+            UIManager.GetInstance().Hurt();
             SetHealth(-1);
             lastPoisonedTime -= 1;
         }
         isPoisoned = false;
+        poisonPartical.SetActive(false);
     }
 
     public void GetBurnt(int time)
     {
         if (GetComponent<PlayerMovement>().avoidDamage) return;
         lastBurntTime += time;
+        burnPartical.SetActive(true);
         if (!isBurnt)
         {
             StartCoroutine(Burnt());
@@ -108,11 +98,11 @@ public class PlayerProperty : MonoBehaviour
         while (lastBurntTime != 0)
         {
             yield return new WaitForSeconds(1f);
-            GetComponent<SpriteRenderer>().color = new Color(0.416f, 0.125f, 0.180f);
-            GetComponent<SpriteRenderer>().DOColor(Color.white, 0.8f);
+            UIManager.GetInstance().Hurt();
             SetHealth(-1);
             lastBurntTime -= 1;
         }
         isBurnt = false;
+        burnPartical.SetActive(false);
     }
 }

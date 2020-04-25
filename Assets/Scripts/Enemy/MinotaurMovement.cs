@@ -10,6 +10,7 @@ public class MinotaurMovement : EnemyMovement
     private bool down;
     private bool rotate;
     private bool attackType;
+    private bool hasAttacked;  //一次动画只造成一次伤害
 
     private float dashDistance;
     private float breathTime;
@@ -25,6 +26,7 @@ public class MinotaurMovement : EnemyMovement
         down = false;
         rotate = false;
         attackType = true;
+        hasAttacked = false;
 
         blood = 300f;
         walkspeed = 80f;
@@ -128,11 +130,13 @@ public class MinotaurMovement : EnemyMovement
 
     void finishDash()
     {
+        hasAttacked = false;
         Debug.Log("finish Dash");
         anim.SetBool("run", false);
         anim.SetBool("chop", false);
         anim.SetBool("weak", true);
         Invoke("finishWeak", weakTime);
+
     }
 
     void finishWeak()
@@ -167,8 +171,19 @@ public class MinotaurMovement : EnemyMovement
         }
     }
 
+    public bool Attacked()
+    {
+        return hasAttacked;
+    }
+
+    public void doAttack()
+    {
+        hasAttacked = true;
+    }
+    
     void finishAttack()
     {
+        hasAttacked = false;
         anim.SetBool("stab", false);
         stab = false;
         anim.SetBool("rotate", false);

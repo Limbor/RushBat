@@ -9916,6 +9916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poisonPartical: {fileID: 1484911856}
   burnPartical: {fileID: 650986040}
+  healFx: {fileID: 6749606915908592094, guid: c58f09aa0102046acb3348c6d7949b8f, type: 3}
   dashCoolDown: 2
   skill2CoolDown: 5
   skill1CoolDown: 3

@@ -8,6 +8,7 @@ public class PlayerProperty : MonoBehaviour
     [Header("State Icon")]
     public GameObject poisonPartical;
     public GameObject burnPartical;
+    public GameObject healFx;
 
     [Header("Skill CD")]
     public float dashCoolDown = 2f;
@@ -45,6 +46,11 @@ public class PlayerProperty : MonoBehaviour
     public void SetHealth(int change)
     {
         if (isDead) return;
+        if(currentHealth != maxHealth && change > 0)
+        {
+            Instantiate(healFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
+
+        }
         currentHealth += change;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentHealth < 0) currentHealth = 0;

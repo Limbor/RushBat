@@ -5220,6 +5220,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 559375686, guid: dadafca4e8e7e471795e3a2e70cf3d12, type: 3}
+      propertyPath: dizzy
+      value: 
+      objectReference: {fileID: 6771492652283072079, guid: 9938518e402a149b08782818de9858e7,
+        type: 3}
     - target: {fileID: 8223924298357443384, guid: dadafca4e8e7e471795e3a2e70cf3d12,
         type: 3}
       propertyPath: m_Color.a

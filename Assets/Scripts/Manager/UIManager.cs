@@ -6,7 +6,8 @@ using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager manager;
+    private static UIManager _manager;
+    
     public Image dashIcon;
     public Image[] skill;
     public Image[] health;
@@ -16,9 +17,9 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        if(manager == null)
+        if(_manager == null)
         {
-            manager = this;
+            _manager = this;
             return;
         }
         Destroy(gameObject);
@@ -69,7 +70,7 @@ public class UIManager : MonoBehaviour
 
     public static UIManager GetInstance()
     {
-        return manager;
+        return _manager;
     }
 
     public void SetSkillTime(int index, float time)

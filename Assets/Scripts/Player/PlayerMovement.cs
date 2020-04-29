@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
     private PlayerAnimation anim;
+    private PlayerProperty property;
 
     private bool doubleJump = true;
     private int jumpCount;
@@ -69,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<PlayerAnimation>();
+        property = GetComponent<PlayerProperty>();
 
         dashCoolDown = GetComponent<PlayerProperty>().dashCoolDown;
         skill2CoolDown = GetComponent<PlayerProperty>().skill1CoolDown;
@@ -81,12 +83,13 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GetComponent<PlayerProperty>().isDead) return;
+        if (property.isDead) return;
         GetMoveButton();
         GetSkillButton();
 
         if (Input.GetMouseButtonDown(2))
         {
+            InputManager.SetInputStatus(false);
             Hurt(1, new Vector2(-transform.localScale.x * 1f, 0));
         }
     }
@@ -94,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
     private void GetSkillButton()
     {
         if (isDashing || !canMove || isSliding || isGliding || isClimbing) return;
-        if (Input.GetButtonDown("Skill3") && Time.time > lastSkill3Time + skill3CoolDown)
+        if (InputManager.GetButtonDown("Skill3") && Time.time > lastSkill3Time + skill3CoolDown)
         {
             UIManager.GetInstance().ResetSkillTime(1);
             rb.velocity = new Vector2(0, rb.velocity.y);
@@ -102,13 +105,13 @@ public class PlayerMovement : MonoBehaviour
             anim.StartSkill3();
             lastSkill3Time = Time.time;
         }
-        if (Input.GetButtonDown("Skill2") && Time.time > lastSkill2Time + skill2CoolDown)
+        if (InputManager.GetButtonDown("Skill2") && Time.time > lastSkill2Time + skill2CoolDown)
         {
             UIManager.GetInstance().ResetSkillTime(0);
             anim.StartSkill2();
             lastSkill2Time = Time.time;
         }
-        if (Input.GetButtonDown("Skill4") && Time.time > lastSkill4Time + skill4CoolDown)
+        if (InputManager.GetButtonDown("Skill4") && Time.time > lastSkill4Time + skill4CoolDown)
         {
             UIManager.GetInstance().ResetSkillTime(2);
             rb.velocity = new Vector2(0, 0);
@@ -121,16 +124,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetMoveButton()
     {
-        xVelocity = Input.GetAxis("Horizontal");
-        yVelocity = Input.GetAxis("Vertical");
-        glideHeld = Input.GetButton("Jump");
-        if (Input.GetButtonDown("Jump"))
+        xVelocity = InputManager.GetAxis("Horizontal");
+        yVelocity = InputManager.GetAxis("Vertical");
+        glideHeld = InputManager.GetButton("Jump");
+        if (InputManager.GetButtonDown("Jump"))
         {
             jumpPressed = true;
             jumpPressTime = Time.time + Time.fixedDeltaTime;
         }
         if (jumpPressed && Time.time >= jumpPressTime) jumpPressed = false;
-        if (Input.GetButtonDown("Dash"))
+        if (InputManager.GetButtonDown("Dash"))
         {
             dashPressed = true;
             dashPressTime = Time.time + Time.fixedDeltaTime;
@@ -141,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GetComponent<PlayerProperty>().isDead) return;
+        if (property.isDead) return;
         airSpeed = rb.velocity.y;
         if (Mathf.Abs(airSpeed) >= 3f) isInAir = true;
         EnvironmentCheck();
@@ -155,10 +158,10 @@ public class PlayerMovement : MonoBehaviour
     public void Hurt(int damage, Vector2 force)
     {
         if (avoidDamage) return;
-        GetComponent<PlayerProperty>().SetHealth(-damage);
+        property.SetHealth(-damage);
         UIManager.GetInstance().Hurt();
         Camera.main.GetComponent<CameraController>().Shake();
-        if (!GetComponent<PlayerProperty>().isDead)
+        if (!property.isDead)
         {
             isHurting = true;
             anim.Hurt();
@@ -177,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
         if (!canMove || isDashing || isHurting) return;
         if(isOnLadder && isOnGround)
         {
-            if(!isClimbing && yVelocity != 0)
+            if(!isClimbing && Mathf.Abs(yVelocity) >= 0)
             {
                 isClimbing = true;
                 rb.bodyType = RigidbodyType2D.Kinematic;
@@ -336,7 +339,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isGliding = false;
-            if(rb.gravityScale != 0f) rb.gravityScale = 1f;
+            if(rb.gravityScale >= 0f) rb.gravityScale = 1f;
         }
     }
 
@@ -424,16 +427,17 @@ public class PlayerMovement : MonoBehaviour
         float a = 0f;
         float duration = 2f;
         float interval = 0.15f;
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
         while(duration >= 0 && avoidDamage)
         {
             yield return new WaitForSeconds(interval);
-            Color color = GetComponent<SpriteRenderer>().color;
-            GetComponent<SpriteRenderer>().color = new Color(color.r, color.g, color.b, a);
+            Color color = sprite.color;
+            sprite.color = new Color(color.r, color.g, color.b, a);
             a = -a + 1;
             duration -= interval;
         }
-        Color color1 = GetComponent<SpriteRenderer>().color;
-        GetComponent<SpriteRenderer>().color = new Color(color1.r, color1.g, color1.b, 1);
+        Color color1 = sprite.color;
+        sprite.color = new Color(color1.r, color1.g, color1.b, 1);
         avoidDamage = false;
     }
 }

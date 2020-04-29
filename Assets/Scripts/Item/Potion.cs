@@ -6,18 +6,18 @@ public class Potion : MonoBehaviour
 {
     public enum Kind
     {
-        red, green, blue, purple, white
+        Red, Green, Blue, Purple, White
     }
-
+    
     public Kind thisKind;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
+        if (collision.CompareTag("Player") && InputManager.GetKeyDown(KeyCode.F))
         {
             switch (thisKind)
             {
-                case Kind.red:
+                case Kind.Red:
                     collision.GetComponent<PlayerProperty>().SetHealth(2);
                     break;
             }

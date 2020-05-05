@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    private AudioManager audioManager;
+    private static AudioManager _audioManager;
 
     private AudioSource musicAudio, playerAudio, fxAudio, ambientAudio;
 
     private void Awake()
     {
-        if(audioManager == null)
+        if(_audioManager == null)
         {
-            audioManager = this;
+            _audioManager = this;
             DontDestroyOnLoad(gameObject);
             return;
         }
@@ -30,12 +30,12 @@ public class AudioManager : MonoBehaviour
         musicAudio.playOnAwake = false;
         // musicAudio.Play();
         ambientAudio.clip = Resources.Load<AudioClip>("Sounds/Ambient");
+        ambientAudio.loop = true;
         ambientAudio.Play();
     }
 
-    // Update is called once per frame
-    void Update()
+    public static  AudioManager GetInstance()
     {
-        
+        return _audioManager;
     }
 }

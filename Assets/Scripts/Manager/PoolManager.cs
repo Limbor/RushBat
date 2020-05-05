@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
     private static PoolManager poolManager;
+    private GameObject player;
 
     public GameObject shadowPrefab;
     public GameObject dustPrefab;
@@ -47,6 +49,11 @@ public class PoolManager : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
+
     public static PoolManager GetInstance()
     {
         return poolManager;
@@ -56,8 +63,7 @@ public class PoolManager : MonoBehaviour
     {
         for (int i = 0; i < shadowCount; i++)
         {
-            GameObject gameObject = Instantiate(shadowPrefab);
-            gameObject.transform.SetParent(transform);
+            GameObject gameObject = Instantiate(shadowPrefab, transform);
             ReturnShadowPool(gameObject);
         }
     }
@@ -84,8 +90,7 @@ public class PoolManager : MonoBehaviour
         {
             for (int i = 0; i < dustCount; i++)
             {
-                GameObject gameObject = Instantiate(dustPrefab);
-                gameObject.transform.SetParent(transform);
+                GameObject gameObject = Instantiate(dustPrefab, transform);
                 ReturnDustPool(gameObject, move);
             }
         }
@@ -93,8 +98,7 @@ public class PoolManager : MonoBehaviour
         {
             for (int i = 0; i < dustCount; i++)
             {
-                GameObject gameObject = Instantiate(wallDustPrefab);
-                gameObject.transform.SetParent(transform);
+                GameObject gameObject = Instantiate(wallDustPrefab, transform);
                 ReturnDustPool(gameObject, move);
             }
         }
@@ -109,7 +113,6 @@ public class PoolManager : MonoBehaviour
 
     public void GetDustObject(bool move)
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject gameObject;
         if (move)
         {
@@ -134,8 +137,7 @@ public class PoolManager : MonoBehaviour
     {
         for (int i = 0; i < tearCount; i++)
         {
-            GameObject gameObject = Instantiate(tearPrefab);
-            gameObject.transform.SetParent(transform);
+            GameObject gameObject = Instantiate(tearPrefab, transform);
             ReturnTearPool(gameObject);
         }
     }
@@ -161,8 +163,7 @@ public class PoolManager : MonoBehaviour
     {
         for (int i = 0; i < fireCount; i++)
         {
-            GameObject gameObject = Instantiate(firePrefab);
-            gameObject.transform.SetParent(transform);
+            GameObject gameObject = Instantiate(firePrefab, transform);
             ReturnFirePool(gameObject);
         }
     }
@@ -189,8 +190,7 @@ public class PoolManager : MonoBehaviour
     {
         for (int i = 0; i < spikeCount; i++)
         {
-            GameObject gameObject = Instantiate(woodSpikePrefab);
-            gameObject.transform.SetParent(transform);
+            GameObject gameObject = Instantiate(woodSpikePrefab, transform);
             ReturnSpikePool(gameObject);
         }
     }

@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager gameManager;
+    private static GameManager _gameManager;
 
     private void Awake()
     {
-        if(gameManager == null)
+        if(_gameManager == null)
         {
-            gameManager = this;
+            _gameManager = this;
             DontDestroyOnLoad(gameObject);
             return;
         }
@@ -26,6 +26,6 @@ public class GameManager : MonoBehaviour
 
     public static GameManager GetInstance()
     {
-        return gameManager;
+        return _gameManager;
     }
 }

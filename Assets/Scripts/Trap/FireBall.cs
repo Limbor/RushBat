@@ -39,7 +39,7 @@ public class FireBall : MonoBehaviour
         {
             Vector2 direction = (collision.transform.position - transform.position).normalized;
             collision.GetComponent<PlayerProperty>().GetBurnt(2);
-            collision.GetComponent<PlayerMovement>().Hurt(1, direction * 2f);
+            collision.GetComponent<PlayerMovement>().Hurt(1, direction * 2f, GameManager.FlyingTrap);
             GetComponent<Animator>().SetTrigger("boom");
             boom = true;
         }

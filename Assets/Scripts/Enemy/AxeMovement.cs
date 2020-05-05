@@ -36,6 +36,7 @@ public class AxeMovement : EnemyMovement
     // Update is called once per frame
     void Update()
     {
+        if (isdead) return;
         base.Update();
 
         Attack();
@@ -55,6 +56,7 @@ public class AxeMovement : EnemyMovement
     //}
     void FixedUpdate()
     {
+        if (isdead) return;
         Move();
     }
     void Move()

@@ -29,7 +29,7 @@ public class Saw : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Vector2 direction = collision.transform.position - transform.position;
-            collision.GetComponent<PlayerMovement>().Hurt(1, direction.normalized * 3f);
+            collision.GetComponent<PlayerMovement>().Hurt(1, direction.normalized * 3f, GameManager.GroundTrap);
         }
     }
 }

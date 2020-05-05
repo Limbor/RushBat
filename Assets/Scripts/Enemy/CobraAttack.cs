@@ -11,7 +11,7 @@ public class CobraAttack : EnemyAttack
     void Start()
     {
         normalDamage = 1;
-        normalScope = 0.35f;
+        normalScope = 0.15f;
     }
 
     // Update is called once per frame
@@ -41,8 +41,8 @@ public class CobraAttack : EnemyAttack
                 }
 
                 Debug.Log("Enemy take damage, Amount: " + players.Length);
-                player.GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction, 0));
                 player.GetComponent<PlayerProperty>().GetPoisoned(2);
+                player.GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction, 0), GameManager.Enemy);
                 //transform.GetComponent<EnemyMovement>().getDamage(10, (int)direction * -1);
                 break;
             }

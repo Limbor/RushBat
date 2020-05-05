@@ -29,6 +29,7 @@ public class FireElementalMovement : EnemyMovement
     // Update is called once per frame
     void Update()
     {
+        if (isdead) return;
         base.Update();
         Move();
         Attack();

@@ -38,6 +38,15 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public static KeyCode GetKeyCode(String button)
+    {
+        if (_inputManager.buttonTable.Contains(button))
+        {
+            return _inputManager.buttonTable[button] is KeyCode ? (KeyCode) _inputManager.buttonTable[button] : KeyCode.None;
+        }
+        return KeyCode.None;
+    }
+
     public static bool CanInput()
     {
         return _inputManager.acceptInput;

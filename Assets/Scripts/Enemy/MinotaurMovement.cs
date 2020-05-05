@@ -56,6 +56,7 @@ public class MinotaurMovement : EnemyMovement
     // Update is called once per frame
     void Update()
     {
+        if (isdead) return;
         base.Update();
         //attackInterval -= Time.deltaTime;
         Move();
@@ -260,7 +261,7 @@ public class MinotaurMovement : EnemyMovement
             //怪物受伤后退
             transform.position = new Vector2(transform.position.x + backDis, transform.position.y);
 
-
+            PoolManager.GetInstance().GetDamageText(transform.position, damage);
         }
 
     }

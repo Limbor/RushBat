@@ -21,33 +21,33 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: ec0242b6dea6ded46bffe8dbbbce90a1, type: 3}
-    - time: 0.06666667
+    - time: 0.0625
       value: {fileID: 21300000, guid: ec0242b6dea6ded46bffe8dbbbce90a1, type: 3}
-    - time: 0.13333334
+    - time: 0.125
       value: {fileID: 21300000, guid: 7f875babd6a1bb143bef1b021a56e808, type: 3}
-    - time: 0.2
+    - time: 0.1875
       value: {fileID: 21300000, guid: aef890e2f120a164882bbee4d9229c3a, type: 3}
-    - time: 0.26666668
+    - time: 0.25
       value: {fileID: 21300000, guid: 9057a88b88aa1ab4e9235a3273c359cc, type: 3}
-    - time: 0.33333334
+    - time: 0.3125
       value: {fileID: 21300000, guid: 80785dc757f258b4f98f158c06b49e44, type: 3}
-    - time: 0.4
+    - time: 0.375
       value: {fileID: 21300000, guid: fd6f9571227e9694ab49353ad783227b, type: 3}
-    - time: 0.46666667
+    - time: 0.4375
       value: {fileID: 21300000, guid: 430130865b110ac4fba6a586699f73fc, type: 3}
-    - time: 0.53333336
+    - time: 0.5
       value: {fileID: 21300000, guid: 73cce84ae7a8334498c349f6a225c4c1, type: 3}
-    - time: 0.6
+    - time: 0.5625
       value: {fileID: 21300000, guid: a23b8f97c9f0edb44964d830b08c5301, type: 3}
-    - time: 0.6666667
+    - time: 0.625
       value: {fileID: 21300000, guid: 38975df8d2c450f4f9e0e9c8407dfe00, type: 3}
-    - time: 0.73333335
+    - time: 0.6875
       value: {fileID: 21300000, guid: 139dff9ebeed04e49b3bf65e5de0f986, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 15
+  m_SampleRate: 16
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -79,7 +79,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.8
+    m_StopTime: 0.75
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -99,14 +99,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.2
+  - time: 0.1875
     functionName: Attack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.6
+  - time: 0.5625
     functionName: Attack
     data: 
     objectReferenceParameter: {fileID: 0}

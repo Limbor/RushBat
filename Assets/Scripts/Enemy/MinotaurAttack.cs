@@ -81,7 +81,7 @@ public class MinotaurAttack : MonoBehaviour
                 }
 
                 Debug.Log("Enemy take damage, Amount: " + players.Length);
-                player.GetComponent<PlayerMovement>().Hurt(damage, new Vector2(direction, 0));
+                player.GetComponent<PlayerMovement>().Hurt(damage, new Vector2(direction, 0), GameManager.Enemy);
                 //transform.GetComponent<EnemyMovement>().getDamage(10, (int)direction * -1);
                 break;
             }

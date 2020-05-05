@@ -98,7 +98,7 @@ public class MinotaurMovement : EnemyMovement
             }
             if (abs_dis.x > dashDistance)
             {
-                Debug.Log("Distance: " + abs_dis.x);
+                //Debug.Log("Distance: " + abs_dis.x);
                 StartCoroutine(Dash(-1));
             }
             
@@ -164,7 +164,7 @@ public class MinotaurMovement : EnemyMovement
         anim.SetBool("run", true);
         while (Mathf.Abs(transform.position.x - player.transform.position.x) >= 0.7f)
         {
-            Debug.Log("Distance: " + Mathf.Abs(transform.position.x - player.transform.position.x));
+            //Debug.Log("Distance: " + Mathf.Abs(transform.position.x - player.transform.position.x));
             rb.velocity = new Vector2(dir * walkspeed * Time.deltaTime, rb.velocity.y);
             yield return null;
         }

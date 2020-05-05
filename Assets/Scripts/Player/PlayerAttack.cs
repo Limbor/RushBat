@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
+    [Header("Damage Judgement")]
     public Transform damagePoint;
     public Transform energyPoint;
     public Transform dartPoint;
     public LayerMask enemyLayer;
+
+    [Header("Damage Number")] 
+    public float attackDamage, attackFloatRange;
+    public float slashDamage, slashFloatRange;
 
     private GameObject energy;
     private GameObject dart;
@@ -63,8 +68,8 @@ public class PlayerAttack : MonoBehaviour
                         StartCoroutine(TimeStart());
                     }
                     damagesEnemies.Add(enemy.gameObject);
-                    enemy.GetComponent<EnemyMovement>().getDamage(30, (int)transform.localScale.x);
-                    Debug.Log("damage");
+                    enemy.GetComponent<EnemyMovement>().getDamage(slashDamage + Random.Range(-slashFloatRange,
+                        slashFloatRange), (int)transform.localScale.x);
                 }
             }
         }
@@ -72,12 +77,13 @@ public class PlayerAttack : MonoBehaviour
 
     public void Attack()
     {
+        // transform.Translate(transform.localScale.x * 0.1f, 0f, 0f);
         Collider2D[] enemies = Physics2D.OverlapCircleAll(damagePoint.position, scope, enemyLayer);
         foreach (Collider2D enemy in enemies)
         {
             int direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
-            enemy.GetComponent<EnemyMovement>().getDamage(30, direction);
-            Debug.Log("damage");
+            enemy.GetComponent<EnemyMovement>().getDamage(attackDamage + Random.Range(-attackFloatRange, 
+                attackFloatRange), direction);
         }
     }
 

@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
 public class PlayerProperty : MonoBehaviour
 {
-    [Header("State Icon")]
+    [Header("State Effect")]
     public GameObject poisonPartical;
     public GameObject burnPartical;
     public GameObject healFx;
@@ -24,14 +25,22 @@ public class PlayerProperty : MonoBehaviour
     public bool isBurnt = false;
 
     private int currentHealth;
+    public List<string> equipments;
     private int lastPoisonedTime;
     private int lastBurntTime;
 
+    private PlayerAnimation anim;
+    private Rigidbody2D rb;
+    
     void Start()
     {
         currentHealth = maxHealth;
         lastPoisonedTime = 0;
         lastBurntTime = 0;
+        equipments = new List<string>();
+
+        anim = GetComponent<PlayerAnimation>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -43,21 +52,36 @@ public class PlayerProperty : MonoBehaviour
         UIManager.GetInstance().SetSkillTime(2, 1.0f / skill3CoolDown * Time.deltaTime);
     }
 
+    public void Equip(string equipment)
+    {
+        if (HaveEquipment(equipment)) return;
+        equipments.Add(equipment);
+        anim.Acquire();
+    }
+
+    public bool HaveEquipment(string name)
+    {
+        foreach (var equipment in equipments)
+        {
+            if (equipment.Equals(name)) return true;
+        }
+        return false;
+    }
+    
     public void SetHealth(int change)
     {
         if (isDead) return;
         if(currentHealth != maxHealth && change > 0)
         {
             Instantiate(healFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
-
         }
         currentHealth += change;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentHealth < 0) currentHealth = 0;
         if (currentHealth == 0)
         {
-            GetComponent<PlayerAnimation>().Die();
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            anim.Die();
+            rb.velocity = new Vector2(0, 0);
             isDead = true;
         }
     }

@@ -29,7 +29,7 @@ public class Spike : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Vector2 direction = (collision.transform.position - transform.position + new Vector3(0, 0.5f, 0)).normalized;
-            collision.GetComponent<PlayerMovement>().Hurt(1, direction * 5f);
+            collision.GetComponent<PlayerMovement>().Hurt(1, direction * 5f, GameManager.GroundTrap);
         }
     }
 }

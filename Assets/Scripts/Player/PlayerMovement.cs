@@ -65,6 +65,11 @@ public class PlayerMovement : MonoBehaviour
     public bool isOnLadder;
     public bool isHurting;
 
+    private void Awake()
+    {
+        GameManager.GetInstance().RegisterPlayer(gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,12 +77,10 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<PlayerAnimation>();
         property = GetComponent<PlayerProperty>();
 
-        dashCoolDown = GetComponent<PlayerProperty>().dashCoolDown;
-        skill2CoolDown = GetComponent<PlayerProperty>().skill1CoolDown;
-        skill3CoolDown = GetComponent<PlayerProperty>().skill2CoolDown;
-        skill4CoolDown = GetComponent<PlayerProperty>().skill3CoolDown;
-
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"));
+        dashCoolDown = property.dashCoolDown;
+        skill2CoolDown = property.skill1CoolDown;
+        skill3CoolDown = property.skill2CoolDown;
+        skill4CoolDown = property.skill3CoolDown;
     }
 
     // Update is called once per frame
@@ -86,12 +89,6 @@ public class PlayerMovement : MonoBehaviour
         if (property.isDead) return;
         GetMoveButton();
         GetSkillButton();
-
-        if (Input.GetMouseButtonDown(2))
-        {
-            InputManager.SetInputStatus(false);
-            Hurt(1, new Vector2(-transform.localScale.x * 1f, 0));
-        }
     }
 
     private void GetSkillButton()
@@ -155,9 +152,10 @@ public class PlayerMovement : MonoBehaviour
         AirMove();
     }
 
-    public void Hurt(int damage, Vector2 force)
+    public void Hurt(int damage, Vector2 force, string source)
     {
         if (avoidDamage) return;
+        if (source.Equals(GameManager.GroundTrap) && property.HaveEquipment("Helmet")) return;
         property.SetHealth(-damage);
         UIManager.GetInstance().Hurt();
         Camera.main.GetComponent<CameraController>().Shake();
@@ -180,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
         if (!canMove || isDashing || isHurting) return;
         if(isOnLadder && isOnGround)
         {
-            if(!isClimbing && Mathf.Abs(yVelocity) >= 0)
+            if(!isClimbing && Mathf.Abs(yVelocity) != 0)
             {
                 isClimbing = true;
                 rb.bodyType = RigidbodyType2D.Kinematic;
@@ -280,7 +278,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else if(isSliding)
         {
-            
             isSliding = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
@@ -339,7 +336,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isGliding = false;
-            if(rb.gravityScale >= 0f) rb.gravityScale = 1f;
+            if(rb.gravityScale != 0f) rb.gravityScale = 1f;
         }
     }
 
@@ -384,10 +381,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Trap"))
         {
-            if (!avoidDamage)
-            {
-                Hurt(1, (Vector2.up + new Vector2(-transform.localScale.x, 0)).normalized * 2f);
-            }
+            if (avoidDamage) return;
+            if (property.HaveEquipment("Helmet")) return;
+            Hurt(1, (Vector2.up + new Vector2(-transform.localScale.x, 0)).normalized * 2f, GameManager.GroundTrap);
         }
     }
 

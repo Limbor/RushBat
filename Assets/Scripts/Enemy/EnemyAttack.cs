@@ -28,7 +28,7 @@ public class EnemyAttack : MonoBehaviour
             }
             
             Debug.Log("Enemy take damage, Amount: "+players.Length);
-            player.GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction, 0));
+            player.GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction, 0), GameManager.Enemy);
             break;
         }
     }

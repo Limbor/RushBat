@@ -34,7 +34,7 @@ public class AudioManager : MonoBehaviour
         ambientAudio.Play();
     }
 
-    public static  AudioManager GetInstance()
+    public static AudioManager GetInstance()
     {
         return _audioManager;
     }

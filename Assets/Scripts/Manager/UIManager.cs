@@ -13,7 +13,9 @@ public class UIManager : MonoBehaviour
     public Image[] health;
     public Sprite[] hearts;
     public Image hurt;
-    public RawImage fader;
+    public SceneFader fader;
+    public Text coinNumber;
+    
 
     private void Awake()
     {
@@ -37,9 +39,13 @@ public class UIManager : MonoBehaviour
 
     public void EndScene()
     {
-        fader.GetComponent<SceneFader>().EndScene();
+        fader.EndScene();
     }
 
+    public void SetCoinNumber(int number)
+    {
+        coinNumber.text = "X" + number;
+    }
 
     public void SetPlayerHealth(int health)
     {

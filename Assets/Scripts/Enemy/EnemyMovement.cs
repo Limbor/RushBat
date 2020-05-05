@@ -35,11 +35,13 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     protected void Start()
     {
+        GameManager.GetInstance().RegisterEnemy(gameObject);
+        
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         render = GetComponent<SpriteRenderer>();
 
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameManager.GetInstance().GetPlayer();
         bloodGroove = transform.Find("Canvas/BloodGroove");
         bloodVolume = transform.Find("Canvas/BloodGroove/Blood");
         bloodVolume.GetComponent<Image>().fillAmount=1;
@@ -68,16 +70,16 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
+        if (isdead) return;
         Alive();
     }
 
     // 当接触到地面时，设置跳跃条件为假
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.layer == 9)
+        if (coll.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            //jumping = false;
-            Debug.Log("On Ground!");
+            Debug.Log("OnGround");
             ground = true;
             anim.SetBool("jump", false);
         }
@@ -104,6 +106,10 @@ public class EnemyMovement : MonoBehaviour
             isdead = true;
             anim.SetBool("dead", true);
             canvas.SetActive(false);
+            GameManager.GetInstance().DelEnemy(gameObject);
+            GetComponent<SpriteRenderer>().color = Color.gray;
+            rb.bodyType = RigidbodyType2D.Static;
+            GetComponent<Collider2D>().enabled = false;
         }
         else
         {
@@ -166,6 +172,7 @@ public class EnemyMovement : MonoBehaviour
             float backDis = direction * 0.2f;
             //怪物受伤后退
             transform.position = new Vector2(transform.position.x + backDis, transform.position.y);
+            PoolManager.GetInstance().GetDamageText(transform.position, damage);
         }
         
     }

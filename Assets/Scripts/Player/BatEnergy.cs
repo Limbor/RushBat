@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class BatEnergy : MonoBehaviour
 {
+    public float damage, floatRange;
+    public float boost;
+    
     private CircleCollider2D coll;
     private Animator animator;
     private float startTime;
     private float direction;
     private bool collide;
+    private bool power;
+    private List<GameObject> attackedEnemies = new List<GameObject>();
 
     public LayerMask groundLayer;
     public float flySpeed;
-    public bool powerful;
     public float changeTime;
-
+    
     private void OnEnable()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -25,8 +29,9 @@ public class BatEnergy : MonoBehaviour
         coll = GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
         startTime = Time.time;
-        powerful = false;
         collide = false;
+        power = false;
+        attackedEnemies.Clear();
     }
 
     private void Update()
@@ -35,7 +40,7 @@ public class BatEnergy : MonoBehaviour
         transform.position = new Vector2(transform.position.x + flySpeed * Time.deltaTime * direction, transform.position.y);
         if(Time.time >= startTime + changeTime)
         {
-            powerful = true;
+            power = true;
             animator.SetTrigger("change");
             coll.radius = 0.21f;
         }
@@ -50,7 +55,11 @@ public class BatEnergy : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            collision.GetComponent<EnemyMovement>().getDamage(30, (int)(transform.localScale.x));
+            if (attackedEnemies.Contains(collision.gameObject)) return;
+            attackedEnemies.Add(collision.gameObject);
+            float damage = this.damage + (power ? boost : 0);
+            collision.GetComponent<EnemyMovement>().getDamage(damage + Random.Range(-floatRange, floatRange), 
+                (int)(transform.localScale.x));
         }
     }
 

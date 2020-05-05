@@ -23,6 +23,7 @@ public class PlayerAnimation : MonoBehaviour
     private int skill4;
     private int die;
     private int hurt;
+    private int acquire;
 
     private float fade;
 
@@ -50,6 +51,7 @@ public class PlayerAnimation : MonoBehaviour
         skill4 = Animator.StringToHash("skill4");
         die = Animator.StringToHash("die");
         hurt = Animator.StringToHash("hurt");
+        acquire = Animator.StringToHash("acquire");
 
         fade = 1f;
     }
@@ -69,6 +71,18 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool(climb, player.isClimbing);
     }
 
+    public void Acquire()
+    {
+        animator.SetBool(acquire, true);
+        StartCoroutine(EndAcquire());
+    }
+
+    IEnumerator EndAcquire()
+    {
+        yield return new WaitForSeconds(0.5f);
+        animator.SetBool(acquire, false);
+    }
+    
     public void StartSkill3()
     {
         animator.SetTrigger(skill3);
@@ -115,6 +129,6 @@ public class PlayerAnimation : MonoBehaviour
         } while (fade > 0);
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         gameObject.GetComponent<Collider2D>().enabled = false;
-        GameManager.GetInstance().Restart();
+        GameManager.Restart();
     }
 }

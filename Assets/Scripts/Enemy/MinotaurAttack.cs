@@ -4,32 +4,44 @@ using UnityEngine;
 
 public class MinotaurAttack : MonoBehaviour
 {
+    private bool attacked;
+
     private LayerMask playerLayer;
     //攻击的范围，左上右下
     private Vector2 chopOffset1;
     private Vector2 chopOffset2;
-
     private Vector2 stabOffset1;
     private Vector2 stabOffset2;
+    private Vector2 rotateOffset1;
+    private Vector2 rotateOffset2;
     //伤害
     private int chopDamage;
+    private int stabDamage;
+    private int rotateDamage;
 
-    // Start is called before the first frame update
     void Start()
     {
-        playerLayer = 1 << LayerMask.NameToLayer("Player");
-        chopOffset1 = new Vector2(-0.589f, 0.731f);
-        chopOffset2 = new Vector2(0.678f, -0.266f);
+        attacked = false;
 
+        playerLayer = 1 << LayerMask.NameToLayer("Player");
+        chopOffset1 = new Vector2(-1f, 1.16f);
+        chopOffset2 = new Vector2(1.06f, -0.42f);
+        stabOffset1 = new Vector2(0f, 0.1f);
+        stabOffset2 = new Vector2(1.1f, -0.24f);
+        rotateOffset1 = new Vector2(-1.25f, 0);
+        rotateOffset2 = new Vector2(1.1f, -0.42f);
         chopDamage = 2;
+        stabDamage = 1;
+        rotateDamage = 1;
 
     }
+
     public void animationAttack(string type)
     {
         //一次动画只能造成一次伤害
-        if (!transform.GetComponent<MinotaurMovement>().Attacked())
+        if (!attacked)
         {
-            transform.GetComponent<MinotaurMovement>().doAttack();
+            attacked = true;
 
             Vector2 offset1 = Vector2.zero, offset2 = Vector2.zero;
             int damage = 0;
@@ -41,7 +53,16 @@ public class MinotaurAttack : MonoBehaviour
                     offset2 = chopOffset2;
                     damage = chopDamage;
                     break;
-
+                case "stab":
+                    offset1 = stabOffset1;
+                    offset2 = stabOffset2;
+                    damage = stabDamage;
+                    break;
+                case "rotate":
+                    offset1 = rotateOffset1;
+                    offset2 = rotateOffset2;
+                    damage = rotateDamage;
+                    break;
             }
 
             Vector2 position = new Vector2(transform.position.x, transform.position.y);
@@ -66,5 +87,10 @@ public class MinotaurAttack : MonoBehaviour
             }
         }
         
+    }
+
+    private void canAttack()
+    {
+        attacked = false;
     }
 }

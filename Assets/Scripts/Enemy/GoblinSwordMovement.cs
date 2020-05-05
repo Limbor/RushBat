@@ -57,6 +57,7 @@ public class GoblinSwordMovement : EnemyMovement
             rb.velocity = new Vector2(walkspeed * Time.deltaTime * 1.5f * (faceright ? 1 : -1), rb.velocity.y);
             return;
         }
+
         if (attacking || hurt)
         {
             //Debug.Log("Attacking");

@@ -105,8 +105,14 @@ public class EnemyMovement : MonoBehaviour
     //判断是否存活，并显示血条, 受伤时会变白闪烁
     void Alive()
     {
+        
+        if (isdead)
+        {
+            return;
+        }
         if (blood <= 0)
         {
+           
             rb.velocity = new Vector2(0, rb.velocity.y);
             //死亡后血条瞬间消失
             isdead = true;
@@ -144,6 +150,7 @@ public class EnemyMovement : MonoBehaviour
                 //transform.GetComponent<SpriteRenderer>().color = Color.white;
                 //anim.speed = 1;
                 anim.SetBool("hurt", false);
+                //Debug.Log("finishHurt!");
                 hurt = false;
             }
 
@@ -157,7 +164,7 @@ public class EnemyMovement : MonoBehaviour
     }
 
     //怪物受伤，指定伤害和后退方向，血条改变
-    public void getDamage(float damage, int direction)
+    public virtual void getDamage(float damage, int direction)
     {
 
         if (!isdead)

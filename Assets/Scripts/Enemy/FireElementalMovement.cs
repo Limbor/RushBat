@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AxeMovement : EnemyMovement
+public class FireElementalMovement : EnemyMovement
 {
     //控制怪物行动范围
     public Transform startPos;
@@ -11,52 +11,29 @@ public class AxeMovement : EnemyMovement
     private float startx;
     private float endx;
 
-    //private bool walking;
-
+    private float attackInterval;
     // Start is called before the first frame update
     void Start()
     {
-        
         base.Start();
-        
-        anim.SetBool("jump", false);
-        anim.SetBool("dead", false);
-        anim.SetBool("walk", false);
         startx = startPos.position.x;
         endx = endPos.position.x;
-        blood = 100;
+        blood = 50;
         walkspeed = 100f;
-        waittime = 1f;
-        length = 0.31f;
+      
+        length = 0.2f;
         faceright = true;
-        //length = 0.375f;
-        //walking = true;
+        attackInterval = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         base.Update();
-
-        Attack();
-        //testAttack();
-      
-    }
-    //public bool attack;
-    //void testAttack()
-    //{
-    //    attacking = attack;
-    //    if (attack)
-    //    {
-    //        anim.SetBool("walk", false);
-    //        anim.SetBool("attack", true);
-    //    }
-       
-    //}
-    void FixedUpdate()
-    {
         Move();
+        Attack();
     }
+
     void Move()
     {
         if (isdead)
@@ -65,31 +42,31 @@ public class AxeMovement : EnemyMovement
         }
         if (attacking)
         {
-            //Debug.Log("Attacking");
+            Debug.Log("Attacking");
             rb.velocity = new Vector2(0, rb.velocity.y);
             //Debug.Log(rb.velocity);
             return;
         }
-        
-        
+
         //到起点和终点的距离
         float edis = endx - transform.position.x;
         float sdis = transform.position.x - startx;
         float hdis = Mathf.Abs(player.transform.position.y - transform.position.y);
+
         if (faceright && edis > 0)
         {
             //面向右，未到达终点
             if (player.transform.position.x > startx && player.transform.position.x < transform.position.x)
             {
                 //玩家在身后，转身
-                if (!attacking && hdis < 0.5 && !block) 
+                if (!attacking && hdis < 0.5 && !block)
                 {
                     Flip();
                 }
             }
             else
             {
-                anim.SetBool("walk", true);
+                anim.SetBool("run", true);
                 rb.velocity = new Vector2(walkspeed * Time.deltaTime, rb.velocity.y);
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, length + 0.05f, groundLayer.value);
                 if (hit)
@@ -123,7 +100,7 @@ public class AxeMovement : EnemyMovement
         {
             if (player.transform.position.x > transform.position.x && player.transform.position.x < endx)
             {
-                if (!attacking && hdis < 0.5 && !block) 
+                if (!attacking && hdis < 0.5 && !block)
                 {
                     Flip();
                 }
@@ -147,7 +124,7 @@ public class AxeMovement : EnemyMovement
         }
         else
         {
-            anim.SetBool("walk", false);
+            anim.SetBool("run", false);
             rb.velocity = new Vector2(0, 0);
             if (waittime > 0)
             {
@@ -163,31 +140,39 @@ public class AxeMovement : EnemyMovement
 
     void Attack()
     {
+        attackInterval -= Time.deltaTime;
         if (!isdead && ground && !hurt)
         {
             //根据和玩家的距离进行攻击
             float distance = player.transform.position.x - transform.position.x;
             //Debug.Log(distance);
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
-            if (faceright && distance > 0 && distance < 0.65 && heightdis < 0.5)
+            if (faceright && distance > 0 && distance < 0.5 && heightdis < 0.5)
             {
-                Debug.Log("Attack!");
+               // Debug.Log("Attack!");
                 attacking = true;
 
-                anim.SetBool("walk", false);
+                anim.SetBool("run", false);
+                
                 anim.SetBool("attack", true);
-            
+
+                Invoke("finishAttack", 1.5f);
+
             }
-            else if (!faceright && distance < 0 && distance > -0.65 && heightdis < 0.5)
+            else if (!faceright && distance < 0 && distance > -0.5 && heightdis < 0.5)
             {
                 Debug.Log("Attack!");
                 attacking = true;
 
-                anim.SetBool("walk", false);
+                anim.SetBool("run", false);
+
+               
                 anim.SetBool("attack", true);
                 
+                Invoke("finishAttack", 1.5f);
+
             }
-          
+
         }
     }
 
@@ -195,6 +180,6 @@ public class AxeMovement : EnemyMovement
     {
         anim.SetBool("attack", false);
         attacking = false;
+        attackInterval = 1.5f;
     }
 }
-       

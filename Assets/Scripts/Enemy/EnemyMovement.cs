@@ -15,6 +15,7 @@ public class EnemyMovement : MonoBehaviour
     protected float waittime;
     protected float blood;
     protected float damage;
+    protected float length;
 
     //怪物状态
     protected bool faceright;
@@ -22,6 +23,8 @@ public class EnemyMovement : MonoBehaviour
     protected bool isdead;
     protected bool attacking;
     protected bool ground;
+    protected bool hurt;
+    protected bool block;
     //画布和血条,血量,显示时间
     public GameObject canvas;
     protected Transform bloodGroove;
@@ -30,6 +33,7 @@ public class EnemyMovement : MonoBehaviour
     protected float hurttime;   //受伤会变红，并暂停动画0.5秒
     //玩家
     protected GameObject player;
+    protected LayerMask groundLayer;
     
 
     // Start is called before the first frame update
@@ -42,6 +46,7 @@ public class EnemyMovement : MonoBehaviour
         render = GetComponent<SpriteRenderer>();
 
         player = GameManager.GetInstance().GetPlayer();
+        groundLayer = 1 << LayerMask.NameToLayer("Ground");
         bloodGroove = transform.Find("Canvas/BloodGroove");
         bloodVolume = transform.Find("Canvas/BloodGroove/Blood");
         bloodVolume.GetComponent<Image>().fillAmount=1;
@@ -62,7 +67,9 @@ public class EnemyMovement : MonoBehaviour
         //jumping = false;
         isdead = false;
         attacking = false;
+        hurt = false;
         ground = false;
+        block = false;
 
         //transform.position = startPos.position;
     }
@@ -100,16 +107,25 @@ public class EnemyMovement : MonoBehaviour
     //判断是否存活，并显示血条, 受伤时会变白闪烁
     void Alive()
     {
+        
+        if (isdead)
+        {
+            return;
+        }
         if (blood <= 0)
         {
+           
+            rb.velocity = new Vector2(0, rb.velocity.y);
             //死亡后血条瞬间消失
             isdead = true;
             anim.SetBool("dead", true);
             canvas.SetActive(false);
             GameManager.GetInstance().DelEnemy(gameObject);
             GetComponent<SpriteRenderer>().color = Color.gray;
-            rb.bodyType = RigidbodyType2D.Static;
-            GetComponent<Collider2D>().enabled = false;
+            GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
+            GetComponent<SpriteRenderer>().sortingOrder = 1;
+            Destroy(transform.GetComponent<Rigidbody2D>());
+            Destroy(transform.GetComponent<CapsuleCollider2D>());
         }
         else
         {
@@ -139,6 +155,9 @@ public class EnemyMovement : MonoBehaviour
                 render.material.SetFloat("_FlashAmount", 0);
                 //transform.GetComponent<SpriteRenderer>().color = Color.white;
                 //anim.speed = 1;
+                anim.SetBool("hurt", false);
+                //Debug.Log("finishHurt!");
+                hurt = false;
             }
 
         }
@@ -151,16 +170,25 @@ public class EnemyMovement : MonoBehaviour
     }
 
     //怪物受伤，指定伤害和后退方向，血条改变
-    public void getDamage(float damage, int direction)
+    public virtual void getDamage(float damage, int direction)
     {
+
         if (!isdead)
         {
+
             blood -= damage;
             bloodVolume.GetComponent<Image>().fillAmount = blood / 100;
             Debug.Log("Current health: " + blood);
 
+            //受伤停止攻击
+            //anim.SetBool("attack", false);
+            //attacking = false;
+            anim.SetBool("attack", false);
+            attacking = false;
+            anim.SetBool("hurt", true);
+            hurt = true;
             //transform.GetComponent<SpriteRenderer>().color;
-            
+
             bloodtime = 2;         //血条显示时间
 
             if (hurttime <= 0)
@@ -177,5 +205,11 @@ public class EnemyMovement : MonoBehaviour
         
     }
 
+    protected RaycastHit2D Raycast(Vector2 offset, Vector2 direction, float length, LayerMask layer)
+    {
+        Vector2 pos = transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(pos + offset, direction, length, layer);
+        return hit;
+    }
 
 }

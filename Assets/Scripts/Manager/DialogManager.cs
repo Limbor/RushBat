@@ -37,12 +37,12 @@ public class DialogManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T)&&(index==textList.Count)){
+        if(InputManager.GetButtonDown("Interact")&&(index==textList.Count)){
             gameObject.SetActive(false);
             index=0;
             return;
         }
-        if(Input.GetKeyDown(KeyCode.T)){
+        if(InputManager.GetButtonDown("Interact")){
            if(textFinished && !cancelTyping)
            {
                StartCoroutine(SetTextUI());
@@ -53,10 +53,10 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    void GetText(TextAsset flie){
+    void GetText(TextAsset file){
         textList.Clear();
         index=0;
-        var lineData = flie.text.Split('\n');
+        var lineData = file.text.Split('\n');
 
         foreach (var line in lineData)
         {

@@ -22,7 +22,7 @@ public class TalkButton : MonoBehaviour
 
     private void Update()
     {
-        if (Button.activeSelf && Input.GetKeyDown(KeyCode.T))
+        if (Button.activeSelf && InputManager.GetButtonDown("Interact"))
         {
              talkUI.SetActive(true);
         }

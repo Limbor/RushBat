@@ -14,18 +14,21 @@ public class PoolManager : MonoBehaviour
     public GameObject tearPrefab;
     public GameObject firePrefab;
     public GameObject woodSpikePrefab;
+    public GameObject damageTextPrefab;
 
     private int shadowCount = 10;
     private int dustCount = 3;
     private int tearCount = 3;
     private int fireCount = 3;
     private int spikeCount = 3;
+    private int damageTextCount = 3;
     private Queue<GameObject> shadowPool;
     private Queue<GameObject> dustPool;
     private Queue<GameObject> wallDustPool;
     private Queue<GameObject> tearPool;
     private Queue<GameObject> firePool;
     private Queue<GameObject> spikePool;
+    private Queue<GameObject> damageTextPool;
 
     private void Awake()
     {
@@ -38,12 +41,14 @@ public class PoolManager : MonoBehaviour
             tearPool = new Queue<GameObject>();
             firePool = new Queue<GameObject>();
             spikePool = new Queue<GameObject>();
+            damageTextPool = new Queue<GameObject>();
             FillShadowPool();
             FillDustPool(true);
             FillDustPool(false);
             FillTearPool();
             FillFirePool();
             FillSpikePool();
+            FillDamageTextPool();
             return;
         }
         Destroy(gameObject);
@@ -51,7 +56,7 @@ public class PoolManager : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameManager.GetInstance().GetPlayer();
     }
 
     public static PoolManager GetInstance()
@@ -210,6 +215,33 @@ public class PoolManager : MonoBehaviour
         GameObject gameObject = spikePool.Dequeue();
         gameObject.transform.position = transform.position;
         gameObject.transform.localScale = transform.localScale;
+        gameObject.SetActive(true);
+    }
+    
+    public void FillDamageTextPool()
+    {
+        for (int i = 0; i < damageTextCount; i++)
+        {
+            GameObject gameObject = Instantiate(damageTextPrefab, transform);
+            ReturnDamageTextPool(gameObject);
+        }
+    }
+
+    public void ReturnDamageTextPool(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+        damageTextPool.Enqueue(gameObject);
+    }
+
+    public void GetDamageText(Vector3 position, float damage)
+    {
+        if(damageTextPool.Count == 0)
+        {
+            FillDamageTextPool();
+        }
+        GameObject gameObject = damageTextPool.Dequeue();
+        gameObject.transform.position = position;
+        gameObject.GetComponent<DamageText>().SetNumber(damage);
         gameObject.SetActive(true);
     }
 }

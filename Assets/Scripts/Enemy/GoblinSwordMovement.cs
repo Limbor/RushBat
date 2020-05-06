@@ -30,6 +30,8 @@ public class GoblinSwordMovement : EnemyMovement
         waittime = 1f;
         attackInterval = 1f;
         attackWait = 0;
+        length = 0.375f;
+
         faceright = true;
         walking = true;
     }
@@ -55,7 +57,8 @@ public class GoblinSwordMovement : EnemyMovement
             rb.velocity = new Vector2(walkspeed * Time.deltaTime * 1.5f * (faceright ? 1 : -1), rb.velocity.y);
             return;
         }
-        if (isdead || attacking)
+
+        if (attacking || hurt)
         {
             //Debug.Log("Attacking");
             rb.velocity = new Vector2(0, rb.velocity.y);
@@ -63,7 +66,7 @@ public class GoblinSwordMovement : EnemyMovement
             return;
         }
 
-        if (!walking)
+        if (isdead || !walking)
         {
             return;
         }
@@ -77,7 +80,7 @@ public class GoblinSwordMovement : EnemyMovement
             if (player.transform.position.x > startx && player.transform.position.x < transform.position.x)
             {
                 //玩家在身后，转身
-                if (!attacking && hdis < 0.5)
+                if (!attacking && hdis < 0.5 && !block)
                 {
                     Flip();
                 }
@@ -85,8 +88,19 @@ public class GoblinSwordMovement : EnemyMovement
             else
             {
                 //Debug.Log("");
-                //anim.SetBool("walk", true);
+                anim.SetBool("walk", true);
                 rb.velocity = new Vector2(walkspeed * Time.deltaTime, rb.velocity.y);
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, length + 0.05f, groundLayer.value);
+                if (hit)
+                {
+                    block = true;
+                    Flip();
+                    rb.velocity = new Vector2(-1 * walkspeed * Time.deltaTime, rb.velocity.y);
+                }
+                else
+                {
+                    block = false;
+                }
             }
         }
         else if (faceright && edis <= 0)
@@ -108,7 +122,7 @@ public class GoblinSwordMovement : EnemyMovement
         {
             if (player.transform.position.x > transform.position.x && player.transform.position.x < endx)
             {
-                if (!attacking && hdis < 0.5)
+                if (!attacking && hdis < 0.5 && !block)
                 {
                     Flip();
                 }
@@ -117,6 +131,17 @@ public class GoblinSwordMovement : EnemyMovement
             {
                 anim.SetBool("walk", true);
                 rb.velocity = new Vector2(-1 * walkspeed * Time.deltaTime, rb.velocity.y);
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, length + 0.05f, groundLayer.value);
+                if (hit)
+                {
+                    block = true;
+                    Flip();
+                    rb.velocity = new Vector2(walkspeed * Time.deltaTime, rb.velocity.y);
+                }
+                else
+                {
+                    block = false;
+                }
             }
         }
         else
@@ -137,7 +162,7 @@ public class GoblinSwordMovement : EnemyMovement
 
     void Attack()
     {
-        if (!isdead && ground)
+        if (!isdead && ground && !hurt)
         {
             if (attackWait > 0)
             {

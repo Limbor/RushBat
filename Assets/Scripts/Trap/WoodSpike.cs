@@ -29,7 +29,7 @@ public class WoodSpike : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Vector2 direction = (collision.transform.position - transform.position).normalized;
-            collision.GetComponent<PlayerMovement>().Hurt(1, direction * 2f);
+            collision.GetComponent<PlayerMovement>().Hurt(1, direction * 2f, GameManager.FlyingTrap);
         }
     }
 }

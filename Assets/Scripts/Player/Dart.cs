@@ -7,7 +7,10 @@ public class Dart : MonoBehaviour
     private float direction;
 
     public LayerMask groundLayer;
-    public float flySpeed;
+    public float damage, floatRange;
+    
+    private float flySpeed = 10f;
+    private List<GameObject> attackedEnemies = new List<GameObject>();
 
     private void OnEnable()
     {
@@ -15,6 +18,7 @@ public class Dart : MonoBehaviour
 
         direction = player.transform.localScale.x;
         transform.localScale = new Vector3(direction, 1, 1);
+        attackedEnemies.Clear();
     }
 
     private void Update()
@@ -30,7 +34,10 @@ public class Dart : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            collision.GetComponent<EnemyMovement>().getDamage(30, (int)(transform.localScale.x));
+            if (attackedEnemies.Contains(collision.gameObject)) return;
+            attackedEnemies.Add(collision.gameObject);
+            collision.GetComponent<EnemyMovement>().getDamage(damage + Random.Range(-floatRange, floatRange), 
+                (int)(transform.localScale.x));
         }
     }
 }

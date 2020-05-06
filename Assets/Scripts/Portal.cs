@@ -10,7 +10,8 @@ public class Portal : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameManager.GetInstance().GetPlayer();
+        player.GetComponent<SpriteRenderer>().color = Color.clear;
         player.GetComponent<PlayerMovement>().canMove = false;
     }
 

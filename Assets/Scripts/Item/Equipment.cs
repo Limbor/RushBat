@@ -41,14 +41,15 @@ public class Equipment : MonoBehaviour
     }
     void Pick()
     {
-        player.Equip(equipmentName);
         pick = true;
+        AudioManager.GetInstance().PlayPowerUpAudio();
+        player.Equip(equipmentName);
         Destroy(gameObject, 1.5f);
     }
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (!pick && other.CompareTag("Player"))
         {
             Pick();
         }

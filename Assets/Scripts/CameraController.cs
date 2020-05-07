@@ -5,9 +5,13 @@ using DG.Tweening;
 
 public class CameraController : MonoBehaviour
 {
+    // 与player位置的偏移
     public Vector3 offset;
+    // 相机移动速度
     public float speed;
+    // player在一定范围内移动时相机固定
     public float xOffset, yOffset;
+    // 相机边界
     public Vector2 maxPos, minPos;
 
     private Transform target;

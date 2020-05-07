@@ -240,10 +240,10 @@ MonoBehaviour:
   m_ShapeLightFalloffSize: 0.5
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
-  - {x: -0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: 0.5, z: 0}
-  - {x: -0.5, y: 0.5, z: 0}
+   - {x: -0.5, y: -0.5, z: 0}
+   - {x: 0.5, y: -0.5, z: 0}
+   - {x: 0.5, y: 0.5, z: 0}
+   - {x: -0.5, y: 0.5, z: 0}
 --- !u!1 &1375488013871096
 GameObject:
   m_ObjectHideFlags: 0

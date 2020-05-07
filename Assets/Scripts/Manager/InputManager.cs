@@ -6,8 +6,11 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     private static InputManager _inputManager;
-
+    // 是否接受输入
     private bool acceptInput = true;
+    // 是否处于对话状态
+    private bool isTalking = false;
+    
     private Hashtable buttonTable = new Hashtable();
     private void Awake()
     {
@@ -28,6 +31,7 @@ public class InputManager : MonoBehaviour
         buttonTable.Add("Skill2", KeyCode.Q);
         buttonTable.Add("Skill3", KeyCode.E);
         buttonTable.Add("Skill4", KeyCode.R);
+        buttonTable.Add("Interact", KeyCode.F);
     }
 
     public static void SetButton(String buttonName, KeyCode keyCode)
@@ -47,16 +51,28 @@ public class InputManager : MonoBehaviour
         return KeyCode.None;
     }
 
+    // 是否接受输入
     public static bool CanInput()
     {
         return _inputManager.acceptInput;
     }
 
+    // 设置是否接受输入
     public static void SetInputStatus(bool state)
     {
         _inputManager.acceptInput = state;
     }
 
+    public static void EnterTalkingState()
+    {
+        _inputManager.isTalking = true;
+    }
+    
+    public static void ExitTalkingState()
+    {
+        _inputManager.isTalking = false;
+    }
+    
     public static bool GetKeyDown(KeyCode keyCode)
     {
         return _inputManager.acceptInput && Input.GetKeyDown(keyCode);
@@ -86,6 +102,7 @@ public class InputManager : MonoBehaviour
     {
         if (!_inputManager.buttonTable.Contains(button)) return false;
         var keyCode = _inputManager.buttonTable[button] is KeyCode ? (KeyCode) _inputManager.buttonTable[button] : KeyCode.None;
+        if( _inputManager.isTalking && keyCode == KeyCode.F) return Input.GetKeyDown(keyCode);
         return _inputManager.acceptInput && Input.GetKeyDown(keyCode);
     }
     
@@ -101,5 +118,20 @@ public class InputManager : MonoBehaviour
         if (!_inputManager.buttonTable.Contains(button)) return false;
         var keyCode = _inputManager.buttonTable[button] is KeyCode ? (KeyCode) _inputManager.buttonTable[button] : KeyCode.None;
         return _inputManager.acceptInput && Input.GetKeyUp(keyCode);
+    }
+
+    public static bool GetMouseButtonDown(int button)
+    {
+        return _inputManager.acceptInput && Input.GetMouseButtonDown(button);
+    }
+    
+    public static bool GetMouseButton(int button)
+    {
+        return _inputManager.acceptInput && Input.GetMouseButton(button);
+    }
+    
+    public static bool GetMouseButtonUp(int button)
+    {
+        return _inputManager.acceptInput && Input.GetMouseButtonUp(button);
     }
 }

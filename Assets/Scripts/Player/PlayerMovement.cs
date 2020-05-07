@@ -136,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
             dashPressTime = Time.time + Time.fixedDeltaTime;
         }
         if (dashPressed && Time.time >= dashPressTime) dashPressed = false;
-        attackHeld = Input.GetMouseButton(0);
+        attackHeld = InputManager.GetMouseButton(0);
     }
 
     void FixedUpdate()

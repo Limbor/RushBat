@@ -20,32 +20,56 @@ public class PlayerProperty : MonoBehaviour
     [Header("Player State")]
     public SpriteRenderer state;
     public bool isDead = false;
-    public int maxHealth = 16;
     public bool isPoisoned = false;
     public bool isBurnt = false;
 
+    private int maxHealth;
     private int currentHealth;
-    public List<string> equipments;
+    private int shield;
+    private int coin;
+    [SerializeField]
+    private List<string> equipments;
     private int lastPoisonedTime;
     private int lastBurntTime;
 
     private PlayerAnimation anim;
     private Rigidbody2D rb;
+    private Player player;
     
     void Start()
     {
-        currentHealth = maxHealth;
-        lastPoisonedTime = 0;
-        lastBurntTime = 0;
-        equipments = new List<string>();
+        player = Player.GetInstance();
+        
+        maxHealth = player.maxHealth;
+        currentHealth = player.currentHealth;
+        shield = player.shield;
+        coin = player.coin;
+        
+        lastPoisonedTime = player.lastPoisonedTime;
+        if(lastPoisonedTime != 0) GetPoisoned(0);
+        lastBurntTime = player.lastBurntTime;
+        if(lastBurntTime != 0) GetBurnt(0);
+        
+        equipments = player.equipments;
 
         anim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
+        
+        UIManager.GetInstance().SetPlayerHealth(currentHealth);
+        UIManager.GetInstance().SetCoinNumber(coin);
+        UIManager.GetInstance().SetShieldNumber(shield);
     }
 
     private void Update()
     {
-        UIManager.GetInstance().SetPlayerHealth(currentHealth);
+        if (isDead) return;
+        player.currentHealth = currentHealth;
+        player.shield = shield;
+        player.coin = coin;
+        player.lastPoisonedTime = lastPoisonedTime;
+        player.lastBurntTime = lastBurntTime;
+        player.equipments = equipments;
+        
         UIManager.GetInstance().SetDashTime(1.0f / dashCoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(0, 1.0f / skill1CoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(1, 1.0f / skill2CoolDown * Time.deltaTime);
@@ -67,6 +91,30 @@ public class PlayerProperty : MonoBehaviour
         }
         return false;
     }
+
+    public void SetCoinNumber(int change)
+    {
+        coin += change;
+        UIManager.GetInstance().SetCoinNumber(coin);
+    }
+    
+    public void Hurt(int damage)
+    {
+        if (isDead) return;
+        if(shield > damage) SetShield(-damage);
+        else
+        {
+            SetHealth(shield - damage);
+            SetShield(-shield);
+        }
+    }
+    
+    public void SetShield(int change)
+    {
+        if (isDead) return;
+        shield += change;
+        UIManager.GetInstance().SetShieldNumber(shield);
+    }
     
     public void SetHealth(int change)
     {
@@ -84,11 +132,22 @@ public class PlayerProperty : MonoBehaviour
             rb.velocity = new Vector2(0, 0);
             isDead = true;
         }
+        UIManager.GetInstance().SetPlayerHealth(currentHealth);
     }
-
+    
+    /// <summary>
+    /// player中毒
+    /// </summary>
+    /// <param name="time">中毒时长</param>
     public void GetPoisoned(int time)
     {
+        if (isDead) return;
         if (GetComponent<PlayerMovement>().avoidDamage) return;
+        if (time == -1)
+        {
+            lastPoisonedTime = 0;
+            return;
+        }
         lastPoisonedTime += time;
         poisonPartical.SetActive(true);
         if (!isPoisoned)
@@ -111,9 +170,19 @@ public class PlayerProperty : MonoBehaviour
         poisonPartical.SetActive(false);
     }
 
+    /// <summary>
+    /// player烧伤
+    /// </summary>
+    /// <param name="time">烧伤时长</param>
     public void GetBurnt(int time)
     {
+        if (isDead) return;
         if (GetComponent<PlayerMovement>().avoidDamage) return;
+        if (time == -1)
+        {
+            lastBurntTime = 0;
+            return;
+        }
         lastBurntTime += time;
         burnPartical.SetActive(true);
         if (!isBurnt)

@@ -69,10 +69,12 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool(dash, player.isDashing);
         animator.SetBool(glide, player.isGliding);
         animator.SetBool(climb, player.isClimbing);
+        if(!player.canMove) animator.SetBool(acquire, false);
     }
 
     public void Acquire()
     {
+        if (!player.canMove) return;
         animator.SetBool(acquire, true);
         StartCoroutine(EndAcquire());
     }
@@ -129,6 +131,7 @@ public class PlayerAnimation : MonoBehaviour
         } while (fade > 0);
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         gameObject.GetComponent<Collider2D>().enabled = false;
+        Player.GetInstance().Reset();
         GameManager.Restart();
     }
 }

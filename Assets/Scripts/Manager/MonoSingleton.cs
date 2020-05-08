@@ -5,7 +5,7 @@ using UnityEngine;
 public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour {
 
     // 单例
-    private static T instance;
+    protected static T instance;
     // 线程锁
     private static readonly object _lock = new object();
 

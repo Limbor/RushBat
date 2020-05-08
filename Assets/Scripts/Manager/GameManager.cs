@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    private int coinNumber = 0;
     private GameObject player;
     private List<GameObject> enemies;
     private List<GameObject> doors;
@@ -24,18 +23,12 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void LevelComplete()
     {
-        
-    }
-    
-    public int GetCoinNumber()
-    {
-        return coinNumber;
+        OpenDoors();
     }
 
-    public void SetCoinNumber(int change)
+    public void NextLevel()
     {
-        coinNumber += change;
-        UIManager.GetInstance().SetCoinNumber(coinNumber);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void RegisterPlayer(GameObject player)
@@ -58,12 +51,29 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (!enemies.Contains(enemy)) return;
         enemies.Remove(enemy);
+        if (enemies.Count == 0)
+        {
+            LevelComplete();
+        }
     }
-    
+
+    public void RegisterDoor(GameObject door)
+    {
+        if (doors.Contains(door)) return;
+        doors.Add(door);
+    }
+
+    public void OpenDoors()
+    {
+        foreach (var door in doors)
+        {
+            door.GetComponent<Door>().Open(false);
+        }
+        doors.Clear();
+    }
     
     public static void Restart()
     {
         UIManager.GetInstance().EndScene();
-        //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

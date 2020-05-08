@@ -11,11 +11,13 @@ public class Item : MonoBehaviour
     private GameObject pick;
     // 是否能够拾取
     private bool canPick;
-    
+    // 与英雄交互
+    protected PlayerProperty player;
     // Start is called before the first frame update
     protected virtual void Start()
     {
         pick = Resources.Load<GameObject>("Prefabs/Item/Pick");
+        player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerProperty>();
         canPick = false;
         StartCoroutine(CanPick());
     }
@@ -35,6 +37,7 @@ public class Item : MonoBehaviour
     
     private void Pick()
     {
+        AudioManager.GetInstance().PlayPickAudio();
         Effect();
         Destroy(gameObject);
         Instantiate(pick, transform.position, Quaternion.identity);
@@ -44,13 +47,13 @@ public class Item : MonoBehaviour
     /// 宝箱或者怪物爆出效果
     /// </summary>
     /// <param name="pos">发射起点</param>
-    /// <param name="randomDirction">是否随机方向发射，默认随机</param>
+    /// <param name="randomDirection">是否随机方向发射，默认随机</param>
     /// <param name="defaultAngle">固定发射的角度，默认90度垂直向上</param>
-    public void Emit(Vector3 pos, bool randomDirction = true, float defaultAngle = 90f)
+    public void Emit(Vector3 pos, bool randomDirection = true, float defaultAngle = 90f)
     {
         transform.position = pos;
         float angle = defaultAngle;
-        if (randomDirction)
+        if (randomDirection)
         {
             angle = Random.Range(45f, 135f) / 360f * 2 * Mathf.PI;
         }

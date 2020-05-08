@@ -28,10 +28,32 @@ public class AudioManager : MonoBehaviour
 
         musicAudio.clip = Resources.Load<AudioClip>("Sounds/BGM");
         musicAudio.playOnAwake = false;
-        // musicAudio.Play();
+        musicAudio.volume = 0.2f;
+        musicAudio.loop = true;
+        musicAudio.Play();
+        
         ambientAudio.clip = Resources.Load<AudioClip>("Sounds/Ambient");
+        musicAudio.playOnAwake = false;
         ambientAudio.loop = true;
-        ambientAudio.Play();
+        //ambientAudio.Play();
+    }
+
+    public void PlayPickAudio()
+    {
+        fxAudio.clip = Resources.Load<AudioClip>("Sounds/coin_04");
+        fxAudio.Play();
+    }
+
+    public void PlayPowerUpAudio()
+    {
+        fxAudio.clip = Resources.Load<AudioClip>("Sounds/power_up_04");
+        fxAudio.Play();
+    }
+
+    public void PlayJumpAudio()
+    {
+        playerAudio.clip = Resources.Load<AudioClip>("Sounds/jump");
+        playerAudio.Play();
     }
 
     public static AudioManager GetInstance()

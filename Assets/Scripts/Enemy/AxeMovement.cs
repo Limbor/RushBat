@@ -24,11 +24,13 @@ public class AxeMovement : EnemyMovement
         anim.SetBool("walk", false);
         startx = startPos.position.x;
         endx = endPos.position.x;
-        blood = 100;
+        maxBlood = 200;
+        blood = maxBlood;
         walkspeed = 100f;
         waittime = 1f;
         length = 0.31f;
         faceright = true;
+
         //length = 0.375f;
         //walking = true;
     }
@@ -197,6 +199,32 @@ public class AxeMovement : EnemyMovement
     {
         anim.SetBool("attack", false);
         attacking = false;
+    }
+
+    protected override void Drop()
+    {
+        int silverNum = Random.Range(3, 8);
+        if (silverNum >= 5)
+        {
+            silverNum = silverNum - 5;
+            GameObject itemObject = Instantiate(goldPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
+
+        for (int i = 1; i <= silverNum; i++)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+            //item.
+            //itemList.Add(Instantiate())
+        }
+
+        float heartDrop = Random.Range(0, 1);
+        if (heartDrop <= 0.3)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
     }
 }
        

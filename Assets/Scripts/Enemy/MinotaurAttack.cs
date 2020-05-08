@@ -26,7 +26,7 @@ public class MinotaurAttack : MonoBehaviour
         playerLayer = 1 << LayerMask.NameToLayer("Player");
         chopOffset1 = new Vector2(-1f, 1.16f);
         chopOffset2 = new Vector2(1.06f, -0.42f);
-        stabOffset1 = new Vector2(0f, 0.1f);
+        stabOffset1 = new Vector2(0.5f, 0.2f);
         stabOffset2 = new Vector2(1.1f, -0.24f);
         rotateOffset1 = new Vector2(-1.25f, 0);
         rotateOffset2 = new Vector2(1.1f, -0.42f);

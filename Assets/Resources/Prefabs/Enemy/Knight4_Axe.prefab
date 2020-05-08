@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 1322310080968760512}
   - component: {fileID: 1322310080968760542}
   - component: {fileID: 1322310080968760513}
+  - component: {fileID: 1322310080973446301}
   m_Layer: 10
   m_Name: Knight4_Axe
   m_TagString: Enemy
@@ -317,22 +318,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &1322310080973446301
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1322310080968661629}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.16}
-  serializedVersion: 2
-  m_Radius: 0.34
 --- !u!95 &1322310080978184637
 Animator:
   serializedVersion: 3
@@ -381,6 +366,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1322310081605466491}
+  heartPrefab: {fileID: 3577134757208604740, guid: ea1679b566e6b4618885b791584ac998,
+    type: 3}
+  goldPrefab: {fileID: 6697429691317462264, guid: 3dba2b04ec7f941d8975b2239f7078f2,
+    type: 3}
+  silverPrefab: {fileID: 2882529177012282320, guid: c89c28fe50f784a2382879457283b99e,
+    type: 3}
   startPos: {fileID: 1322310080742535257}
   endPos: {fileID: 1322310081818495323}
 --- !u!114 &1322310080968760513
@@ -399,6 +390,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   damagePoint: {fileID: 1322310080821322379}
+--- !u!58 &1322310080973446301
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322310080968661629}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.16}
+  serializedVersion: 2
+  m_Radius: 0.34
 --- !u!1 &1322310081413331678
 GameObject:
   m_ObjectHideFlags: 0

@@ -122,8 +122,8 @@ public class PlayerAttack : MonoBehaviour
     public void Recover()
     {
         player.avoidDamage = false;
-        player.canMove = true;
         player.gameObject.GetComponent<Rigidbody2D>().gravityScale = 1f;
+        player.canMove = true;
     }
 
     IEnumerator TimeStart()

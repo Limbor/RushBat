@@ -84,7 +84,8 @@ public class EnemyMovement : MonoBehaviour
     // 当接触到地面时，设置跳跃条件为假
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (coll.gameObject.layer == LayerMask.NameToLayer("Platform") ||
+            coll.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Debug.Log("OnGround");
             ground = true;

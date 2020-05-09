@@ -24,6 +24,7 @@ public class PlayerAnimation : MonoBehaviour
     private int die;
     private int hurt;
     private int acquire;
+    private int roomIn;
 
     private float fade;
 
@@ -52,6 +53,7 @@ public class PlayerAnimation : MonoBehaviour
         die = Animator.StringToHash("die");
         hurt = Animator.StringToHash("hurt");
         acquire = Animator.StringToHash("acquire");
+        roomIn = Animator.StringToHash("roomIn");
 
         fade = 1f;
     }
@@ -72,6 +74,11 @@ public class PlayerAnimation : MonoBehaviour
         if(!player.canMove) animator.SetBool(acquire, false);
     }
 
+    public void EnterRoom()
+    {
+        animator.SetTrigger(roomIn);
+    }
+    
     public void Acquire()
     {
         if (!player.canMove) return;

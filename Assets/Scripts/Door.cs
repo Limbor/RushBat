@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Door : MonoBehaviour
 {
@@ -10,10 +11,12 @@ public class Door : MonoBehaviour
     public GameObject openDoor;
     
     private bool isOpen = false;
+    private bool isLocked;
 
     private void Start()
     {
         GameManager.GetInstance().RegisterDoor(gameObject);
+        isLocked = needKey;
     }
 
     public void Open(bool withKey)
@@ -23,7 +26,10 @@ public class Door : MonoBehaviour
         isOpen = true;
         if (isSideDoor)
         {
-            GetComponent<Collider2D>().enabled = false;
+            transform.DOMove(transform.position + Vector3.up * 1.5f, 2f).OnComplete(() =>
+            {
+                GetComponent<Collider>().enabled = false;
+            });
         }
         else
         {
@@ -32,17 +38,23 @@ public class Door : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (!isOpen) return;
         if (!other.CompareTag("Player")) return;
         if (isSideDoor)
         {
-            other.GetComponent<PlayerMovement>().EnterDoor();
+            other.GetComponent<PlayerMovement>().EnterDoor(isSideDoor);
         }
-        else if (InputManager.GetButtonDown("Interact"))
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!isOpen) return;
+        if (!other.CompareTag("Player")) return;
+        if (!isSideDoor && InputManager.GetButtonDown("Interact"))
         {
-            other.GetComponent<PlayerMovement>().EnterDoor();
+            other.GetComponent<PlayerMovement>().EnterDoor(isSideDoor);
         }
     }
 }

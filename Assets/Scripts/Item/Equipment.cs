@@ -14,7 +14,6 @@ public class Equipment : MonoBehaviour
     private float direction = 1f;
     
     public String equipmentName;
-    public String description;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -43,6 +42,7 @@ public class Equipment : MonoBehaviour
     {
         pick = true;
         AudioManager.GetInstance().PlayPowerUpAudio();
+        UIManager.GetInstance().ShowEquipmentInfo(name);
         player.Equip(equipmentName);
         Destroy(gameObject, 1.5f);
     }

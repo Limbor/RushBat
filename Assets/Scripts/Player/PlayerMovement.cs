@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerAnimation anim;
     private PlayerProperty property;
 
-    private bool doubleJump = true;
+    private bool doubleJump;
     private int jumpCount;
     public bool avoidDamage = false;
     
@@ -89,6 +89,10 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         if (property.isDead) return;
+        if (!doubleJump)
+        {
+            doubleJump = property.HaveEquipment("Wing");
+        }
         GetMoveButton();
         GetSkillButton();
         SkillCoolDown();
@@ -201,8 +205,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void EnterDoor()
+    public void EnterDoor(bool sideDoor)
     {
+        canMove = false;
+        if (!sideDoor)
+        {
+            rb.velocity = Vector2.zero;
+            anim.EnterRoom();
+        }
         UIManager.GetInstance().EndScene();
     }
     

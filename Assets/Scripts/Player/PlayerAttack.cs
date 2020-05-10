@@ -73,8 +73,11 @@ public class PlayerAttack : MonoBehaviour
                     }
                     damagesEnemies.Add(enemy.gameObject);
                     if (backAttack && transform.localScale.x * enemy.transform.localScale.x > 0) extraDamage += 10;
-                    enemy.GetComponent<EnemyMovement>().getDamage(slashDamage + Random.Range(-slashFloatRange,
-                        slashFloatRange), (int)transform.localScale.x);
+                    float damage = slashDamage + Random.Range(-slashFloatRange, slashFloatRange) + extraDamage;
+                    enemy.GetComponent<EnemyMovement>().getDamage(damage, (int)transform.localScale.x);
+                    int type = 1;
+                    if (extraDamage > 0) type++;
+                    PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
                 }
             }
         }
@@ -90,8 +93,11 @@ public class PlayerAttack : MonoBehaviour
         {
             int direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
             if (backAttack && direction * enemy.transform.localScale.x > 0) extraDamage += 10;
-            enemy.GetComponent<EnemyMovement>().getDamage(attackDamage + Random.Range(-attackFloatRange, 
-                attackFloatRange) + extraDamage, direction);
+            float damage = attackDamage + Random.Range(-attackFloatRange, attackFloatRange) + extraDamage;
+            enemy.GetComponent<EnemyMovement>().getDamage(damage, direction);
+            int type = 1;
+            if (extraDamage > 0) type++;
+            PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
         }
     }
 

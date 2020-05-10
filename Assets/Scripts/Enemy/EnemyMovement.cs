@@ -205,7 +205,6 @@ public class EnemyMovement : MonoBehaviour
             float backDis = direction * 0.2f;
             //怪物受伤后退
             transform.position = new Vector2(transform.position.x + backDis, transform.position.y);
-            PoolManager.GetInstance().GetDamageText(transform.position, damage);
         }
         
     }

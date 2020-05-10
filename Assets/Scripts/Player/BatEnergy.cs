@@ -63,8 +63,11 @@ public class BatEnergy : MonoBehaviour
             int extraDamage = 0;
             if (property.HaveEquipment("ShadowBlade") && direction * collision.transform.localScale.x > 0)
                 extraDamage += 10;
-            collision.GetComponent<EnemyMovement>().getDamage(
-                damage + Random.Range(-floatRange, floatRange) + extraDamage, (int)transform.localScale.x);
+            damage = damage + Random.Range(-floatRange, floatRange) + extraDamage;
+            collision.GetComponent<EnemyMovement>().getDamage(damage, (int)transform.localScale.x);
+            int type = 1;
+            if (extraDamage > 0) type++;
+            PoolManager.GetInstance().GetDamageText(collision.transform.position, damage, type);
         }
     }
 

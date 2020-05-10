@@ -233,15 +233,23 @@ public class PoolManager : MonoBehaviour
         damageTextPool.Enqueue(gameObject);
     }
 
-    public void GetDamageText(Vector3 position, float damage)
+    /// <summary>
+    /// 显示伤害数字
+    /// </summary>
+    /// <param name="position">伤害显示位置</param>
+    /// <param name="damage">伤害数值</param>
+    /// <param name="type">显示类型</param>
+    public void GetDamageText(Vector3 position, float damage, int type = 1)
     {
         if(damageTextPool.Count == 0)
         {
             FillDamageTextPool();
         }
+        Color[] colors = new[] {Color.white, Color.yellow, new Color(1, 0.71f, 0), Color.red};
         GameObject gameObject = damageTextPool.Dequeue();
         gameObject.transform.position = position;
         gameObject.GetComponent<DamageText>().SetNumber(damage);
+        gameObject.GetComponent<DamageText>().SetColor(colors[type - 1]);
         gameObject.SetActive(true);
     }
 }

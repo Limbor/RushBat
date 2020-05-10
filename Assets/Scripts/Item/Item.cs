@@ -13,6 +13,9 @@ public class Item : MonoBehaviour
     private bool canPick;
     // 与英雄交互
     protected PlayerProperty player;
+    // 是否有拾取条件
+    protected bool pickCondition = false;
+    
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -68,8 +71,9 @@ public class Item : MonoBehaviour
         canPick = true;
     }
 
-    protected void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerStay2D(Collider2D other)
     {
+        if (pickCondition) return;
         if (canPick && other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             Pick();

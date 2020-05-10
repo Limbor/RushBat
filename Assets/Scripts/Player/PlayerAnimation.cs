@@ -25,6 +25,7 @@ public class PlayerAnimation : MonoBehaviour
     private int hurt;
     private int acquire;
     private int roomIn;
+    private int relive;
 
     private float fade;
 
@@ -54,6 +55,7 @@ public class PlayerAnimation : MonoBehaviour
         hurt = Animator.StringToHash("hurt");
         acquire = Animator.StringToHash("acquire");
         roomIn = Animator.StringToHash("roomIn");
+        relive = Animator.StringToHash("relive");
 
         fade = 1f;
     }
@@ -124,6 +126,15 @@ public class PlayerAnimation : MonoBehaviour
 
     public void Disappear()
     {
+        PlayerProperty property = GetComponent<PlayerProperty>();
+        if (property.HaveEquipment("GoldenApple"))
+        {    
+            property.RemoveEquipment("GoldenApple");
+            animator.SetTrigger(relive);
+            property.isDead = false;
+            property.SetHealth(4);
+            return;
+        }
         StartCoroutine(FadeOut());
     }
 

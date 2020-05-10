@@ -3,13 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = System.Object;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoSingleton<GameManager>
 {
     private GameObject player;
+    // 记录所有装备，已出现过的装备不再出现
+    private List<string> equipmentList;
     private List<GameObject> enemies;
     private List<GameObject> doors;
 
+    private static readonly object _lock = new object();
+    
     public static readonly string GroundTrap = "GroundTrap";
     public static readonly string Enemy = "Enemy";
     public static readonly string FlyingTrap = "FlyingTrap";
@@ -19,13 +25,25 @@ public class GameManager : MonoSingleton<GameManager>
         player = null;
         enemies = new List<GameObject>();
         doors = new List<GameObject>();
+        equipmentList = new List<string>();
+        ReadTextAssets();
+    }
+
+    private void ReadTextAssets()
+    {
+        TextAsset text = Resources.Load<TextAsset>("TextAssets/Equipment");
+        EquipmentInfoList equipmentInfoList = JsonUtility.FromJson<EquipmentInfoList>(text.text);
+        foreach (var equipmentInfo in equipmentInfoList.equipmentList)
+        {
+            equipmentList.Add(equipmentInfo.enName);
+        }
     }
 
     private void LevelComplete()
     {
         OpenDoors();
     }
-
+    
     public void NextLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -70,6 +88,33 @@ public class GameManager : MonoSingleton<GameManager>
             door.GetComponent<Door>().Open(false);
         }
         doors.Clear();
+    }
+
+    public string RegisterEquipment(string name)
+    {
+        lock (_lock)
+        {
+            if (name.Equals("Random"))
+            {
+                if (equipmentList.Count > 0)
+                {
+                    var index = Random.Range(0, equipmentList.Count);
+                    name = equipmentList[index];
+                    equipmentList.RemoveAt(index);
+                }
+                else name = "Null";
+            }
+            else
+            {
+                int i;
+                for (i = 0; i < equipmentList.Count; i++)
+                {
+                    if(equipmentList[i].Equals(name)) equipmentList.RemoveAt(i);
+                }
+                if (i == equipmentList.Count) name = "Null";
+            }
+            return name;
+        }
     }
     
     public static void Restart()

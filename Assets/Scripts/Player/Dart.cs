@@ -11,10 +11,12 @@ public class Dart : MonoBehaviour
     
     private float flySpeed = 10f;
     private List<GameObject> attackedEnemies = new List<GameObject>();
+    private PlayerProperty property;
 
     private void OnEnable()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = GameManager.GetInstance().GetPlayer();
+        property = player.GetComponent<PlayerProperty>();
 
         direction = player.transform.localScale.x;
         transform.localScale = new Vector3(direction, 1, 1);
@@ -36,8 +38,11 @@ public class Dart : MonoBehaviour
         {
             if (attackedEnemies.Contains(collision.gameObject)) return;
             attackedEnemies.Add(collision.gameObject);
-            collision.GetComponent<EnemyMovement>().getDamage(damage + Random.Range(-floatRange, floatRange), 
-                (int)(transform.localScale.x));
+            int extraDamage = 0;
+            if (property.HaveEquipment("ShadowBlade") && direction * collision.transform.localScale.x > 0)
+                extraDamage += 10;
+            collision.GetComponent<EnemyMovement>().getDamage(
+                damage + Random.Range(-floatRange, floatRange) + extraDamage, (int)transform.localScale.x);
         }
     }
 }

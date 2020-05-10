@@ -19,19 +19,21 @@ public class PlayerAttack : MonoBehaviour
     private GameObject bigDust;
 
     private float scope = 0.2f;
-    private bool slowDown = false;
-    private bool isSlashing = false;
+    private bool slowDown;
+    private bool isSlashing;
     private float slowDownTime = 0.3f;
     private PlayerMovement player;
+    private PlayerProperty property;
     private Rigidbody2D rb;
 
     private List<GameObject> damagesEnemies;
-    private float pauseTime = 0f;
-    private bool isTimeSlow = false;
+    private float pauseTime;
+    private bool isTimeSlow;
 
     private void Start()
     {
         player = GetComponent<PlayerMovement>();
+        property = GetComponent<PlayerProperty>();
         rb = GetComponent<Rigidbody2D>();
 
         energy = PoolManager.GetInstance().transform.GetChild(0).gameObject;
@@ -56,6 +58,8 @@ public class PlayerAttack : MonoBehaviour
         if (isSlashing)
         {
             Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, 0.35f, enemyLayer);
+            float extraDamage = 0;
+            bool backAttack = property.HaveEquipment("ShadowBlade");
             foreach (Collider2D enemy in enemies)
             {
                 if (!damagesEnemies.Contains(enemy.gameObject))
@@ -68,6 +72,7 @@ public class PlayerAttack : MonoBehaviour
                         StartCoroutine(TimeStart());
                     }
                     damagesEnemies.Add(enemy.gameObject);
+                    if (backAttack && transform.localScale.x * enemy.transform.localScale.x > 0) extraDamage += 10;
                     enemy.GetComponent<EnemyMovement>().getDamage(slashDamage + Random.Range(-slashFloatRange,
                         slashFloatRange), (int)transform.localScale.x);
                 }
@@ -79,11 +84,14 @@ public class PlayerAttack : MonoBehaviour
     {
         // transform.Translate(transform.localScale.x * 0.1f, 0f, 0f);
         Collider2D[] enemies = Physics2D.OverlapCircleAll(damagePoint.position, scope, enemyLayer);
+        float extraDamage = 0;
+        bool backAttack = property.HaveEquipment("ShadowBlade");
         foreach (Collider2D enemy in enemies)
         {
             int direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
+            if (backAttack && direction * enemy.transform.localScale.x > 0) extraDamage += 10;
             enemy.GetComponent<EnemyMovement>().getDamage(attackDamage + Random.Range(-attackFloatRange, 
-                attackFloatRange), direction);
+                attackFloatRange) + extraDamage, direction);
         }
     }
 

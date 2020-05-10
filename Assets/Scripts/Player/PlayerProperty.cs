@@ -9,7 +9,6 @@ public class PlayerProperty : MonoBehaviour
     [Header("State Effect")]
     public GameObject poisonPartical;
     public GameObject burnPartical;
-    public GameObject healFx;
 
     [Header("Skill CD")]
     public float dashCoolDown = 2f;
@@ -35,7 +34,8 @@ public class PlayerProperty : MonoBehaviour
     private PlayerAnimation anim;
     private Rigidbody2D rb;
     private Player player;
-    
+    private GameObject healFx;
+    private GameObject reliveFx;
     void Start()
     {
         player = Player.GetInstance();
@@ -54,6 +54,8 @@ public class PlayerProperty : MonoBehaviour
 
         anim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
+        healFx = Resources.Load<GameObject>("Prefabs/FX/Heal");
+        reliveFx = Resources.Load<GameObject>("Prefabs/FX/Relive");
         
         UIManager.GetInstance().SetPlayerHealth(currentHealth);
         UIManager.GetInstance().SetCoinNumber(coin);
@@ -92,6 +94,14 @@ public class PlayerProperty : MonoBehaviour
         return false;
     }
 
+    public void RemoveEquipment(string name)
+    {
+        for (int i = 0; i < equipments.Count; i++)
+        {
+            if(equipments[i].Equals(name)) equipments.RemoveAt(i);
+        }
+    }
+
     public void SetCoinNumber(int change)
     {
         coin += change;
@@ -121,13 +131,22 @@ public class PlayerProperty : MonoBehaviour
         if (isDead) return;
         if(currentHealth != maxHealth && change > 0)
         {
-            Instantiate(healFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
+            if (currentHealth != 0)
+            {
+                Instantiate(healFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
+            }
+            else
+            {
+                Instantiate(reliveFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
+            }
         }
         currentHealth += change;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentHealth < 0) currentHealth = 0;
         if (currentHealth == 0)
         {
+            GetBurnt(-1);
+            GetPoisoned(-1);
             anim.Die();
             rb.velocity = new Vector2(0, 0);
             isDead = true;
@@ -146,6 +165,7 @@ public class PlayerProperty : MonoBehaviour
         if (time == -1)
         {
             lastPoisonedTime = 0;
+            isPoisoned = false;
             return;
         }
         lastPoisonedTime += time;
@@ -163,8 +183,9 @@ public class PlayerProperty : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             UIManager.GetInstance().Hurt();
-            SetHealth(-1);
+            if(lastPoisonedTime == 0) break;
             lastPoisonedTime -= 1;
+            SetHealth(-1);
         }
         isPoisoned = false;
         poisonPartical.SetActive(false);
@@ -181,6 +202,7 @@ public class PlayerProperty : MonoBehaviour
         if (time == -1)
         {
             lastBurntTime = 0;
+            isBurnt = false;
             return;
         }
         lastBurntTime += time;
@@ -198,10 +220,16 @@ public class PlayerProperty : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             UIManager.GetInstance().Hurt();
-            SetHealth(-1);
+            if(lastBurntTime == 0) break;
             lastBurntTime -= 1;
+            SetHealth(-1);
         }
         isBurnt = false;
         burnPartical.SetActive(false);
+    }
+
+    public bool IsHealthy()
+    {
+        return currentHealth == maxHealth;
     }
 }

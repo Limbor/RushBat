@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 public class Equipment : MonoBehaviour
 {
-    private bool pick = false;
+    private bool pick;
     private float floatScope = 0.05f;
     private PlayerProperty player;
     private float pos;
@@ -20,6 +20,16 @@ public class Equipment : MonoBehaviour
     {
         player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerProperty>();
         pos = transform.position.y;
+        string originalName = equipmentName;
+        equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName);
+        if (equipmentName.Equals("Null"))
+        {
+            Destroy(gameObject);
+        }
+        if (originalName.Equals("Random"))
+        {
+            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/" + equipmentName);
+        }
     }
 
     // Update is called once per frame
@@ -42,7 +52,7 @@ public class Equipment : MonoBehaviour
     {
         pick = true;
         AudioManager.GetInstance().PlayPowerUpAudio();
-        UIManager.GetInstance().ShowEquipmentInfo(name);
+        UIManager.GetInstance().ShowEquipmentInfo(equipmentName);
         player.Equip(equipmentName);
         Destroy(gameObject, 1.5f);
     }

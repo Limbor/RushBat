@@ -14,6 +14,7 @@ public class EnemyMovement : MonoBehaviour
     protected float walkspeed;
     protected float waittime;
     protected float blood;
+    protected float maxBlood;
     protected float damage;
     protected float length;
 
@@ -34,7 +35,11 @@ public class EnemyMovement : MonoBehaviour
     //玩家
     protected GameObject player;
     protected LayerMask groundLayer;
-    
+
+    //掉落物
+    public GameObject heartPrefab;
+    public GameObject goldPrefab;
+    public GameObject silverPrefab;
 
     // Start is called before the first frame update
     protected void Start()
@@ -106,13 +111,8 @@ public class EnemyMovement : MonoBehaviour
     }
 
     //判断是否存活，并显示血条, 受伤时会变白闪烁
-    void Alive()
+    protected virtual void Alive()
     {
-        
-        if (isdead)
-        {
-            return;
-        }
         if (blood <= 0)
         {
            
@@ -121,6 +121,10 @@ public class EnemyMovement : MonoBehaviour
             isdead = true;
             anim.SetBool("dead", true);
             canvas.SetActive(false);
+
+            //掉落物品
+            Drop();
+
             GameManager.GetInstance().DelEnemy(gameObject);
             GetComponent<SpriteRenderer>().color = Color.gray;
             GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
@@ -178,7 +182,7 @@ public class EnemyMovement : MonoBehaviour
         {
 
             blood -= damage;
-            bloodVolume.GetComponent<Image>().fillAmount = blood / 100;
+            bloodVolume.GetComponent<Image>().fillAmount = blood / maxBlood;
             Debug.Log("Current health: " + blood);
 
             //受伤停止攻击
@@ -211,6 +215,11 @@ public class EnemyMovement : MonoBehaviour
         Vector2 pos = transform.position;
         RaycastHit2D hit = Physics2D.Raycast(pos + offset, direction, length, layer);
         return hit;
+    }
+
+    protected virtual void Drop()
+    {
+
     }
 
 }

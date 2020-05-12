@@ -20,16 +20,12 @@ public class Equipment : MonoBehaviour
     {
         player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerProperty>();
         pos = transform.position.y;
-        string originalName = equipmentName;
         equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName);
         if (equipmentName.Equals("Null"))
         {
             Destroy(gameObject);
         }
-        if (originalName.Equals("Random"))
-        {
-            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/" + equipmentName);
-        }
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/" + equipmentName);
     }
 
     // Update is called once per frame

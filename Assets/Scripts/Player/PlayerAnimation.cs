@@ -127,9 +127,9 @@ public class PlayerAnimation : MonoBehaviour
     public void Disappear()
     {
         PlayerProperty property = GetComponent<PlayerProperty>();
-        if (property.HaveEquipment("GoldenApple"))
-        {    
-            property.RemoveEquipment("GoldenApple");
+        if (property.HaveEquipment("GoldenApple") && !Player.GetInstance().hasRelived)
+        {
+            Player.GetInstance().hasRelived = true;
             animator.SetTrigger(relive);
             property.isDead = false;
             property.SetHealth(4);

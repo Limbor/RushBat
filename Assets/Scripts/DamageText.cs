@@ -32,6 +32,11 @@ public class DamageText : MonoBehaviour
         text.color = color;
     }
 
+    public void SetScale(float scale = 1.33f)
+    {
+        text.transform.localScale *= scale;
+    }
+
     IEnumerator ReturnPool()
     {
         yield return new WaitForSeconds(1f);

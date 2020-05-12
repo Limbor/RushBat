@@ -17,7 +17,6 @@ public class PlayerProperty : MonoBehaviour
     public float skill3CoolDown = 10f;
 
     [Header("Player State")]
-    public SpriteRenderer state;
     public bool isDead = false;
     public bool isPoisoned = false;
     public bool isBurnt = false;
@@ -26,6 +25,7 @@ public class PlayerProperty : MonoBehaviour
     private int currentHealth;
     private int shield;
     private int coin;
+    private int key;
     [SerializeField]
     private List<string> equipments;
     private int lastPoisonedTime;
@@ -39,11 +39,12 @@ public class PlayerProperty : MonoBehaviour
     void Start()
     {
         player = Player.GetInstance();
-        
+        // 复原player基础属性
         maxHealth = player.maxHealth;
         currentHealth = player.currentHealth;
         shield = player.shield;
         coin = player.coin;
+        key = player.key;
         
         lastPoisonedTime = player.lastPoisonedTime;
         if(lastPoisonedTime != 0) GetPoisoned(0);
@@ -51,15 +52,21 @@ public class PlayerProperty : MonoBehaviour
         if(lastBurntTime != 0) GetBurnt(0);
         
         equipments = player.equipments;
+        
+        foreach (var item in player.surroundingItems)
+        {
+            Instantiate(Resources.Load<GameObject>("Prefabs/Item/" + item));
+        }
 
         anim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
         healFx = Resources.Load<GameObject>("Prefabs/FX/Heal");
         reliveFx = Resources.Load<GameObject>("Prefabs/FX/Relive");
-        
+
         UIManager.GetInstance().SetPlayerHealth(currentHealth);
         UIManager.GetInstance().SetCoinNumber(coin);
         UIManager.GetInstance().SetShieldNumber(shield);
+        UIManager.GetInstance().SetKeyNumber(key);
     }
 
     private void Update()
@@ -68,6 +75,7 @@ public class PlayerProperty : MonoBehaviour
         player.currentHealth = currentHealth;
         player.shield = shield;
         player.coin = coin;
+        player.key = key;
         player.lastPoisonedTime = lastPoisonedTime;
         player.lastBurntTime = lastBurntTime;
         player.equipments = equipments;
@@ -81,8 +89,25 @@ public class PlayerProperty : MonoBehaviour
     public void Equip(string equipment)
     {
         if (HaveEquipment(equipment)) return;
+        SpecialEquipmentCheck(equipment);
         equipments.Add(equipment);
         anim.Acquire();
+    }
+
+    private void SpecialEquipmentCheck(string equipment)
+    {
+        if (equipment.Equals("HappyBeer"))
+        {
+            maxHealth += 4;
+            player.maxHealth += 4;
+            UIManager.GetInstance().AddHeartContainer(1);
+            SetHealth(4);
+        }
+        else if(equipment.Equals("CrossBlade"))
+        {
+            Instantiate(Resources.Load<GameObject>("Prefabs/Item/CrossBlade"));
+            player.surroundingItems.Add("CrossBlade");
+        }
     }
 
     public bool HaveEquipment(string name)
@@ -106,6 +131,12 @@ public class PlayerProperty : MonoBehaviour
     {
         coin += change;
         UIManager.GetInstance().SetCoinNumber(coin);
+    }
+    
+    public void SetKeyNumber(int change)
+    {
+        key += change;
+        UIManager.GetInstance().SetKeyNumber(key);
     }
     
     public void Hurt(int damage)
@@ -161,6 +192,7 @@ public class PlayerProperty : MonoBehaviour
     public void GetPoisoned(int time)
     {
         if (isDead) return;
+        if (HaveEquipment("GasMask")) return;
         if (GetComponent<PlayerMovement>().avoidDamage) return;
         if (time == -1)
         {
@@ -182,10 +214,11 @@ public class PlayerProperty : MonoBehaviour
         while(lastPoisonedTime != 0)
         {
             yield return new WaitForSeconds(1f);
-            UIManager.GetInstance().Hurt();
+            if (HaveEquipment("GasMask")) lastPoisonedTime = 0;
             if(lastPoisonedTime == 0) break;
             lastPoisonedTime -= 1;
-            SetHealth(-1);
+            Hurt(1);
+            UIManager.GetInstance().Hurt();
         }
         isPoisoned = false;
         poisonPartical.SetActive(false);
@@ -198,6 +231,7 @@ public class PlayerProperty : MonoBehaviour
     public void GetBurnt(int time)
     {
         if (isDead) return;
+        if (HaveEquipment("WeldingMask")) return;
         if (GetComponent<PlayerMovement>().avoidDamage) return;
         if (time == -1)
         {
@@ -219,10 +253,11 @@ public class PlayerProperty : MonoBehaviour
         while (lastBurntTime != 0)
         {
             yield return new WaitForSeconds(1f);
-            UIManager.GetInstance().Hurt();
+            if (HaveEquipment("WeldingMask")) lastBurntTime = 0;
             if(lastBurntTime == 0) break;
             lastBurntTime -= 1;
-            SetHealth(-1);
+            Hurt(1);
+            UIManager.GetInstance().Hurt();
         }
         isBurnt = false;
         burnPartical.SetActive(false);
@@ -231,5 +266,15 @@ public class PlayerProperty : MonoBehaviour
     public bool IsHealthy()
     {
         return currentHealth == maxHealth;
+    }
+
+    public int GetCoinNumber()
+    {
+        return coin;
+    }
+    
+    public int GetKeyNumber()
+    {
+        return key;
     }
 }

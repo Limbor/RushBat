@@ -109,7 +109,11 @@ public class GameManager : MonoSingleton<GameManager>
                 int i;
                 for (i = 0; i < equipmentList.Count; i++)
                 {
-                    if(equipmentList[i].Equals(name)) equipmentList.RemoveAt(i);
+                    if (equipmentList[i].Equals(name))
+                    {
+                        equipmentList.RemoveAt(i);
+                        break;
+                    }
                 }
                 if (i == equipmentList.Count) name = "Null";
             }

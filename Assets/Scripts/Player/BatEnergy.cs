@@ -14,7 +14,7 @@ public class BatEnergy : MonoBehaviour
     private bool collide;
     private bool power;
     private List<GameObject> attackedEnemies = new List<GameObject>();
-    private PlayerProperty property;
+    private PlayerAttack attack;
     
     public LayerMask groundLayer;
     public float flySpeed;
@@ -23,7 +23,7 @@ public class BatEnergy : MonoBehaviour
     private void OnEnable()
     {
         GameObject player = GameManager.GetInstance().GetPlayer();
-        property = player.GetComponent<PlayerProperty>();
+        attack = player.GetComponent<PlayerAttack>();
         
         direction = player.transform.localScale.x;
         transform.localScale = new Vector3(direction, 1, 1);
@@ -60,14 +60,8 @@ public class BatEnergy : MonoBehaviour
             if (attackedEnemies.Contains(collision.gameObject)) return;
             attackedEnemies.Add(collision.gameObject);
             float damage = this.damage + (power ? boost : 0);
-            int extraDamage = 0;
-            if (property.HaveEquipment("ShadowBlade") && direction * collision.transform.localScale.x > 0)
-                extraDamage += 10;
-            damage = damage + Random.Range(-floatRange, floatRange) + extraDamage;
-            collision.GetComponent<EnemyMovement>().getDamage(damage, (int)transform.localScale.x);
-            int type = 1;
-            if (extraDamage > 0) type++;
-            PoolManager.GetInstance().GetDamageText(collision.transform.position, damage, type);
+            damage = damage + Random.Range(-floatRange, floatRange);
+            attack.Damage(collision.gameObject, damage, direction);
         }
     }
 

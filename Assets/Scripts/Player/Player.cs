@@ -9,6 +9,7 @@ public class Player
     public int currentHealth;
     public int shield;
     public int coin;
+    public int key;
     public List<string> equipments;
     public int lastPoisonedTime;
     public int lastBurntTime;
@@ -17,6 +18,9 @@ public class Player
     public float skill1CoolDown;
     public float skill2CoolDown;
     public float skill3CoolDown;
+    // 针对特殊装备的属性
+    public bool hasRelived;
+    public List<string> surroundingItems = new List<string>();
 
     private Player()
     {
@@ -25,9 +29,11 @@ public class Player
 
     public void Reset()
     {
+        maxHealth = 16;
         currentHealth = maxHealth;
         shield = 0;
         coin = 0;
+        key = 0;
         lastPoisonedTime = 0;
         lastBurntTime = 0;
         equipments = new List<string>();
@@ -35,6 +41,9 @@ public class Player
         skill1CoolDown = 0;
         skill2CoolDown = 0;
         skill3CoolDown = 0;
+
+        hasRelived = false;
+        surroundingItems = new List<string>();
     }
     
     public static Player GetInstance()

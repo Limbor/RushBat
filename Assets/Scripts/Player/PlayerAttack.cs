@@ -58,8 +58,6 @@ public class PlayerAttack : MonoBehaviour
         if (isSlashing)
         {
             Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, 0.35f, enemyLayer);
-            float extraDamage = 0;
-            bool backAttack = property.HaveEquipment("ShadowBlade");
             foreach (Collider2D enemy in enemies)
             {
                 if (!damagesEnemies.Contains(enemy.gameObject))
@@ -72,32 +70,52 @@ public class PlayerAttack : MonoBehaviour
                         StartCoroutine(TimeStart());
                     }
                     damagesEnemies.Add(enemy.gameObject);
-                    if (backAttack && transform.localScale.x * enemy.transform.localScale.x > 0) extraDamage += 10;
-                    float damage = slashDamage + Random.Range(-slashFloatRange, slashFloatRange) + extraDamage;
-                    enemy.GetComponent<EnemyMovement>().getDamage(damage, (int)transform.localScale.x);
-                    int type = 1;
-                    if (extraDamage > 0) type++;
-                    PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
+                    float damage = slashDamage + Random.Range(-slashFloatRange, slashFloatRange);
+                    Damage(enemy.gameObject, damage, transform.localScale.x);
                 }
             }
         }
     }
 
+    /// <summary>
+    /// 对敌人造成伤害
+    /// </summary>
+    /// <param name="enemy">敌人对象</param>
+    /// <param name="baseDamage">基础伤害</param>
+    /// <param name="direction">伤害方向</param>
+    public void Damage(GameObject enemy, float baseDamage, float direction)
+    {
+        float extraDamage = 0;
+        int type = 1;
+        if (property.HaveEquipment("ThiefMask") && Random.Range(0, 1f) < 0.1f)
+        {
+            GameObject coin = Resources.Load<GameObject>("Prefabs/Item/SilverCoin");
+            Instantiate(coin).GetComponent<Item>().Emit(enemy.transform.position, false);
+        }
+        if (property.HaveEquipment("SamuraiSoul") && Random.Range(0, 1f) < 0.3f)
+        {
+            baseDamage *= 2;
+            type += 2;
+        }
+        if (property.HaveEquipment("ShadowBlade") && direction * enemy.transform.localScale.x > 0)
+        {
+            extraDamage += 10;
+            type++;
+        }
+        float damage = baseDamage + extraDamage;
+        enemy.GetComponent<EnemyMovement>().getDamage(damage, (int)direction);
+        PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
+    }
+    
     public void Attack()
     {
         // transform.Translate(transform.localScale.x * 0.1f, 0f, 0f);
         Collider2D[] enemies = Physics2D.OverlapCircleAll(damagePoint.position, scope, enemyLayer);
-        float extraDamage = 0;
-        bool backAttack = property.HaveEquipment("ShadowBlade");
         foreach (Collider2D enemy in enemies)
         {
-            int direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
-            if (backAttack && direction * enemy.transform.localScale.x > 0) extraDamage += 10;
-            float damage = attackDamage + Random.Range(-attackFloatRange, attackFloatRange) + extraDamage;
-            enemy.GetComponent<EnemyMovement>().getDamage(damage, direction);
-            int type = 1;
-            if (extraDamage > 0) type++;
-            PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
+            var direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
+            float damage = attackDamage + Random.Range(-attackFloatRange, attackFloatRange);
+            Damage(enemy.gameObject, damage, direction);
         }
     }
 

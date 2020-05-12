@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Saw : MonoBehaviour
 {
-    public float lastTime = -10f;
+    public float lastTime = 0f;
     private float coolDown = 2f;
 
     private Animator anim;
@@ -12,6 +12,7 @@ public class Saw : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        lastTime += Time.time;
     }
 
     // Update is called once per frame

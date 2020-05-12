@@ -208,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
     public void EnterDoor(bool sideDoor)
     {
         canMove = false;
+        avoidDamage = true;
         if (!sideDoor)
         {
             rb.velocity = Vector2.zero;
@@ -437,6 +438,26 @@ public class PlayerMovement : MonoBehaviour
         {
             isOnLadder = false;
         }
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("OneWayPlatform") && Mathf.Abs(rb.velocity.y) < 0.1f)
+        {
+            if (yVelocity < -0.1f)
+            {
+                other.gameObject.GetComponent<PlatformEffector2D>().colliderMask = 1 << LayerMask.NameToLayer("Enemy");
+                other.gameObject.layer = 0;
+                StartCoroutine(ThroughPlatform(other.gameObject));
+            }
+        }
+    }
+
+    IEnumerator ThroughPlatform(GameObject platform)
+    {
+        yield return new WaitForSeconds(0.5f);
+        platform.GetComponent<PlatformEffector2D>().colliderMask |= 1 << LayerMask.NameToLayer("Player");
+        platform.layer = LayerMask.NameToLayer("Platform");
     }
 
     IEnumerator DisableMovement(float duration)

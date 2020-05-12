@@ -245,11 +245,13 @@ public class PoolManager : MonoBehaviour
         {
             FillDamageTextPool();
         }
-        Color[] colors = new[] {Color.white, Color.yellow, new Color(1, 0.71f, 0), Color.red};
+        Color[] colors = {Color.white, Color.yellow, new Color(1, 0.71f, 0), Color.red};
         GameObject gameObject = damageTextPool.Dequeue();
         gameObject.transform.position = position;
-        gameObject.GetComponent<DamageText>().SetNumber(damage);
-        gameObject.GetComponent<DamageText>().SetColor(colors[type - 1]);
+        var text = gameObject.GetComponent<DamageText>();
+        text.SetNumber(damage);
+        text.SetColor(colors[type - 1]);
+        if(type == 4) text.SetScale();
         gameObject.SetActive(true);
     }
 }

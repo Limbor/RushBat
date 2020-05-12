@@ -18,13 +18,9 @@ public class UIManager : MonoBehaviour
     public Text keyNumber;
     [Header("Scene Fade")]
     public RawImage cover;
-    [Header("Equipment Panel")]
-    public GameObject equipmentPanel;
-    public Image equipmentImage;
-    public Text equipmentName;
-    public Text equipmentIntro;
 
     private float fadeTime = 1.5f;
+    public GameObject equipmentPanel;
     private Image shieldPrefab;
     private Image heartPrefab;
     private Dictionary<string, EquipmentInfo> equipmentInfoMap;
@@ -50,6 +46,7 @@ public class UIManager : MonoBehaviour
 
     private void InitUI()
     {
+        equipmentPanel = Resources.Load<GameObject>("Prefabs/UI/Profile");
         heartList = new List<Image>();
         shieldList = new List<Image>();
         heartPrefab = Resources.Load<Image>("Prefabs/UI/Heart");
@@ -57,14 +54,19 @@ public class UIManager : MonoBehaviour
         int heartNumber = Player.GetInstance().maxHealth / 4;
         for (int i = 0; i < heartNumber; i++)
         {
-            Image heartUI = Instantiate(heartPrefab, transform.GetChild(0));
-            var heart = heartUI.rectTransform;
-            heart.SetAsFirstSibling();
-            Vector2 pos = heart.position;
-            float scaleInverse = heart.transform.parent.localScale.x;
-            heart.position = new Vector2(pos.x + 60 * i * scaleInverse, pos.y);
-            heartList.Add(heartUI);
+            AddHeart(i);
         }
+    }
+
+    private void AddHeart(int index)
+    {
+        Image heartUI = Instantiate(heartPrefab, transform.GetChild(0));
+        var heart = heartUI.rectTransform;
+        heart.SetAsFirstSibling();
+        Vector2 pos = heart.position;
+        float scaleInverse = heart.transform.parent.localScale.x;
+        heart.position = new Vector2(pos.x + 60 * index * scaleInverse, pos.y);
+        heartList.Add(heartUI);
     }
     
     private void ReadAssets()
@@ -88,7 +90,7 @@ public class UIManager : MonoBehaviour
         });
     }
 
-    void StartScene()
+    public void StartScene()
     {
         cover.color = Color.black;
         cover.DOFade(0, fadeTime).OnComplete(() =>
@@ -109,22 +111,18 @@ public class UIManager : MonoBehaviour
     public void ShowEquipmentInfo(string name)
     {
         EquipmentInfo equipmentInfo = equipmentInfoMap[name];
-        equipmentName.text = equipmentInfo.name;
-        equipmentIntro.text = equipmentInfo.intro;
-        equipmentImage.sprite = Resources.Load<Sprite>("Images/" + equipmentInfo.enName);
-        equipmentPanel.SetActive(true);
-        StartCoroutine(HideEquipmentInfo());
+        var profile = Instantiate(equipmentPanel, transform.GetChild(0));
+        profile.GetComponent<EquipmentDisplay>().SetContent(equipmentInfo);
     }
 
-    IEnumerator HideEquipmentInfo()
-    {
-        yield return new WaitForSeconds(1.5f);
-        equipmentPanel.SetActive(false);
-    }
-    
     public void SetCoinNumber(int number)
     {
         coinNumber.text = number.ToString();
+    }
+    
+    public void SetKeyNumber(int number)
+    {
+        keyNumber.text = number.ToString();
     }
 
     public void SetShieldNumber(int shieldNumber)
@@ -166,6 +164,17 @@ public class UIManager : MonoBehaviour
                 heart.sprite = hearts[4 - health];
                 health = 0;
             }
+        }
+    }
+
+    public void AddHeartContainer(int count)
+    {
+        for (var i = 0; i < count; i++)
+        {
+            int shieldCount = shieldList.Count;
+            SetShieldNumber(0);
+            AddHeart(heartList.Count + i);
+            SetShieldNumber(shieldCount);
         }
     }
 

@@ -6,22 +6,24 @@ using DG.Tweening;
 
 public class Door : MonoBehaviour
 {
-    public bool needKey = false;
+    public bool needKey;
     public bool isSideDoor;
     public GameObject openDoor;
-    
+
+    private bool canOpen = false;
     private bool isOpen = false;
-    private bool isLocked;
 
     private void Start()
     {
         GameManager.GetInstance().RegisterDoor(gameObject);
-        isLocked = needKey;
+        if (isSideDoor && needKey)
+            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/lockSideDoor");
     }
 
     public void Open(bool withKey)
     {
         if (isOpen) return;
+        canOpen = true;
         if (needKey && !withKey) return;
         isOpen = true;
         if (isSideDoor)
@@ -38,6 +40,21 @@ public class Door : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (!other.gameObject.CompareTag("Player")) return;
+        if (canOpen && !isOpen && needKey && InputManager.GetButtonDown("Interact"))
+        {
+            if (other.gameObject.GetComponent<PlayerProperty>().GetKeyNumber() == 0)
+            {
+                GetComponent<TriggerDisplay>().SetText("需要钥匙");
+                return;
+            }
+            other.gameObject.GetComponent<PlayerProperty>().SetKeyNumber(-1);
+            Open(true);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!isOpen) return;
@@ -50,11 +67,16 @@ public class Door : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!isOpen) return;
         if (!other.CompareTag("Player")) return;
-        if (!isSideDoor && InputManager.GetButtonDown("Interact"))
+        if (isOpen && !isSideDoor && InputManager.GetButtonDown("Interact"))
         {
             other.GetComponent<PlayerMovement>().EnterDoor(isSideDoor);
+        }
+        if (canOpen && !isOpen && needKey && InputManager.GetButtonDown("Interact"))
+        {
+            if (other.GetComponent<PlayerProperty>().GetKeyNumber() == 0) return;
+            other.GetComponent<PlayerProperty>().SetKeyNumber(-1);
+            Open(true);
         }
     }
 }

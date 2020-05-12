@@ -7,6 +7,6 @@ public class Coin : Item
     public int value;
     protected override void Effect()
     {
-        GameManager.GetInstance().SetCoinNumber(value);
+        player.SetCoinNumber(value);
     }
 }

@@ -3,39 +3,88 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 using Random = UnityEngine.Random;
 
 public class Treasure : MonoBehaviour
 {
     // 掉落物品列表
-    public GameObject[] itemList;
-    
+    private GameObject goldCoin, silverCoin, shield, key, heart, halfHeart;
+    private bool open;
+
+    public bool locked;
+    public bool random;
+    public List<GameObject> itemList;
     public GameObject openedChest;
 
-    public Image hint;
-
-    // 触发范围显示按键提示
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Start()
     {
-        if (!collision.CompareTag("Player")) return;
-        hint.enabled = true;
+        if (locked) GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/LockChest");
+        goldCoin = Resources.Load<GameObject>("Prefabs/Item/GoldCoin");
+        silverCoin = Resources.Load<GameObject>("Prefabs/Item/SilverCoin");
+        shield = Resources.Load<GameObject>("Prefabs/Item/Shield");
+        key = Resources.Load<GameObject>("Prefabs/Item/Key");
+        heart = Resources.Load<GameObject>("Prefabs/Item/Heart");
+        halfHeart = Resources.Load<GameObject>("Prefabs/Item/HalfHeart");
+        if(random) RandomItems();
     }
-    
+
+    private void RandomItems()
+    {
+        itemList.Clear();
+        int randomCoin = Random.Range(0, 20);
+        if (randomCoin < 10 || locked)
+        {
+            randomCoin = randomCoin % 4 + 4;
+            if (randomCoin >= 5)
+            {
+                itemList.Add(goldCoin);
+                randomCoin -= 5;
+            }
+            for (int i = 0; i < randomCoin; i++)
+            {
+                itemList.Add(silverCoin);
+            }
+        }
+        int randomShield = Random.Range(0, 4);
+        if(randomShield == 0 || locked && randomShield < 2) itemList.Add(shield);
+        int randomHeart = Random.Range(0, 20);
+        if (randomHeart < 10)
+        {
+            if(randomHeart % 2 == 1 || locked) itemList.Add(heart);
+            else itemList.Add(halfHeart);
+        }
+        if(Random.Range(0, 3) == 0) itemList.Add(key);
+        if (itemList.Count > 0) return;
+        for (int i = 0; i < 4; i++)
+        {
+            itemList.Add(silverCoin);
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (open) return;
         if (!collision.CompareTag("Player") || !InputManager.GetButtonDown("Interact")) return;
-        Instantiate(openedChest).transform.position = transform.position;
-        foreach (var item in itemList)
+        transform.DOShakeRotation(0.5f, 30f, 30).OnComplete(() =>
         {
-            GameObject itemObject = Instantiate(item);
-            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
-        }
-        Destroy(gameObject);
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (!collision.CompareTag("Player")) return;
-        hint.enabled = false;
+            if (locked)
+            {
+                if (collision.GetComponent<PlayerProperty>().GetKeyNumber() == 0)
+                {
+                    GetComponent<TriggerDisplay>().SetText("需要钥匙");
+                    return;
+                }
+                collision.GetComponent<PlayerProperty>().SetKeyNumber(-1);
+            }
+            open = true;
+            Instantiate(openedChest).transform.position = transform.position;
+            foreach (var item in itemList)
+            {
+                GameObject itemObject = Instantiate(item);
+                itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+            }
+            Destroy(gameObject);
+        });
     }
 }

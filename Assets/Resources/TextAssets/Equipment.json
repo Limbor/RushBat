@@ -1,0 +1,54 @@
+{
+  "equipmentList": [
+    {
+      "enName": "Helmet",
+      "name": "安全帽",
+      "intro": "工人们佩戴的头盔，保护你免受地面陷阱的伤害"
+    },
+    {
+      "enName": "Wing",
+      "name": "滑翔翼",
+      "intro": "现在可以进行二段跳了并且进行滑行\n(连按两次空格进行二段跳之后在空中可以按住空格进行滑行)"
+    },
+    {
+      "enName": "GoldenApple",
+      "name": "金苹果",
+      "intro": "金色的苹果，味道一般，第一次死亡后会复活并恢复一颗心的生命值"
+    },
+    {
+      "enName": "ShadowBlade",
+      "name": "影刃",
+      "intro": "隐藏在暗影中的利器，从背后攻击敌人会造成额外的伤害"
+    },
+    {
+      "enName": "HappyBeer",
+      "name": "哈啤",
+      "intro": "喝了就会快乐的神秘淡黄色液体，获得一格额外的生命值"
+    },
+    {
+      "enName": "SamuraiSoul",
+      "name": "武士之魂",
+      "intro": "古老的武士留下的，似乎蕴含着强大的力量，你的攻击将有概率造成暴击"
+    },
+    {
+      "enName": "WeldingMask",
+      "name": "焊接面具",
+      "intro": "焊接工人用的面罩，不会再被烧伤了"
+    },
+    {
+      "enName": "GasMask",
+      "name": "防毒面具",
+      "intro": "长相奇异的面罩，似乎对毒有很强的防护性，不会再中毒了"
+    },
+    {
+      "enName": "CrossBlade",
+      "name": "十字刃",
+      "intro": "十字型的飞刀，环绕着你给碰触到的敌人造成伤害"
+    },
+    {
+      "enName": "ThiefMask",
+      "name": "窃贼头套",
+      "intro": "窃贼所佩戴的头套，对敌人造成伤害的同时有概率从敌人身上窃取金币"
+    }
+  ]
+}

@@ -24,6 +24,8 @@ public class PlayerAnimation : MonoBehaviour
     private int die;
     private int hurt;
     private int acquire;
+    private int roomIn;
+    private int relive;
 
     private float fade;
 
@@ -52,6 +54,8 @@ public class PlayerAnimation : MonoBehaviour
         die = Animator.StringToHash("die");
         hurt = Animator.StringToHash("hurt");
         acquire = Animator.StringToHash("acquire");
+        roomIn = Animator.StringToHash("roomIn");
+        relive = Animator.StringToHash("relive");
 
         fade = 1f;
     }
@@ -69,10 +73,17 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool(dash, player.isDashing);
         animator.SetBool(glide, player.isGliding);
         animator.SetBool(climb, player.isClimbing);
+        if(!player.canMove) animator.SetBool(acquire, false);
     }
 
+    public void EnterRoom()
+    {
+        animator.SetTrigger(roomIn);
+    }
+    
     public void Acquire()
     {
+        if (!player.canMove) return;
         animator.SetBool(acquire, true);
         StartCoroutine(EndAcquire());
     }
@@ -115,6 +126,15 @@ public class PlayerAnimation : MonoBehaviour
 
     public void Disappear()
     {
+        PlayerProperty property = GetComponent<PlayerProperty>();
+        if (property.HaveEquipment("GoldenApple") && !Player.GetInstance().hasRelived)
+        {
+            Player.GetInstance().hasRelived = true;
+            animator.SetTrigger(relive);
+            property.isDead = false;
+            property.SetHealth(4);
+            return;
+        }
         StartCoroutine(FadeOut());
     }
 
@@ -129,6 +149,7 @@ public class PlayerAnimation : MonoBehaviour
         } while (fade > 0);
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         gameObject.GetComponent<Collider2D>().enabled = false;
+        Player.GetInstance().Reset();
         GameManager.Restart();
     }
 }

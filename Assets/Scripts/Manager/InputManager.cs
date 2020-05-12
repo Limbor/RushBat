@@ -65,11 +65,13 @@ public class InputManager : MonoBehaviour
 
     public static void EnterTalkingState()
     {
+        _inputManager.acceptInput = false;
         _inputManager.isTalking = true;
     }
     
     public static void ExitTalkingState()
     {
+        _inputManager.acceptInput = true;
         _inputManager.isTalking = false;
     }
     

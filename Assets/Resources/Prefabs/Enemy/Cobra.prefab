@@ -393,6 +393,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 6134651075544246442}
+  heartPrefab: {fileID: 3577134757208604740, guid: ea1679b566e6b4618885b791584ac998,
+    type: 3}
+  goldPrefab: {fileID: 6697429691317462264, guid: 3dba2b04ec7f941d8975b2239f7078f2,
+    type: 3}
+  silverPrefab: {fileID: 2882529177012282320, guid: c89c28fe50f784a2382879457283b99e,
+    type: 3}
   startPos: {fileID: 6134651075682886300}
   endPos: {fileID: 6134651077614673016}
 --- !u!70 &6134651076731027909

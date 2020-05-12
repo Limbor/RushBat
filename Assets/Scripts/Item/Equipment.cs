@@ -7,20 +7,25 @@ using UnityEngine.Serialization;
 
 public class Equipment : MonoBehaviour
 {
-    private bool pick = false;
+    private bool pick;
     private float floatScope = 0.05f;
     private PlayerProperty player;
     private float pos;
     private float direction = 1f;
     
     public String equipmentName;
-    public String description;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerProperty>();
         pos = transform.position.y;
+        equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName);
+        if (equipmentName.Equals("Null"))
+        {
+            Destroy(gameObject);
+        }
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/" + equipmentName);
     }
 
     // Update is called once per frame
@@ -41,14 +46,16 @@ public class Equipment : MonoBehaviour
     }
     void Pick()
     {
-        player.Equip(equipmentName);
         pick = true;
+        AudioManager.GetInstance().PlayPowerUpAudio();
+        UIManager.GetInstance().ShowEquipmentInfo(equipmentName);
+        player.Equip(equipmentName);
         Destroy(gameObject, 1.5f);
     }
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (!pick && other.CompareTag("Player"))
         {
             Pick();
         }

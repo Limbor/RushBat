@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ladder
   - Enemy
+  - OneWayPlatform
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Trap
   - Item
   - TriggerBox
-  - 
+  - Platform
   - 
   - 
   - 
@@ -49,8 +50,11 @@ TagManager:
   - name: Environment
     uniqueID: 2605810617
     locked: 0
-  - name: Trap&Item
+  - name: Trap
     uniqueID: 4244842025
+    locked: 0
+  - name: Item
+    uniqueID: 215378885
     locked: 0
   - name: Enemy
     uniqueID: 3506969907

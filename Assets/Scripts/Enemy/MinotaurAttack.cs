@@ -26,7 +26,7 @@ public class MinotaurAttack : MonoBehaviour
         playerLayer = 1 << LayerMask.NameToLayer("Player");
         chopOffset1 = new Vector2(-1f, 1.16f);
         chopOffset2 = new Vector2(1.06f, -0.42f);
-        stabOffset1 = new Vector2(0f, 0.1f);
+        stabOffset1 = new Vector2(0.5f, 0.2f);
         stabOffset2 = new Vector2(1.1f, -0.24f);
         rotateOffset1 = new Vector2(-1.25f, 0);
         rotateOffset2 = new Vector2(1.1f, -0.42f);
@@ -45,22 +45,38 @@ public class MinotaurAttack : MonoBehaviour
 
             Vector2 offset1 = Vector2.zero, offset2 = Vector2.zero;
             int damage = 0;
+            //根据怪物朝向施加力度
+            float direction;
+            if (GetComponent<EnemyMovement>().Direction())
+            {
+                direction = 1;
+            }
+            else
+            {
+                direction = -1;
+            }
             switch (type)
             {
                 //根据不同的攻击类型设置范围和伤害
                 case "chop":
                     offset1 = chopOffset1;
                     offset2 = chopOffset2;
+                    offset1.x = offset1.x * direction;
+                    offset2.x = offset2.x * direction;
                     damage = chopDamage;
                     break;
                 case "stab":
                     offset1 = stabOffset1;
                     offset2 = stabOffset2;
+                    offset1.x = offset1.x * direction;
+                    offset2.x = offset2.x * direction;
                     damage = stabDamage;
                     break;
                 case "rotate":
                     offset1 = rotateOffset1;
                     offset2 = rotateOffset2;
+                    offset1.x = offset1.x * direction;
+                    offset2.x = offset2.x * direction;
                     damage = rotateDamage;
                     break;
             }
@@ -69,16 +85,7 @@ public class MinotaurAttack : MonoBehaviour
             Collider2D[] players = Physics2D.OverlapAreaAll(position + offset1, position + offset2, playerLayer);
             foreach (Collider2D player in players)
             {
-                //根据怪物朝向施加力度
-                float direction;
-                if (GetComponent<EnemyMovement>().Direction())
-                {
-                    direction = 1;
-                }
-                else
-                {
-                    direction = -1;
-                }
+               
 
                 Debug.Log("Enemy take damage, Amount: " + players.Length);
                 player.GetComponent<PlayerMovement>().Hurt(damage, new Vector2(direction, 0), GameManager.Enemy);

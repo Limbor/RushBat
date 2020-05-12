@@ -18,7 +18,8 @@ public class FireElementalMovement : EnemyMovement
         base.Start();
         startx = startPos.position.x;
         endx = endPos.position.x;
-        blood = 50;
+        maxBlood = 100;
+        blood = maxBlood;
         walkspeed = 100f;
       
         length = 0.2f;
@@ -29,6 +30,7 @@ public class FireElementalMovement : EnemyMovement
     // Update is called once per frame
     void Update()
     {
+        if (isdead) return;
         base.Update();
         Move();
         Attack();
@@ -181,5 +183,24 @@ public class FireElementalMovement : EnemyMovement
         anim.SetBool("attack", false);
         attacking = false;
         attackInterval = 1.5f;
+    }
+    protected override void Drop()
+    {
+        int silverNum = Random.Range(2, 4);
+
+        for (int i = 1; i <= silverNum; i++)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+            //item.
+            //itemList.Add(Instantiate())
+        }
+
+        float heartDrop = Random.Range(0, 1);
+        if (heartDrop <= 0.2)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
     }
 }

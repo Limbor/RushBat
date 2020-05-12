@@ -14,14 +14,16 @@ public class BatEnergy : MonoBehaviour
     private bool collide;
     private bool power;
     private List<GameObject> attackedEnemies = new List<GameObject>();
-
+    private PlayerAttack attack;
+    
     public LayerMask groundLayer;
     public float flySpeed;
     public float changeTime;
     
     private void OnEnable()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = GameManager.GetInstance().GetPlayer();
+        attack = player.GetComponent<PlayerAttack>();
         
         direction = player.transform.localScale.x;
         transform.localScale = new Vector3(direction, 1, 1);
@@ -58,8 +60,8 @@ public class BatEnergy : MonoBehaviour
             if (attackedEnemies.Contains(collision.gameObject)) return;
             attackedEnemies.Add(collision.gameObject);
             float damage = this.damage + (power ? boost : 0);
-            collision.GetComponent<EnemyMovement>().getDamage(damage + Random.Range(-floatRange, floatRange), 
-                (int)(transform.localScale.x));
+            damage = damage + Random.Range(-floatRange, floatRange);
+            attack.Damage(collision.gameObject, damage, direction);
         }
     }
 

@@ -19,19 +19,21 @@ public class PlayerAttack : MonoBehaviour
     private GameObject bigDust;
 
     private float scope = 0.2f;
-    private bool slowDown = false;
-    private bool isSlashing = false;
+    private bool slowDown;
+    private bool isSlashing;
     private float slowDownTime = 0.3f;
     private PlayerMovement player;
+    private PlayerProperty property;
     private Rigidbody2D rb;
 
     private List<GameObject> damagesEnemies;
-    private float pauseTime = 0f;
-    private bool isTimeSlow = false;
+    private float pauseTime;
+    private bool isTimeSlow;
 
     private void Start()
     {
         player = GetComponent<PlayerMovement>();
+        property = GetComponent<PlayerProperty>();
         rb = GetComponent<Rigidbody2D>();
 
         energy = PoolManager.GetInstance().transform.GetChild(0).gameObject;
@@ -68,22 +70,52 @@ public class PlayerAttack : MonoBehaviour
                         StartCoroutine(TimeStart());
                     }
                     damagesEnemies.Add(enemy.gameObject);
-                    enemy.GetComponent<EnemyMovement>().getDamage(slashDamage + Random.Range(-slashFloatRange,
-                        slashFloatRange), (int)transform.localScale.x);
+                    float damage = slashDamage + Random.Range(-slashFloatRange, slashFloatRange);
+                    Damage(enemy.gameObject, damage, transform.localScale.x);
                 }
             }
         }
     }
 
+    /// <summary>
+    /// 对敌人造成伤害
+    /// </summary>
+    /// <param name="enemy">敌人对象</param>
+    /// <param name="baseDamage">基础伤害</param>
+    /// <param name="direction">伤害方向</param>
+    public void Damage(GameObject enemy, float baseDamage, float direction)
+    {
+        float extraDamage = 0;
+        int type = 1;
+        if (property.HaveEquipment("ThiefMask") && Random.Range(0, 1f) < 0.1f)
+        {
+            GameObject coin = Resources.Load<GameObject>("Prefabs/Item/SilverCoin");
+            Instantiate(coin).GetComponent<Item>().Emit(enemy.transform.position, false);
+        }
+        if (property.HaveEquipment("SamuraiSoul") && Random.Range(0, 1f) < 0.3f)
+        {
+            baseDamage *= 2;
+            type += 2;
+        }
+        if (property.HaveEquipment("ShadowBlade") && direction * enemy.transform.localScale.x > 0)
+        {
+            extraDamage += 10;
+            type++;
+        }
+        float damage = baseDamage + extraDamage;
+        enemy.GetComponent<EnemyMovement>().getDamage(damage, (int)direction);
+        PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
+    }
+    
     public void Attack()
     {
         // transform.Translate(transform.localScale.x * 0.1f, 0f, 0f);
         Collider2D[] enemies = Physics2D.OverlapCircleAll(damagePoint.position, scope, enemyLayer);
         foreach (Collider2D enemy in enemies)
         {
-            int direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
-            enemy.GetComponent<EnemyMovement>().getDamage(attackDamage + Random.Range(-attackFloatRange, 
-                attackFloatRange), direction);
+            var direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
+            float damage = attackDamage + Random.Range(-attackFloatRange, attackFloatRange);
+            Damage(enemy.gameObject, damage, direction);
         }
     }
 
@@ -122,8 +154,8 @@ public class PlayerAttack : MonoBehaviour
     public void Recover()
     {
         player.avoidDamage = false;
-        player.canMove = true;
         player.gameObject.GetComponent<Rigidbody2D>().gravityScale = 1f;
+        player.canMove = true;
     }
 
     IEnumerator TimeStart()

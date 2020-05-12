@@ -9,7 +9,6 @@ public class PlayerProperty : MonoBehaviour
     [Header("State Effect")]
     public GameObject poisonPartical;
     public GameObject burnPartical;
-    public GameObject healFx;
 
     [Header("Skill CD")]
     public float dashCoolDown = 2f;
@@ -18,34 +17,69 @@ public class PlayerProperty : MonoBehaviour
     public float skill3CoolDown = 10f;
 
     [Header("Player State")]
-    public SpriteRenderer state;
     public bool isDead = false;
-    public int maxHealth = 16;
     public bool isPoisoned = false;
     public bool isBurnt = false;
 
+    private int maxHealth;
     private int currentHealth;
-    public List<string> equipments;
+    private int shield;
+    private int coin;
+    private int key;
+    [SerializeField]
+    private List<string> equipments;
     private int lastPoisonedTime;
     private int lastBurntTime;
 
     private PlayerAnimation anim;
     private Rigidbody2D rb;
-    
+    private Player player;
+    private GameObject healFx;
+    private GameObject reliveFx;
     void Start()
     {
-        currentHealth = maxHealth;
-        lastPoisonedTime = 0;
-        lastBurntTime = 0;
-        equipments = new List<string>();
+        player = Player.GetInstance();
+        // 复原player基础属性
+        maxHealth = player.maxHealth;
+        currentHealth = player.currentHealth;
+        shield = player.shield;
+        coin = player.coin;
+        key = player.key;
+        
+        lastPoisonedTime = player.lastPoisonedTime;
+        if(lastPoisonedTime != 0) GetPoisoned(0);
+        lastBurntTime = player.lastBurntTime;
+        if(lastBurntTime != 0) GetBurnt(0);
+        
+        equipments = player.equipments;
+        
+        foreach (var item in player.surroundingItems)
+        {
+            Instantiate(Resources.Load<GameObject>("Prefabs/Item/" + item));
+        }
 
         anim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
+        healFx = Resources.Load<GameObject>("Prefabs/FX/Heal");
+        reliveFx = Resources.Load<GameObject>("Prefabs/FX/Relive");
+
+        UIManager.GetInstance().SetPlayerHealth(currentHealth);
+        UIManager.GetInstance().SetCoinNumber(coin);
+        UIManager.GetInstance().SetShieldNumber(shield);
+        UIManager.GetInstance().SetKeyNumber(key);
     }
 
     private void Update()
     {
-        UIManager.GetInstance().SetPlayerHealth(currentHealth);
+        if (isDead) return;
+        player.currentHealth = currentHealth;
+        player.shield = shield;
+        player.coin = coin;
+        player.key = key;
+        player.lastPoisonedTime = lastPoisonedTime;
+        player.lastBurntTime = lastBurntTime;
+        player.equipments = equipments;
+        
         UIManager.GetInstance().SetDashTime(1.0f / dashCoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(0, 1.0f / skill1CoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(1, 1.0f / skill2CoolDown * Time.deltaTime);
@@ -55,8 +89,25 @@ public class PlayerProperty : MonoBehaviour
     public void Equip(string equipment)
     {
         if (HaveEquipment(equipment)) return;
+        SpecialEquipmentCheck(equipment);
         equipments.Add(equipment);
         anim.Acquire();
+    }
+
+    private void SpecialEquipmentCheck(string equipment)
+    {
+        if (equipment.Equals("HappyBeer"))
+        {
+            maxHealth += 4;
+            player.maxHealth += 4;
+            UIManager.GetInstance().AddHeartContainer(1);
+            SetHealth(4);
+        }
+        else if(equipment.Equals("CrossBlade"))
+        {
+            Instantiate(Resources.Load<GameObject>("Prefabs/Item/CrossBlade"));
+            player.surroundingItems.Add("CrossBlade");
+        }
     }
 
     public bool HaveEquipment(string name)
@@ -67,28 +118,88 @@ public class PlayerProperty : MonoBehaviour
         }
         return false;
     }
+
+    public void RemoveEquipment(string name)
+    {
+        for (int i = 0; i < equipments.Count; i++)
+        {
+            if(equipments[i].Equals(name)) equipments.RemoveAt(i);
+        }
+    }
+
+    public void SetCoinNumber(int change)
+    {
+        coin += change;
+        UIManager.GetInstance().SetCoinNumber(coin);
+    }
+    
+    public void SetKeyNumber(int change)
+    {
+        key += change;
+        UIManager.GetInstance().SetKeyNumber(key);
+    }
+    
+    public void Hurt(int damage)
+    {
+        if (isDead) return;
+        if(shield > damage) SetShield(-damage);
+        else
+        {
+            SetHealth(shield - damage);
+            SetShield(-shield);
+        }
+    }
+    
+    public void SetShield(int change)
+    {
+        if (isDead) return;
+        shield += change;
+        UIManager.GetInstance().SetShieldNumber(shield);
+    }
     
     public void SetHealth(int change)
     {
         if (isDead) return;
         if(currentHealth != maxHealth && change > 0)
         {
-            Instantiate(healFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
+            if (currentHealth != 0)
+            {
+                Instantiate(healFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
+            }
+            else
+            {
+                Instantiate(reliveFx, transform.position + Vector3.up * 0.2f, Quaternion.identity, transform);
+            }
         }
         currentHealth += change;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentHealth < 0) currentHealth = 0;
         if (currentHealth == 0)
         {
+            GetBurnt(-1);
+            GetPoisoned(-1);
             anim.Die();
             rb.velocity = new Vector2(0, 0);
             isDead = true;
         }
+        UIManager.GetInstance().SetPlayerHealth(currentHealth);
     }
-
+    
+    /// <summary>
+    /// player中毒
+    /// </summary>
+    /// <param name="time">中毒时长</param>
     public void GetPoisoned(int time)
     {
+        if (isDead) return;
+        if (HaveEquipment("GasMask")) return;
         if (GetComponent<PlayerMovement>().avoidDamage) return;
+        if (time == -1)
+        {
+            lastPoisonedTime = 0;
+            isPoisoned = false;
+            return;
+        }
         lastPoisonedTime += time;
         poisonPartical.SetActive(true);
         if (!isPoisoned)
@@ -103,17 +214,31 @@ public class PlayerProperty : MonoBehaviour
         while(lastPoisonedTime != 0)
         {
             yield return new WaitForSeconds(1f);
-            UIManager.GetInstance().Hurt();
-            SetHealth(-1);
+            if (HaveEquipment("GasMask")) lastPoisonedTime = 0;
+            if(lastPoisonedTime == 0) break;
             lastPoisonedTime -= 1;
+            Hurt(1);
+            UIManager.GetInstance().Hurt();
         }
         isPoisoned = false;
         poisonPartical.SetActive(false);
     }
 
+    /// <summary>
+    /// player烧伤
+    /// </summary>
+    /// <param name="time">烧伤时长</param>
     public void GetBurnt(int time)
     {
+        if (isDead) return;
+        if (HaveEquipment("WeldingMask")) return;
         if (GetComponent<PlayerMovement>().avoidDamage) return;
+        if (time == -1)
+        {
+            lastBurntTime = 0;
+            isBurnt = false;
+            return;
+        }
         lastBurntTime += time;
         burnPartical.SetActive(true);
         if (!isBurnt)
@@ -128,11 +253,28 @@ public class PlayerProperty : MonoBehaviour
         while (lastBurntTime != 0)
         {
             yield return new WaitForSeconds(1f);
-            UIManager.GetInstance().Hurt();
-            SetHealth(-1);
+            if (HaveEquipment("WeldingMask")) lastBurntTime = 0;
+            if(lastBurntTime == 0) break;
             lastBurntTime -= 1;
+            Hurt(1);
+            UIManager.GetInstance().Hurt();
         }
         isBurnt = false;
         burnPartical.SetActive(false);
+    }
+
+    public bool IsHealthy()
+    {
+        return currentHealth == maxHealth;
+    }
+
+    public int GetCoinNumber()
+    {
+        return coin;
+    }
+    
+    public int GetKeyNumber()
+    {
+        return key;
     }
 }

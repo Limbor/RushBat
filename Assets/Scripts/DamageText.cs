@@ -27,6 +27,16 @@ public class DamageText : MonoBehaviour
         text.text = ((int) number).ToString();
     }
 
+    public void SetColor(Color color)
+    {
+        text.color = color;
+    }
+
+    public void SetScale(float scale = 1.33f)
+    {
+        text.transform.localScale *= scale;
+    }
+
     IEnumerator ReturnPool()
     {
         yield return new WaitForSeconds(1f);

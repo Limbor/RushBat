@@ -16,6 +16,7 @@ public class Totem : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        lastShootTime += Time.time;
         nextShootHead = 0;
         shootPoint = GetComponentsInChildren<Transform>();
     }

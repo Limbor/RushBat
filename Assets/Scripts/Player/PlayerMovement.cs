@@ -10,21 +10,17 @@ public class PlayerMovement : MonoBehaviour
     private PlayerAnimation anim;
     private PlayerProperty property;
 
-    private bool doubleJump = true;
+    private bool doubleJump;
     private int jumpCount;
     public bool avoidDamage = false;
-
-    private float lastDashTime = -10f;
+    
     private float dashCoolDown;
     private float dashTime = 0.15f;
     private float dashTimeLeft;
 
-    private float lastSkill3Time = -10f;
-    private float skill3CoolDown;
-    private float lastSkill2Time = -10f;
+    private float skill1CoolDown;
     private float skill2CoolDown;
-    private float lastSkill4Time = -12f;
-    private float skill4CoolDown;
+    private float skill3CoolDown;
 
     private bool jumpPressed = false;
     private float jumpPressTime;
@@ -65,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isOnLadder;
     public bool isHurting;
 
+    private Player player;
     private void Awake()
     {
         GameManager.GetInstance().RegisterPlayer(gameObject);
@@ -73,48 +70,83 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = Player.GetInstance();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<PlayerAnimation>();
         property = GetComponent<PlayerProperty>();
 
-        dashCoolDown = property.dashCoolDown;
-        skill2CoolDown = property.skill1CoolDown;
-        skill3CoolDown = property.skill2CoolDown;
-        skill4CoolDown = property.skill3CoolDown;
+        dashCoolDown = player.dashCoolDown;
+        skill1CoolDown = player.skill1CoolDown;
+        skill2CoolDown = player.skill2CoolDown;
+        skill3CoolDown = player.skill3CoolDown;
+        UIManager.GetInstance().ResetDashTime(dashCoolDown / property.dashCoolDown);
+        UIManager.GetInstance().ResetSkillTime(0, skill1CoolDown / property.skill1CoolDown);
+        UIManager.GetInstance().ResetSkillTime(1, skill2CoolDown / property.skill2CoolDown);
+        UIManager.GetInstance().ResetSkillTime(2, skill3CoolDown / property.skill3CoolDown);
     }
 
     // Update is called once per frame
     void Update()
     {
         if (property.isDead) return;
+        if (!doubleJump)
+        {
+            doubleJump = property.HaveEquipment("Wing");
+        }
         GetMoveButton();
         GetSkillButton();
+        SkillCoolDown();
     }
 
+    private void SkillCoolDown()
+    {
+        if (skill1CoolDown > 0)
+        {
+            skill1CoolDown -= Time.deltaTime;
+        }
+        if (skill2CoolDown > 0)
+        {
+            skill2CoolDown -= Time.deltaTime;
+        }
+        if (skill3CoolDown > 0)
+        {
+            skill3CoolDown -= Time.deltaTime;
+        }
+        if (dashCoolDown > 0)
+        {
+            dashCoolDown -= Time.deltaTime;
+        }
+        
+        player.dashCoolDown = dashCoolDown;
+        player.skill1CoolDown = skill1CoolDown;
+        player.skill2CoolDown = skill2CoolDown;
+        player.skill3CoolDown = skill3CoolDown;
+    }
+    
     private void GetSkillButton()
     {
         if (isDashing || !canMove || isSliding || isGliding || isClimbing) return;
-        if (InputManager.GetButtonDown("Skill3") && Time.time > lastSkill3Time + skill3CoolDown)
+        if (InputManager.GetButtonDown("Skill3") && skill2CoolDown <= 0)
         {
             UIManager.GetInstance().ResetSkillTime(1);
             rb.velocity = new Vector2(0, rb.velocity.y);
             canMove = false;
             anim.StartSkill3();
-            lastSkill3Time = Time.time;
+            skill2CoolDown = property.skill2CoolDown;
         }
-        if (InputManager.GetButtonDown("Skill2") && Time.time > lastSkill2Time + skill2CoolDown)
+        if (InputManager.GetButtonDown("Skill2") && skill1CoolDown <= 0)
         {
             UIManager.GetInstance().ResetSkillTime(0);
             anim.StartSkill2();
-            lastSkill2Time = Time.time;
+            skill1CoolDown = property.skill1CoolDown;
         }
-        if (InputManager.GetButtonDown("Skill4") && Time.time > lastSkill4Time + skill4CoolDown)
+        if (InputManager.GetButtonDown("Skill4") && skill3CoolDown <= 0)
         {
             UIManager.GetInstance().ResetSkillTime(2);
             rb.velocity = new Vector2(0, 0);
             canMove = false;
             anim.StartSkill4();
-            lastSkill4Time = Time.time;
+            skill3CoolDown = property.skill3CoolDown;
             rb.gravityScale = 0f;
         }
     }
@@ -156,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (avoidDamage) return;
         if (source.Equals(GameManager.GroundTrap) && property.HaveEquipment("Helmet")) return;
-        property.SetHealth(-damage);
+        property.Hurt(damage);
         UIManager.GetInstance().Hurt();
         Camera.main.GetComponent<CameraController>().Shake();
         if (!property.isDead)
@@ -173,6 +205,18 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void EnterDoor(bool sideDoor)
+    {
+        canMove = false;
+        avoidDamage = true;
+        if (!sideDoor)
+        {
+            rb.velocity = Vector2.zero;
+            anim.EnterRoom();
+        }
+        UIManager.GetInstance().EndScene();
+    }
+    
     private void Climb()
     {
         if (!canMove || isDashing || isHurting) return;
@@ -198,13 +242,13 @@ public class PlayerMovement : MonoBehaviour
     private void Dash()
     {
         if (isSliding || isGliding || isClimbing || isHurting) return;
-        if (dashPressed && Time.time > lastDashTime + dashCoolDown && canMove)
+        if (dashPressed && dashCoolDown <= 0 && canMove)
         {
             UIManager.GetInstance().ResetDashTime();
             PoolManager.GetInstance().GetDustObject(true);
             Camera.main.GetComponent<CameraController>().Shake();
             Camera.main.GetComponent<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
-            lastDashTime = Time.time;
+            dashCoolDown = property.dashCoolDown;
             dashTimeLeft = dashTime;
             float direction = transform.localScale.x;
             isDashing = true;
@@ -350,6 +394,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+        AudioManager.GetInstance().PlayJumpAudio();
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         jumpCount--;
@@ -393,6 +438,26 @@ public class PlayerMovement : MonoBehaviour
         {
             isOnLadder = false;
         }
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("OneWayPlatform") && Mathf.Abs(rb.velocity.y) < 0.1f)
+        {
+            if (yVelocity < -0.1f)
+            {
+                other.gameObject.GetComponent<PlatformEffector2D>().colliderMask = 1 << LayerMask.NameToLayer("Enemy");
+                other.gameObject.layer = 0;
+                StartCoroutine(ThroughPlatform(other.gameObject));
+            }
+        }
+    }
+
+    IEnumerator ThroughPlatform(GameObject platform)
+    {
+        yield return new WaitForSeconds(0.5f);
+        platform.GetComponent<PlatformEffector2D>().colliderMask |= 1 << LayerMask.NameToLayer("Player");
+        platform.layer = LayerMask.NameToLayer("Platform");
     }
 
     IEnumerator DisableMovement(float duration)

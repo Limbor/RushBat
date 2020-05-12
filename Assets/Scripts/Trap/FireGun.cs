@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,11 @@ public class FireGun : MonoBehaviour
 {
     public float lastFireTime = 0f;
     private float coolDown = 3f;
+
+    private void Start()
+    {
+        lastFireTime += Time.time;
+    }
 
     private void Update()
     {

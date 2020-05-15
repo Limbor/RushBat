@@ -1,0 +1,379 @@
+fileFormatVersion: 2
+guid: 4c0ef119e31348441a29d7416079b53f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4810902692858447233
+    second: Flying Brain Monster Mind Blast_0
+  - first:
+      213: -800277384279549139
+    second: Flying Brain Monster Mind Blast_1
+  - first:
+      213: 6376997945049437896
+    second: Flying Brain Monster Mind Blast_2
+  - first:
+      213: -5158003705877188642
+    second: Flying Brain Monster Mind Blast_3
+  - first:
+      213: 8109296104695172459
+    second: Flying Brain Monster Mind Blast_4
+  - first:
+      213: -4078760635294825838
+    second: Flying Brain Monster Mind Blast_5
+  - first:
+      213: -5043087005207843727
+    second: Flying Brain Monster Mind Blast_6
+  - first:
+      213: 2097173983202195683
+    second: Flying Brain Monster Mind Blast_7
+  - first:
+      213: 8914331687072299056
+    second: Flying Brain Monster Mind Blast_8
+  - first:
+      213: 7713935101029258260
+    second: Flying Brain Monster Mind Blast_9
+  - first:
+      213: 8947109715385843732
+    second: Flying Brain Monster Mind Blast_10
+  - first:
+      213: 2190805716608638746
+    second: Flying Brain Monster Mind Blast_0
+  - first:
+      213: -7750554258551884557
+    second: Flying Brain Monster Mind Blast_1
+  - first:
+      213: -7155092610524786155
+    second: Flying Brain Monster Mind Blast_2
+  - first:
+      213: 4893805284119068159
+    second: Flying Brain Monster Mind Blast_3
+  - first:
+      213: 8484309110020500229
+    second: Flying Brain Monster Mind Blast_4
+  - first:
+      213: 8485539605389309737
+    second: Flying Brain Monster Mind Blast_5
+  - first:
+      213: 6665013012065368920
+    second: Flying Brain Monster Mind Blast_6
+  - first:
+      213: -4349828803403010628
+    second: Flying Brain Monster Mind Blast_7
+  - first:
+      213: 3307352055081113603
+    second: Flying Brain Monster Mind Blast_8
+  - first:
+      213: -6012601661441027478
+    second: Flying Brain Monster Mind Blast_9
+  - first:
+      213: -5932500660631254206
+    second: Flying Brain Monster Mind Blast_10
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_0
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1f5a5e113e476e10800000000000000
+      internalID: 2190805716608638746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_1
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 0
+        width: 150
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f4bf9e47ff707490800000000000000
+      internalID: -7750554258551884557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_2
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 0
+        width: 150
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 512d5a61e2104bc90800000000000000
+      internalID: -7155092610524786155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_3
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffdb8d73af94ae340800000000000000
+      internalID: 4893805284119068159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_5
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 0
+        width: 231
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 927fcb21051b2c570800000000000000
+      internalID: 8485539605389309737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_6
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85b338f8502ee7c50800000000000000
+      internalID: 6665013012065368920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_7
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 234
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbda66befbd42a3c0800000000000000
+      internalID: -4349828803403010628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_8
+      rect:
+        serializedVersion: 2
+        x: 1424
+        y: 60
+        width: 36
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3089446cb2316ed20800000000000000
+      internalID: 3307352055081113603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_9
+      rect:
+        serializedVersion: 2
+        x: 1612
+        y: 0
+        width: 245
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6252e125a2fe8ca0800000000000000
+      internalID: -6012601661441027478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flying Brain Monster Mind Blast_10
+      rect:
+        serializedVersion: 2
+        x: 1844
+        y: 60
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24bcd45b4168bada0800000000000000
+      internalID: -5932500660631254206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

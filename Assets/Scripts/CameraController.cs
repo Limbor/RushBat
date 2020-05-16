@@ -21,6 +21,11 @@ public class CameraController : MonoBehaviour
     {
         target = GameManager.GetInstance().GetPlayer().transform;
         position = target.position + offset;
+        if (maxPos == minPos)
+        {
+            maxPos = Vector2.positiveInfinity;
+            minPos = Vector2.negativeInfinity;
+        }
     }
 
 

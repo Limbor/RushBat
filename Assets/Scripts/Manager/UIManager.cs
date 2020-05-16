@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -19,7 +20,11 @@ public class UIManager : MonoBehaviour
     [Header("Scene Fade")]
     public RawImage cover;
 
+    [Header("Pause Menu")] 
+    public GameObject menu;
+
     private float fadeTime = 1.5f;
+    [Space]
     public GameObject equipmentPanel;
     private Image shieldPrefab;
     private Image heartPrefab;
@@ -99,15 +104,29 @@ public class UIManager : MonoBehaviour
         });
     }
 
-    public void EndScene()
+    public void EndScene(TweenCallback callBack)
     {
         cover.enabled = true;
-        cover.DOFade(1, fadeTime).OnComplete(() =>
-        {
-            GameManager.GetInstance().NextLevel();
-        });
+        cover.DOFade(1, fadeTime).OnComplete(callBack);
     }
 
+    public void ChangeMiniMap(Room room, bool enter = true)
+    {
+        var roomMap = room.transform.GetChild(0).gameObject;
+        if (enter && room.FirstEnterRoom())
+        {
+            roomMap.SetActive(true);
+            var connectedRooms = room.GetConnectedRoom();
+            foreach (var thisRoomMap in 
+                connectedRooms.Select(connectedRoom => connectedRoom.transform.GetChild(0).gameObject))
+            {
+                thisRoomMap.SetActive(true);
+                thisRoomMap.GetComponent<SpriteRenderer>().color = Color.gray;
+            }
+        }
+        roomMap.GetComponent<SpriteRenderer>().color = enter ? Color.cyan : Color.gray;
+    }
+    
     public void ShowEquipmentInfo(string name)
     {
         EquipmentInfo equipmentInfo = equipmentInfoMap[name];

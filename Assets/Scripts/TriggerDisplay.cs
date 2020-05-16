@@ -7,8 +7,11 @@ using UnityEngine.UI;
 public class TriggerDisplay : MonoBehaviour
 {
     public Sprite displayImage;
+    // 是否自定义图片
     public bool customizeImage;
+    // 初始显示内容
     public string content = "解锁";
+    // 使用碰撞题还是触发器触发
     public bool useCollision;
     
     private Image hint;
@@ -16,7 +19,7 @@ public class TriggerDisplay : MonoBehaviour
 
     private void Start()
     {
-        GameObject hintUI =
+        var hintUI =
             Instantiate(Resources.Load<GameObject>("Prefabs/UI/InteractiveHint"), transform);
         hint = hintUI.GetComponentInChildren<Image>();
         hintText = hintUI.GetComponentInChildren<Text>();

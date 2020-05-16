@@ -8,6 +8,7 @@ public class Player
     public int maxHealth = 16;
     public int currentHealth;
     public int shield;
+    public int attack;
     public int coin;
     public int key;
     public List<string> equipments;
@@ -32,6 +33,7 @@ public class Player
         maxHealth = 16;
         currentHealth = maxHealth;
         shield = 0;
+        attack = 0;
         coin = 0;
         key = 0;
         lastPoisonedTime = 0;

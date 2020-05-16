@@ -38,6 +38,11 @@ public class Item : MonoBehaviour
         
     }
     
+    protected virtual void OnGround()
+    {
+        canPick = true;
+    }
+    
     private void Pick()
     {
         AudioManager.GetInstance().PlayPickAudio();
@@ -67,8 +72,11 @@ public class Item : MonoBehaviour
     // 碰撞地面后可以拾取
     protected void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer != LayerMask.NameToLayer("Ground")) return;
-        canPick = true;
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+            collision.gameObject.layer == LayerMask.NameToLayer("Platform"))
+        {
+            OnGround();
+        }
     }
 
     protected virtual void OnTriggerStay2D(Collider2D other)

@@ -40,6 +40,7 @@ public class DialogManager : MonoBehaviour
         if(InputManager.GetButtonDown("Interact")&&(index==textList.Count)){
             gameObject.SetActive(false);
             index=0;
+            InputManager.ExitTalkingState();
             return;
         }
         if(InputManager.GetButtonDown("Interact")){

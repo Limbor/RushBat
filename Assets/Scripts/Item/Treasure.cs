@@ -11,6 +11,7 @@ public class Treasure : MonoBehaviour
     // 掉落物品列表
     private GameObject goldCoin, silverCoin, shield, key, heart, halfHeart;
     private bool open;
+    private bool isOpening;
 
     public bool locked;
     public bool random;
@@ -64,8 +65,9 @@ public class Treasure : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (open) return;
+        if (open || isOpening) return;
         if (!collision.CompareTag("Player") || !InputManager.GetButtonDown("Interact")) return;
+        isOpening = true;
         transform.DOShakeRotation(0.5f, 30f, 30).OnComplete(() =>
         {
             if (locked)
@@ -73,16 +75,25 @@ public class Treasure : MonoBehaviour
                 if (collision.GetComponent<PlayerProperty>().GetKeyNumber() == 0)
                 {
                     GetComponent<TriggerDisplay>().SetText("需要钥匙");
+                    isOpening = false;
                     return;
                 }
                 collision.GetComponent<PlayerProperty>().SetKeyNumber(-1);
             }
             open = true;
+            isOpening = false;
             Instantiate(openedChest).transform.position = transform.position;
             foreach (var item in itemList)
             {
                 GameObject itemObject = Instantiate(item);
-                itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+                itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.3f);
+            }
+
+            if (Random.Range(0, 1f) < 0.05f || locked && Random.Range(0, 1f) < 0.1f)
+            {
+                var equipment = 
+                    Instantiate(Resources.Load<GameObject>("Prefabs/Item/RandomEquipment"));
+                equipment.transform.position = transform.position +  Vector3.up * 0.3f;
             }
             Destroy(gameObject);
         });

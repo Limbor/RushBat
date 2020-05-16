@@ -47,7 +47,7 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     protected void Start()
     {
-        GameManager.GetInstance().RegisterEnemy(gameObject);
+        GetComponentInParent<Room>().RegisterEnemy(gameObject);
         
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -131,7 +131,7 @@ public class EnemyMovement : MonoBehaviour
             //掉落物品
             Drop();
 
-            GameManager.GetInstance().DelEnemy(gameObject);
+            GetComponentInParent<Room>().DelEnemy(gameObject);
             GetComponent<SpriteRenderer>().color = Color.gray;
             GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
             GetComponent<SpriteRenderer>().sortingOrder = 1;

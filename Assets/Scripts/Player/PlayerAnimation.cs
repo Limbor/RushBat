@@ -76,6 +76,11 @@ public class PlayerAnimation : MonoBehaviour
         if(!player.canMove) animator.SetBool(acquire, false);
     }
 
+    public void Footstep()
+    {
+        AudioManager.GetInstance().PlayFootstepAudio();
+    }
+    
     public void EnterRoom()
     {
         animator.SetTrigger(roomIn);
@@ -150,6 +155,6 @@ public class PlayerAnimation : MonoBehaviour
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         gameObject.GetComponent<Collider2D>().enabled = false;
         Player.GetInstance().Reset();
-        GameManager.Restart();
+        GameManager.GetInstance().GameOver();
     }
 }

@@ -24,7 +24,7 @@ public class Portal : MonoBehaviour
     public void LevelStart()
     {
         begin = true;
-        player.GetComponent<SpriteRenderer>().color = Color.green;
+        player.GetComponent<SpriteRenderer>().color = new Color(0.39f, 0.29f, 0.44f, 1f);
         player.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.3f);
         player.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         player.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 5f, ForceMode2D.Impulse);

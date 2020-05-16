@@ -87,6 +87,15 @@ public class PlayerAttack : MonoBehaviour
     {
         float extraDamage = 0;
         int type = 1;
+        baseDamage += property.GetAttack();
+        if (property.HaveEquipment("SkullSword"))
+        {
+            baseDamage += property.GetCoinNumber() / 20 * 2;
+        }
+        if (property.HaveEquipment("WizardSword") && Random.Range(0, 1f) < 0.05f)
+        {
+            property.SetShield(1);
+        }
         if (property.HaveEquipment("ThiefMask") && Random.Range(0, 1f) < 0.1f)
         {
             GameObject coin = Resources.Load<GameObject>("Prefabs/Item/SilverCoin");

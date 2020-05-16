@@ -11,9 +11,16 @@ public class FireBall : MonoBehaviour
 
     private void OnEnable()
     {
+        if(TryGetComponent(typeof(ActionTimer), out var oldTimer))
+            Destroy(oldTimer);
         boom = false;
         direction = transform.localScale.y;
         transform.position += new Vector3(0.3f * direction, 0, 0);
+        gameObject.AddComponent<ActionTimer>().SetTimer(2f, () =>
+        {
+            GetComponent<Animator>().SetTrigger("boom");
+            boom = true;
+        });
     }
 
     // Update is called once per frame
@@ -47,6 +54,7 @@ public class FireBall : MonoBehaviour
 
     public void Disappear()
     {
+        Destroy(GetComponent<ActionTimer>());
         PoolManager.GetInstance().ReturnFirePool(gameObject);
     }
 }

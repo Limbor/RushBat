@@ -217,13 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   locked: 0
   random: 1
-  itemList:
-  - {fileID: 7897922991592905825, guid: 8a3cf5c81e9ce42919600cbcbb68c277, type: 3}
-  - {fileID: 2882529177012282320, guid: c89c28fe50f784a2382879457283b99e, type: 3}
-  - {fileID: 2882529177012282320, guid: c89c28fe50f784a2382879457283b99e, type: 3}
-  - {fileID: 2882529177012282320, guid: c89c28fe50f784a2382879457283b99e, type: 3}
-  - {fileID: 6697429691317462264, guid: 3dba2b04ec7f941d8975b2239f7078f2, type: 3}
-  - {fileID: 4825021644016004439, guid: 96ca0176c4d2c4b75adfa64a6dab3b27, type: 3}
+  itemList: []
   openedChest: {fileID: 1270113300534496, guid: df0d65b074ba11d458504137470c01e6,
     type: 3}
 --- !u!114 &5882651240401295468
@@ -240,5 +234,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayImage: {fileID: 0}
   customizeImage: 0
-  content: "\u89E3\u9501"
+  content: "\u6253\u5F00"
   useCollision: 0

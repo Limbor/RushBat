@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
 {
     private static AudioManager _audioManager;
 
-    private AudioSource musicAudio, playerAudio, fxAudio, ambientAudio;
+    private AudioSource musicAudio, playerAudio, fxAudio, ambientAudio, environmentAudio;
 
     private void Awake()
     {
@@ -25,6 +25,7 @@ public class AudioManager : MonoBehaviour
         playerAudio = gameObject.AddComponent<AudioSource>();
         fxAudio = gameObject.AddComponent<AudioSource>();
         ambientAudio = gameObject.AddComponent<AudioSource>();
+        environmentAudio = gameObject.AddComponent<AudioSource>();
 
         musicAudio.clip = Resources.Load<AudioClip>("Sounds/BGM");
         musicAudio.playOnAwake = false;
@@ -40,7 +41,8 @@ public class AudioManager : MonoBehaviour
 
     public void PlayPickAudio()
     {
-        fxAudio.clip = Resources.Load<AudioClip>("Sounds/coin_04");
+        // fxAudio.clip = Resources.Load<AudioClip>("Sounds/coin_04");
+        fxAudio.clip = Resources.Load<AudioClip>("Sounds/Collection");
         fxAudio.Play();
     }
 
@@ -52,10 +54,23 @@ public class AudioManager : MonoBehaviour
 
     public void PlayJumpAudio()
     {
-        playerAudio.clip = Resources.Load<AudioClip>("Sounds/jump");
+        // playerAudio.clip = Resources.Load<AudioClip>("Sounds/jump");
+        playerAudio.clip = Resources.Load<AudioClip>("Sounds/Jump 1");
         playerAudio.Play();
     }
 
+    public void PlayDoorAudio()
+    {
+        environmentAudio.clip = Resources.Load<AudioClip>("Sounds/door_rise");
+        environmentAudio.Play();
+    }
+
+    public void PlayFootstepAudio()
+    {
+        playerAudio.clip = Resources.Load<AudioClip>("Sounds/Footstep_1");
+        playerAudio.Play();
+    }
+    
     public static AudioManager GetInstance()
     {
         return _audioManager;

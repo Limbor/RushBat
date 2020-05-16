@@ -13,7 +13,7 @@ public class EquipmentDisplay : MonoBehaviour
     void Start()
     {
         GetComponent<Image>().DOFade(0.8f, 0.5f);
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, 2.5f);
     }
 
     public void SetContent(EquipmentInfo equipmentInfo)

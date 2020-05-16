@@ -9822,7 +9822,7 @@ MonoBehaviour:
     m_Bits: 1024
   attackDamage: 20
   attackFloatRange: 3
-  slashDamage: 40
+  slashDamage: 45
   slashFloatRange: 5
 --- !u!114 &2397731286741389378
 MonoBehaviour:

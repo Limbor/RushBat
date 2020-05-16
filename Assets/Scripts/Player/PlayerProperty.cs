@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class PlayerProperty : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class PlayerProperty : MonoBehaviour
 
     private int maxHealth;
     private int currentHealth;
+    private int attack;
     private int shield;
     private int coin;
     private int key;
@@ -43,6 +45,7 @@ public class PlayerProperty : MonoBehaviour
         maxHealth = player.maxHealth;
         currentHealth = player.currentHealth;
         shield = player.shield;
+        attack = player.attack;
         coin = player.coin;
         key = player.key;
         
@@ -74,6 +77,7 @@ public class PlayerProperty : MonoBehaviour
         if (isDead) return;
         player.currentHealth = currentHealth;
         player.shield = shield;
+        player.attack = attack;
         player.coin = coin;
         player.key = key;
         player.lastPoisonedTime = lastPoisonedTime;
@@ -108,6 +112,10 @@ public class PlayerProperty : MonoBehaviour
             Instantiate(Resources.Load<GameObject>("Prefabs/Item/CrossBlade"));
             player.surroundingItems.Add("CrossBlade");
         }
+        else if (equipment.Equals("ShadowBlade") || equipment.Equals("WizardSword"))
+        {
+            attack += 5;
+        }
     }
 
     public bool HaveEquipment(string name)
@@ -130,6 +138,10 @@ public class PlayerProperty : MonoBehaviour
     public void SetCoinNumber(int change)
     {
         coin += change;
+        if (change > 0 && HaveEquipment("SapphireRing"))
+        {
+            if(Random.Range(0, 1f) < 0.1f) SetShield(1);
+        }
         UIManager.GetInstance().SetCoinNumber(coin);
     }
     
@@ -276,5 +288,10 @@ public class PlayerProperty : MonoBehaviour
     public int GetKeyNumber()
     {
         return key;
+    }
+
+    public int GetAttack()
+    {
+        return attack;
     }
 }

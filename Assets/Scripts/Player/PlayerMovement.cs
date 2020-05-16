@@ -205,16 +205,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void EnterDoor(bool sideDoor)
+    public void EnterDoor(bool sideDoor, float orientation, int roomId)
     {
         canMove = false;
         avoidDamage = true;
+        rb.gravityScale = 0f;
         if (!sideDoor)
         {
             rb.velocity = Vector2.zero;
             anim.EnterRoom();
         }
-        UIManager.GetInstance().EndScene();
+        GameManager.GetInstance().NextRoom(orientation, roomId);
+        gameObject.AddComponent<ActionTimer>().SetTimer(1.5f, () =>
+        {
+            canMove = true;
+            avoidDamage = false;
+            rb.gravityScale = 1f;
+        });
     }
     
     private void Climb()
@@ -446,7 +453,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (yVelocity < -0.1f)
             {
-                other.gameObject.GetComponent<PlatformEffector2D>().colliderMask = 1 << LayerMask.NameToLayer("Enemy");
+                other.gameObject.GetComponent<PlatformEffector2D>().colliderMask ^= 1 << LayerMask.NameToLayer("Player");
                 other.gameObject.layer = 0;
                 StartCoroutine(ThroughPlatform(other.gameObject));
             }

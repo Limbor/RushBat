@@ -14,7 +14,8 @@ public class GoblinSwordMovement : EnemyMovement
     private float attackInterval;
     private float attackWait;
 
-    private bool walking;
+    //private bool walking;
+    private bool attackType;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,12 +30,13 @@ public class GoblinSwordMovement : EnemyMovement
         blood = maxBlood;
         walkspeed = 100f;
         waittime = 1f;
-        attackInterval = 1f;
+        attackInterval = 1.5f;
         attackWait = 0;
         length = 0.375f;
 
         faceright = true;
-        walking = true;
+        attackType = true;
+        //walking = true;
     }
 
     // Update is called once per frame
@@ -69,10 +71,6 @@ public class GoblinSwordMovement : EnemyMovement
             return;
         }
 
-        if (isdead || !walking)
-        {
-            return;
-        }
         //到起点和终点的距离
         float edis = endx - transform.position.x;
         float sdis = transform.position.x - startx;
@@ -167,61 +165,69 @@ public class GoblinSwordMovement : EnemyMovement
     {
         if (!isdead && ground && !hurt)
         {
-            if (attackWait > 0)
-            {
-                //attacking = true;
-                attackWait -= Time.deltaTime;
-                anim.SetBool("walk", false);
-                walking = false;
-                return;
-            }
+            //if (attackWait > 0)
+            //{
+            //    //Debug.Log(attackWait);
+            //    //attacking = true;
+            //    attackWait -= Time.deltaTime;
+            //    anim.SetBool("walk", false);
+            //    walking = false;
+            //    return;
+            //}
             
-            walking = true;
-            if (waittime ==1)
-            {
-                anim.SetBool("walk", true);
-            }
+            //walking = true;
+            //if (waittime ==1)
+            //{
+            //    anim.SetBool("walk", true);
+            //}
      
             float distance = player.transform.position.x - transform.position.x;
+            float absDis = Mathf.Abs(distance);
             //Debug.Log(distance);
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
-            if (faceright && distance > 0 && heightdis < 0.5)
+            if ((faceright && distance > 0 || !faceright && distance < 0) && heightdis < 0.5) 
             {
                 //Debug.Log("Attack!");
-                if (distance < 0.65)
+                if (absDis < 0.65)
                 {
-                    attacking = true;
-                    anim.SetBool("attack", true);
+                    if (!attacking)
+                    {
+                        attacking = true;
+                        anim.SetBool("walk", false);
+                        if (attackType)
+                        {
+                            anim.SetBool("attack", true);
+                        }
+                        else
+                        {
+                            shield = true;
+                            anim.SetBool("shield", true);
+                            Invoke("finishShield", 3f);
+                        }
+                        attackType = !attackType;
+                    }
+                    
+                    //attackWait = attackInterval;
                 }
-                else if (distance > 1.3 && distance < 1.6) 
+                else if (absDis > 1.3 && absDis < 1.6) 
                 {
                     rb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
                     ground = false;
-                    attackWait = attackInterval;
-                    attacking = true;
-                    anim.SetBool("attack", true);
-                }
-                
-
+                    //attackWait = attackInterval;
+                    //attacking = true;
+                    //anim.SetBool("attack", true);
+                    anim.SetBool("jump", true);
+                }    
             }
-            else if (!faceright && distance < 0 && heightdis < 0.5)
+            if (shield && (faceright && distance > 0 || !faceright && distance < 0))
             {
-                if (distance > -0.65)
-                {
-                    attacking = true;
-                    anim.SetBool("attack", true);
-                }
-                else if (distance < -1.3 && distance > -1.6)
-                {
-                    rb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
-                    ground = false;
-                    attackWait = attackInterval;
-                    attacking = true;
-                    anim.SetBool("attack", true);
-                }
-               
+                canHurt = false;
             }
-      
+            else
+            {
+                canHurt = true;
+            }
+            Debug.Log(canHurt);
         }
     }
 
@@ -231,6 +237,16 @@ public class GoblinSwordMovement : EnemyMovement
         attacking = false;
     }
 
+    public void finishShield()
+    {
+        if (shield)
+        {
+            shield = false;
+            anim.SetBool("shield", false);
+            attacking = false;
+        }
+
+    }
     protected override void Drop()
     {
         int silverNum = Random.Range(3, 8);

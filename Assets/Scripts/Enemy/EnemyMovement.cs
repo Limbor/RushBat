@@ -26,6 +26,8 @@ public class EnemyMovement : MonoBehaviour
     protected bool ground;
     protected bool hurt;
     protected bool block;
+    protected bool shield;
+    protected bool canHurt;
     //画布和血条,血量,显示时间
     public GameObject canvas;
     protected Transform bloodGroove;
@@ -35,6 +37,7 @@ public class EnemyMovement : MonoBehaviour
     //玩家
     protected GameObject player;
     protected LayerMask groundLayer;
+    protected LayerMask platformLayer;
 
     //掉落物
     public GameObject heartPrefab;
@@ -52,6 +55,7 @@ public class EnemyMovement : MonoBehaviour
 
         player = GameManager.GetInstance().GetPlayer();
         groundLayer = 1 << LayerMask.NameToLayer("Ground");
+        platformLayer = 1 << LayerMask.NameToLayer("Platform");
         bloodGroove = transform.Find("Canvas/BloodGroove");
         bloodVolume = transform.Find("Canvas/BloodGroove/Blood");
         bloodVolume.GetComponent<Image>().fillAmount=1;
@@ -75,6 +79,8 @@ public class EnemyMovement : MonoBehaviour
         hurt = false;
         ground = false;
         block = false;
+        shield = false;
+        canHurt = true;
 
         //transform.position = startPos.position;
     }
@@ -92,7 +98,7 @@ public class EnemyMovement : MonoBehaviour
         if (coll.gameObject.layer == LayerMask.NameToLayer("Platform") ||
             coll.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            Debug.Log("OnGround");
+            //Debug.Log("OnGround");
             ground = true;
             anim.SetBool("jump", false);
         }
@@ -178,9 +184,8 @@ public class EnemyMovement : MonoBehaviour
     public virtual void getDamage(float damage, int direction)
     {
 
-        if (!isdead)
+        if (!isdead && canHurt) 
         {
-
             blood -= damage;
             bloodVolume.GetComponent<Image>().fillAmount = blood / maxBlood;
             Debug.Log("Current health: " + blood);
@@ -190,6 +195,8 @@ public class EnemyMovement : MonoBehaviour
             //attacking = false;
             anim.SetBool("attack", false);
             attacking = false;
+            anim.SetBool("shield", false);
+            shield = false;
             anim.SetBool("hurt", true);
             hurt = true;
             //transform.GetComponent<SpriteRenderer>().color;
@@ -220,5 +227,6 @@ public class EnemyMovement : MonoBehaviour
     {
 
     }
+
 
 }

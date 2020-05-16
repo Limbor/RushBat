@@ -2,26 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireElementalAttack : EnemyAttack
+public class SimpleEnemyAttack : EnemyAttack
 {
-
+    /*
+       这是简单的怪物的攻击脚本，怪物攻击通过DamagePoint进行检测，
+       要设置的参数有攻击伤害，攻击范围半径
+       并在怪物的attack动画中要造成伤害的所有帧添加事件simpleEnemyAttack(), 在最后一帧添加事件recover();
+     */
     private bool attacked;
-
-    // Start is called before the first frame update
+    public int Damage;
+    public float Scope;
+ 
     void Start()
     {
-        normalDamage = 1;
-        normalScope = 0.2f;
         attacked = false;
+        normalDamage = Damage;
+        normalScope = Scope;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void fireAttack()
+    
+    private void simpleEnemyAttack()
     {
         if (!attacked)
         {
@@ -41,18 +40,14 @@ public class FireElementalAttack : EnemyAttack
                     direction = -1;
                 }
 
-                Debug.Log("Enemy take damage, Amount: " + players.Length);
-                player.GetComponent<PlayerProperty>().GetBurnt(2);
                 player.GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction, 0), GameManager.Enemy);
-                //transform.GetComponent<EnemyMovement>().getDamage(10, (int)direction * -1);
                 break;
             }
         }
-        
     }
 
     private void recover()
     {
-        attacked = false;   
+        attacked = false;
     }
 }

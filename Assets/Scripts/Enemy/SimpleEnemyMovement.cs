@@ -2,29 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireElementalMovement : EnemyMovement
+public class SimpleEnemyMovement : EnemyMovement
 {
-    //控制怪物行动范围
+    /*
+      简单怪物的行为脚本，怪物的动画只有idle, run, atack, die，也可以有hurt动画，
+      怪物的状态bool变量有四个：run, attack, hurt, dead
+      怪物的行为模式为在一定范围内左右巡逻，玩家进入移动范围后会向玩家移动，
+      接近玩家后会攻击，怪物有攻击间隔
+      要设置的参数为移动范围，攻击间隔，血量，移速，长度(transform.position到身体前侧的水平距离,
+      用于检测前方障碍), 银币数和心的掉落几率，以及EnemyMovement中的参数
+     */
     public Transform startPos;
     public Transform endPos;
 
     private float startx;
     private float endx;
 
+    public float AttackInterval;
     private float attackInterval;
-    // Start is called before the first frame update
+    public float Blood;
+    public float Speed;
+    public float Length;
+    public int SilverNum;
+    public float HeartRate;
+
     void Start()
     {
         base.Start();
         startx = startPos.position.x;
         endx = endPos.position.x;
-        maxBlood = 100;
+        maxBlood = Blood;
         blood = maxBlood;
-        walkspeed = 100f;
-      
-        length = 0.2f;
+        walkspeed = Speed;
+
+        length = Length;
         faceright = true;
-        attackInterval = 0f;
+        attackInterval = AttackInterval;
     }
 
     // Update is called once per frame
@@ -151,11 +164,11 @@ public class FireElementalMovement : EnemyMovement
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
             if (faceright && distance > 0 && distance < 0.5 && heightdis < 0.5)
             {
-               // Debug.Log("Attack!");
+                // Debug.Log("Attack!");
                 attacking = true;
 
                 anim.SetBool("run", false);
-                
+
                 anim.SetBool("attack", true);
 
                 Invoke("finishAttack", 1.5f);
@@ -168,9 +181,9 @@ public class FireElementalMovement : EnemyMovement
 
                 anim.SetBool("run", false);
 
-               
+
                 anim.SetBool("attack", true);
-                
+
                 Invoke("finishAttack", 1.5f);
 
             }
@@ -182,11 +195,11 @@ public class FireElementalMovement : EnemyMovement
     {
         anim.SetBool("attack", false);
         attacking = false;
-        attackInterval = 1.5f;
+        attackInterval = AttackInterval;
     }
     protected override void Drop()
     {
-        int silverNum = Random.Range(2, 4);
+        int silverNum = SilverNum;
 
         for (int i = 1; i <= silverNum; i++)
         {
@@ -197,7 +210,7 @@ public class FireElementalMovement : EnemyMovement
         }
 
         float heartDrop = Random.Range(0, 1);
-        if (heartDrop <= 0.2)
+        if (heartDrop <= HeartRate)
         {
             GameObject itemObject = Instantiate(silverPrefab);
             itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);

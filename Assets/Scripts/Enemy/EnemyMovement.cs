@@ -228,5 +228,8 @@ public class EnemyMovement : MonoBehaviour
 
     }
 
-
+    public bool canGetDamage()
+    {
+        return canHurt;
+    }
 }

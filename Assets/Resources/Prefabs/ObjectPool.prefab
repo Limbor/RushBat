@@ -127,6 +127,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dart
       objectReference: {fileID: 0}
+    - target: {fileID: 7922877217420805158, guid: ea73f2a5814d7d3429d90dbf6ea5a9d3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea73f2a5814d7d3429d90dbf6ea5a9d3, type: 3}
 --- !u!4 &4697505555719315032 stripped
@@ -146,6 +151,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BatEnerge
+      objectReference: {fileID: 0}
+    - target: {fileID: 1177103098508498924, guid: 7aa0c46fad774814f9dcfe2622d4c97b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1177103098508498925, guid: 7aa0c46fad774814f9dcfe2622d4c97b,
         type: 3}
@@ -276,6 +286,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Big Dust
+      objectReference: {fileID: 0}
+    - target: {fileID: 5837200781898967401, guid: d7048b2816685294382fe6eb71fe4dd0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7048b2816685294382fe6eb71fe4dd0, type: 3}

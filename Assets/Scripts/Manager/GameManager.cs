@@ -65,8 +65,14 @@ public class GameManager : MonoSingleton<GameManager>
             UIManager.GetInstance().ChangeMiniMap(nextRoom);
             nextRoom.BeginRoom();
             UIManager.GetInstance().StartScene();
-            player.transform.Translate(Vector3.left * 10f * direction);
+            player.transform.Translate( 10f * direction * Vector3.left);
         });
+    }
+
+    private void Reset()
+    {
+        player = null;
+        rooms.Clear();
     }
 
     public void RegisterPlayer(GameObject player)
@@ -159,6 +165,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         UIManager.GetInstance().EndScene(() =>
         {
+            Reset();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
     }

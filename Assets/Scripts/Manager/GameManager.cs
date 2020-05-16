@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = System.Object;
@@ -13,18 +14,22 @@ public class GameManager : MonoSingleton<GameManager>
     private List<string> equipmentList;
     private List<GameObject> enemies;
     private List<GameObject> doors;
+    private List<Room> rooms;
+    private Room currentRoom;
 
     private static readonly object _lock = new object();
     
     public static readonly string GroundTrap = "GroundTrap";
     public static readonly string Enemy = "Enemy";
     public static readonly string FlyingTrap = "FlyingTrap";
+    public static readonly string Environment = "Environment";
     
     protected override void Init()
     {
         player = null;
         enemies = new List<GameObject>();
         doors = new List<GameObject>();
+        rooms = new List<Room>();
         equipmentList = new List<string>();
         ReadTextAssets();
     }
@@ -42,11 +47,26 @@ public class GameManager : MonoSingleton<GameManager>
     private void LevelComplete()
     {
         OpenDoors();
+        AudioManager.GetInstance().PlayDoorAudio();
+    }
+
+    public Room GetRoomById(int id)
+    {
+        return rooms.FirstOrDefault(room => room.GetRoomId() == id);
     }
     
-    public void NextLevel()
+    public void NextRoom(float direction, int nextRoomId)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        UIManager.GetInstance().EndScene(() =>
+        {
+            var nextRoom = GetRoomById(nextRoomId).GetComponent<Room>();
+            UIManager.GetInstance().ChangeMiniMap(currentRoom, false);
+            currentRoom = nextRoom;
+            UIManager.GetInstance().ChangeMiniMap(nextRoom);
+            nextRoom.BeginRoom();
+            UIManager.GetInstance().StartScene();
+            player.transform.Translate(Vector3.left * 10f * direction);
+        });
     }
 
     public void RegisterPlayer(GameObject player)
@@ -90,6 +110,19 @@ public class GameManager : MonoSingleton<GameManager>
         doors.Clear();
     }
 
+    public void RegisterRooms(Room room)
+    {
+        if (rooms.Contains(room)) return;
+        rooms.Add(room);
+        if (room.GetRoomId() == 0)
+        {
+            currentRoom = room;
+            UIManager.GetInstance().ChangeMiniMap(room);
+            room.BeginRoom();
+            room.EnterRoom();
+        }
+    }
+    
     public string RegisterEquipment(string name)
     {
         lock (_lock)
@@ -107,6 +140,7 @@ public class GameManager : MonoSingleton<GameManager>
             else
             {
                 int i;
+                int count = equipmentList.Count;
                 for (i = 0; i < equipmentList.Count; i++)
                 {
                     if (equipmentList[i].Equals(name))
@@ -115,14 +149,26 @@ public class GameManager : MonoSingleton<GameManager>
                         break;
                     }
                 }
-                if (i == equipmentList.Count) name = "Null";
+                if (count == equipmentList.Count) name = "Null";
             }
             return name;
         }
     }
     
-    public static void Restart()
+    public void GameOver()
     {
-        UIManager.GetInstance().EndScene();
+        UIManager.GetInstance().EndScene(() =>
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
+    }
+
+    private void Update()
+    {
+        if (InputManager.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 0;
+            UIManager.GetInstance().menu.SetActive(true);
+        }
     }
 }

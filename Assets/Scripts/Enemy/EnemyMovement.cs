@@ -50,6 +50,7 @@ public class EnemyMovement : MonoBehaviour
         GetComponentInParent<Room>().RegisterEnemy(gameObject);
         
         rb = GetComponent<Rigidbody2D>();
+        Debug.Log("sddada");
         anim = GetComponent<Animator>();
         render = GetComponent<SpriteRenderer>();
 
@@ -119,9 +120,9 @@ public class EnemyMovement : MonoBehaviour
     //判断是否存活，并显示血条, 受伤时会变白闪烁
     protected virtual void Alive()
     {
+        //Debug.Log(blood);
         if (blood <= 0)
         {
-           
             rb.velocity = new Vector2(0, rb.velocity.y);
             //死亡后血条瞬间消失
             isdead = true;
@@ -136,7 +137,7 @@ public class EnemyMovement : MonoBehaviour
             GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
             GetComponent<SpriteRenderer>().sortingOrder = 1;
             Destroy(transform.GetComponent<Rigidbody2D>());
-            Destroy(transform.GetComponent<CapsuleCollider2D>());
+            Destroy(transform.GetComponent<Collider2D>());
         }
         else
         {

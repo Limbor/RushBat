@@ -7347,16 +7347,6 @@ PrefabInstance:
       propertyPath: correspondRoomId
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 2625569870023451877, guid: 7da983ea66f144443ae8c969652c20e5,
-        type: 3}
-      propertyPath: isOpen
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2625569870023451877, guid: 7da983ea66f144443ae8c969652c20e5,
-        type: 3}
-      propertyPath: needKey
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7da983ea66f144443ae8c969652c20e5, type: 3}
 --- !u!4 &803880198 stripped
@@ -9116,6 +9106,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Knight5_Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 7028972151027759319, guid: 8f20bfc75da54dd4abac03eea1cc7d00,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7028972151529780793, guid: 8f20bfc75da54dd4abac03eea1cc7d00,
         type: 3}
@@ -21093,6 +21088,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knight4_Axe
       objectReference: {fileID: 0}
+    - target: {fileID: 1322310080968661629, guid: 5f25a6b7e1d91ce48bae56d2616ce3c9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1322310081818495323, guid: 5f25a6b7e1d91ce48bae56d2616ce3c9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -22982,6 +22982,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Knight2_Axe
+      objectReference: {fileID: 0}
+    - target: {fileID: 992847685960037335, guid: 4442788d0767f6b40ac663f0d03111c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4442788d0767f6b40ac663f0d03111c0, type: 3}

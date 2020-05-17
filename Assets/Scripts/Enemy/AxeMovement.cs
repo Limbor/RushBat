@@ -17,7 +17,7 @@ public class AxeMovement : EnemyMovement
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("Start??");
         base.Start();
         
         anim.SetBool("jump", false);
@@ -34,6 +34,7 @@ public class AxeMovement : EnemyMovement
         attackType = true;
         //length = 0.375f;
         //walking = true;
+        
     }
 
     // Update is called once per frame
@@ -162,7 +163,7 @@ public class AxeMovement : EnemyMovement
         {
             //根据和玩家的距离进行攻击
             float distance = player.transform.position.x - transform.position.x;
-            //Debug.Log(distance);
+            //Debug.Log("player: " + player.transform.position.x + ", enemy: " + transform.position.x);
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
             if (faceright && distance > 0 && distance < 0.65 && heightdis < 0.5 || !faceright && distance < 0 && distance > -0.65 && heightdis < 0.5)
             {
@@ -176,7 +177,8 @@ public class AxeMovement : EnemyMovement
                     }
                     else
                     {
-                        shield = true;
+                        //shield = true;
+                        Invoke("doShield", 1.4f);
                         anim.SetBool("shield", true);
                         Invoke("finishShield", 3f);
                     }
@@ -186,16 +188,22 @@ public class AxeMovement : EnemyMovement
             }
             if (shield && (faceright && distance > 0 || !faceright && distance < 0))
             {
+                Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
                 canHurt = false;
             }
             else
             {
+                Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
                 canHurt = true;
             }
-
+            //Debug.Log(canHurt);
         }
     }
 
+    private void doShield()
+    {
+        shield = true;
+    }
     public void finishAttack()
     {
         anim.SetBool("attack", false);
@@ -211,6 +219,16 @@ public class AxeMovement : EnemyMovement
             attacking = false;
         }
         
+    }
+
+    public override void getDamage(float damage, int direction)
+    {
+        base.getDamage(damage, direction);
+        if (!isdead && canHurt)
+        {
+            CancelInvoke("doShield");
+            CancelInvoke("finishShield");
+        }
     }
     protected override void Drop()
     {

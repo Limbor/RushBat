@@ -16,6 +16,8 @@ public class GoblinSwordMovement : EnemyMovement
 
     //private bool walking;
     private bool attackType;
+    private float JumpInterval;
+    private float jumpInterval;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +35,8 @@ public class GoblinSwordMovement : EnemyMovement
         attackInterval = 1.5f;
         attackWait = 0;
         length = 0.375f;
+        JumpInterval = 2f;
+        jumpInterval = 0;
 
         faceright = true;
         attackType = true;
@@ -165,22 +169,6 @@ public class GoblinSwordMovement : EnemyMovement
     {
         if (!isdead && ground && !hurt)
         {
-            //if (attackWait > 0)
-            //{
-            //    //Debug.Log(attackWait);
-            //    //attacking = true;
-            //    attackWait -= Time.deltaTime;
-            //    anim.SetBool("walk", false);
-            //    walking = false;
-            //    return;
-            //}
-            
-            //walking = true;
-            //if (waittime ==1)
-            //{
-            //    anim.SetBool("walk", true);
-            //}
-     
             float distance = player.transform.position.x - transform.position.x;
             float absDis = Mathf.Abs(distance);
             //Debug.Log(distance);
@@ -200,7 +188,7 @@ public class GoblinSwordMovement : EnemyMovement
                         }
                         else
                         {
-                            shield = true;
+                            Invoke("doShield", 1.4f);
                             anim.SetBool("shield", true);
                             Invoke("finishShield", 3f);
                         }
@@ -211,12 +199,18 @@ public class GoblinSwordMovement : EnemyMovement
                 }
                 else if (absDis > 1.3 && absDis < 1.6) 
                 {
-                    rb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
-                    ground = false;
-                    //attackWait = attackInterval;
-                    //attacking = true;
-                    //anim.SetBool("attack", true);
-                    anim.SetBool("jump", true);
+                    if (jumpInterval <= 0)
+                    {
+                        rb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
+                        ground = false;
+                        anim.SetBool("jump", true);
+                        jumpInterval = JumpInterval;
+                    }
+                    else
+                    {
+                        jumpInterval -= Time.deltaTime;
+                    }
+                    
                 }    
             }
             if (shield && (faceright && distance > 0 || !faceright && distance < 0))
@@ -229,6 +223,11 @@ public class GoblinSwordMovement : EnemyMovement
             }
             Debug.Log(canHurt);
         }
+    }
+
+    private void doShield()
+    {
+        shield = true;
     }
 
     public void finishAttack()
@@ -247,6 +246,17 @@ public class GoblinSwordMovement : EnemyMovement
         }
 
     }
+
+    public override void getDamage(float damage, int direction)
+    {
+        base.getDamage(damage, direction);
+        if (!isdead && canHurt)
+        {
+            CancelInvoke("doShield");
+            CancelInvoke("finishShield");
+        }
+    }
+
     protected override void Drop()
     {
         int silverNum = Random.Range(3, 8);

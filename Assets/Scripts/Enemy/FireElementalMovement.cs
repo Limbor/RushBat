@@ -25,6 +25,8 @@ public class FireElementalMovement : EnemyMovement
         length = 0.2f;
         faceright = true;
         attackInterval = 0f;
+
+
     }
 
     // Update is called once per frame

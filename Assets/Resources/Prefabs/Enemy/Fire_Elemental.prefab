@@ -145,9 +145,9 @@ GameObject:
   - component: {fileID: 2221363861846009449}
   - component: {fileID: 2221363861846009448}
   - component: {fileID: 2221363861846009444}
-  - component: {fileID: 2221363861846009451}
   - component: {fileID: 2221363861846009445}
   - component: {fileID: 2221363861846009446}
+  - component: {fileID: 2671646651205824353}
   m_Layer: 10
   m_Name: Fire_Elemental
   m_TagString: Untagged
@@ -263,32 +263,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &2221363861846009451
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2221363861846009455}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.016599655, y: -0.2827907}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.9846154, y: 0.9846154}
-    newSize: {x: 1.28, y: 1.28}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.37052536, y: 0.28518862}
-  m_EdgeRadius: 0
 --- !u!114 &2221363861846009445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,6 +300,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   damagePoint: {fileID: 2221363861165381263}
+--- !u!70 &2671646651205824353
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2221363861846009455}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.023306888, y: -0.31666753}
+  m_Size: {x: 0.39509135, y: 0.22826973}
+  m_Direction: 1
 --- !u!1 &2221363861850232449
 GameObject:
   m_ObjectHideFlags: 0

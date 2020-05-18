@@ -5,25 +5,29 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Serialization;
 
-public class Equipment : MonoBehaviour
+public class Equipment : Goods
 {
     private bool pick;
     private float floatScope = 0.05f;
-    private PlayerProperty player;
     private float pos;
     private float direction = 1f;
     
     public String equipmentName;
 
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected override void Start()
     {
-        player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerProperty>();
+        base.Start();
         pos = transform.position.y;
         equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName);
         if (equipmentName.Equals("Null"))
         {
             Destroy(gameObject);
+        }
+        if (isGoods)
+        {
+            price = GameManager.GetInstance().GetEquipmentInfo(equipmentName).price;
+            value.text = price.ToString();
         }
         GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/" + equipmentName);
     }
@@ -55,6 +59,7 @@ public class Equipment : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
+        if (isGoods) return;
         if (!pick && other.CompareTag("Player"))
         {
             Pick();

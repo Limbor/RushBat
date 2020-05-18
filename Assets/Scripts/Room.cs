@@ -35,7 +35,7 @@ public class Room : MonoBehaviour
         CameraController camera = Camera.main.GetComponent<CameraController>();
         camera.maxPos = rightTop;
         camera.minPos = leftBottom;
-        camera.gameObject.transform.position = transform.position;
+        camera.gameObject.transform.position = transform.position + Vector3.back * 10f;
         if (enemies.Count == 0)
         {
             roomComplete = true;

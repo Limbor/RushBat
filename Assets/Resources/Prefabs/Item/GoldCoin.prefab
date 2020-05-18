@@ -275,4 +275,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b75ff2cb06fe4b2fa068ee6221c7e5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 5
+  isGoods: 0
+  number: 5

@@ -55,7 +55,7 @@ public class PlayerProperty : MonoBehaviour
         if(lastBurntTime != 0) GetBurnt(0);
         
         equipments = player.equipments;
-        
+        // 恢复环绕型的道具
         foreach (var item in player.surroundingItems)
         {
             Instantiate(Resources.Load<GameObject>("Prefabs/Item/" + item));
@@ -116,6 +116,10 @@ public class PlayerProperty : MonoBehaviour
         {
             attack += 5;
         }
+        else if (equipment.Equals("LotteryTicket"))
+        {
+            SetCoinNumber(999);
+        }
     }
 
     public bool HaveEquipment(string name)
@@ -138,6 +142,7 @@ public class PlayerProperty : MonoBehaviour
     public void SetCoinNumber(int change)
     {
         coin += change;
+        coin = Mathf.Clamp(coin, 0, 999);
         if (change > 0 && HaveEquipment("SapphireRing"))
         {
             if(Random.Range(0, 1f) < 0.1f) SetShield(1);

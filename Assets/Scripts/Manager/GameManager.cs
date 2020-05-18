@@ -10,12 +10,15 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoSingleton<GameManager>
 {
     private GameObject player;
-    // 记录所有装备，已出现过的装备不再出现
+    // 记录未出现过的装备
     private List<string> equipmentList;
+    // 记录所有装备
+    private List<string> allEquipemnt;
     private List<GameObject> enemies;
     private List<GameObject> doors;
     private List<Room> rooms;
     private Room currentRoom;
+    private Dictionary<string, EquipmentInfo> equipmentInfoMap;
 
     private static readonly object _lock = new object();
     
@@ -31,6 +34,8 @@ public class GameManager : MonoSingleton<GameManager>
         doors = new List<GameObject>();
         rooms = new List<Room>();
         equipmentList = new List<string>();
+        allEquipemnt = new List<string>();
+        equipmentInfoMap = new Dictionary<string, EquipmentInfo>();
         ReadTextAssets();
     }
 
@@ -40,14 +45,15 @@ public class GameManager : MonoSingleton<GameManager>
         EquipmentInfoList equipmentInfoList = JsonUtility.FromJson<EquipmentInfoList>(text.text);
         foreach (var equipmentInfo in equipmentInfoList.equipmentList)
         {
-            equipmentList.Add(equipmentInfo.enName);
+            allEquipemnt.Add(equipmentInfo.enName);
+            equipmentInfoMap.Add(equipmentInfo.enName, equipmentInfo);
         }
+        allEquipemnt.ForEach(i => equipmentList.Add(i));
     }
 
     private void LevelComplete()
     {
-        OpenDoors();
-        AudioManager.GetInstance().PlayDoorAudio();
+       
     }
 
     public Room GetRoomById(int id)
@@ -72,6 +78,8 @@ public class GameManager : MonoSingleton<GameManager>
     private void Reset()
     {
         player = null;
+        equipmentList.Clear();
+        allEquipemnt.ForEach(i => equipmentList.Add(i));
         rooms.Clear();
     }
 
@@ -101,21 +109,6 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    public void RegisterDoor(GameObject door)
-    {
-        if (doors.Contains(door)) return;
-        doors.Add(door);
-    }
-
-    public void OpenDoors()
-    {
-        foreach (var door in doors)
-        {
-            door.GetComponent<Door>().Open(false);
-        }
-        doors.Clear();
-    }
-
     public void RegisterRooms(Room room)
     {
         if (rooms.Contains(room)) return;
@@ -129,19 +122,19 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
     
-    public string RegisterEquipment(string name)
+    public string RegisterEquipment(string originName)
     {
         lock (_lock)
         {
-            if (name.Equals("Random"))
+            if (originName.Equals("Random"))
             {
                 if (equipmentList.Count > 0)
                 {
                     var index = Random.Range(0, equipmentList.Count);
-                    name = equipmentList[index];
+                    originName = equipmentList[index];
                     equipmentList.RemoveAt(index);
                 }
-                else name = "Null";
+                else originName = "Null";
             }
             else
             {
@@ -149,15 +142,15 @@ public class GameManager : MonoSingleton<GameManager>
                 int count = equipmentList.Count;
                 for (i = 0; i < equipmentList.Count; i++)
                 {
-                    if (equipmentList[i].Equals(name))
+                    if (equipmentList[i].Equals(originName))
                     {
                         equipmentList.RemoveAt(i);
                         break;
                     }
                 }
-                if (count == equipmentList.Count) name = "Null";
+                if (count == equipmentList.Count) originName = "Null";
             }
-            return name;
+            return originName;
         }
     }
     
@@ -168,6 +161,11 @@ public class GameManager : MonoSingleton<GameManager>
             Reset();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
+    }
+
+    public EquipmentInfo GetEquipmentInfo(string equipmentName)
+    {
+        return equipmentInfoMap[equipmentName];
     }
 
     private void Update()

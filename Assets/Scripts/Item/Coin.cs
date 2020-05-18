@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Coin : Item
 {
-    public int value;
+    public int number;
     protected override void Effect()
     {
-        player.SetCoinNumber(value);
+        player.SetCoinNumber(number);
     }
 
     protected override void OnGround()

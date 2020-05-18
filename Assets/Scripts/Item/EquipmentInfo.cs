@@ -7,6 +7,7 @@ public class EquipmentInfo
     public string enName;
     public string name;
     public string intro;
+    public int price;
 }
 
 [Serializable]

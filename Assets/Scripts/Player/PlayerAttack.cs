@@ -85,6 +85,8 @@ public class PlayerAttack : MonoBehaviour
     /// <param name="direction">伤害方向</param>
     public void Damage(GameObject enemy, float baseDamage, float direction)
     {
+        var enemyMovement = enemy.GetComponent<EnemyMovement>();
+        if (!enemyMovement.canGetDamage()) return;
         float extraDamage = 0;
         int type = 1;
         baseDamage += property.GetAttack();
@@ -112,7 +114,7 @@ public class PlayerAttack : MonoBehaviour
             type++;
         }
         float damage = baseDamage + extraDamage;
-        enemy.GetComponent<EnemyMovement>().getDamage(damage, (int)direction);
+        enemyMovement.getDamage(damage, (int)direction);
         PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
     }
     

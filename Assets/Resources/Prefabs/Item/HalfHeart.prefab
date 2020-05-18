@@ -275,4 +275,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b626d4d53a42041bc98a5d4e56ca7340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 2
+  isGoods: 0
+  heal: 2

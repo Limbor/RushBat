@@ -111,7 +111,17 @@ public class PlayerAttack : MonoBehaviour
         if (property.HaveEquipment("ShadowBlade") && direction * enemy.transform.localScale.x > 0)
         {
             extraDamage += 10;
-            type++;
+            type += 1;
+        }
+        if (property.HaveEquipment("BloodyFangs"))
+        {
+            if (!enemy.TryGetComponent(out BloodyFangs bloodyFangs))
+            {
+                bloodyFangs = enemy.AddComponent<BloodyFangs>();
+            }
+            bloodyFangs.AddHurtNumber();
+            extraDamage += bloodyFangs.GetExtraDamage();
+            if (extraDamage > 0 && type != 2 && type != 4) type++;
         }
         float damage = baseDamage + extraDamage;
         enemyMovement.getDamage(damage, (int)direction);

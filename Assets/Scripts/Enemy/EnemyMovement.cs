@@ -50,7 +50,6 @@ public class EnemyMovement : MonoBehaviour
         GetComponentInParent<Room>().RegisterEnemy(gameObject);
         
         rb = GetComponent<Rigidbody2D>();
-        Debug.Log("sddada");
         anim = GetComponent<Animator>();
         render = GetComponent<SpriteRenderer>();
 
@@ -232,5 +231,10 @@ public class EnemyMovement : MonoBehaviour
     public bool canGetDamage()
     {
         return canHurt;
+    }
+
+    public bool IsDead()
+    {
+        return isdead;
     }
 }

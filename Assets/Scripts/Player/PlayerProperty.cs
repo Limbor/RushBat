@@ -100,7 +100,7 @@ public class PlayerProperty : MonoBehaviour
 
     private void SpecialEquipmentCheck(string equipment)
     {
-        if (equipment.Equals("HappyBeer"))
+        if (equipment.Equals("HappyBeer") || equipment.Equals("IceCream"))
         {
             maxHealth += 4;
             player.maxHealth += 4;
@@ -109,8 +109,8 @@ public class PlayerProperty : MonoBehaviour
         }
         else if(equipment.Equals("CrossBlade"))
         {
-            Instantiate(Resources.Load<GameObject>("Prefabs/Item/CrossBlade"));
-            player.surroundingItems.Add("CrossBlade");
+            Instantiate(Resources.Load<GameObject>("Prefabs/Item/" + equipment));
+            player.surroundingItems.Add(equipment);
         }
         else if (equipment.Equals("ShadowBlade") || equipment.Equals("WizardSword"))
         {
@@ -122,20 +122,20 @@ public class PlayerProperty : MonoBehaviour
         }
     }
 
-    public bool HaveEquipment(string name)
+    public bool HaveEquipment(string equipmentName)
     {
         foreach (var equipment in equipments)
         {
-            if (equipment.Equals(name)) return true;
+            if (equipment.Equals(equipmentName)) return true;
         }
         return false;
     }
 
-    public void RemoveEquipment(string name)
+    public void RemoveEquipment(string equipmentName)
     {
         for (int i = 0; i < equipments.Count; i++)
         {
-            if(equipments[i].Equals(name)) equipments.RemoveAt(i);
+            if(equipments[i].Equals(equipmentName)) equipments.RemoveAt(i);
         }
     }
 

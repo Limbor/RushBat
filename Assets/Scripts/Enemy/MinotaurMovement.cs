@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class MinotaurMovement : EnemyMovement
     public GameObject healPrefab;
     private GameObject healIcon;
 
-    public Transform bloodCanvas;
+    public RectTransform bloodCanvas;
     private Transform blood1;
     private Transform blood2;
     private Transform blood3;
@@ -36,6 +37,17 @@ public class MinotaurMovement : EnemyMovement
     //private float recoverAmount;
     private float attackInterval;
     // Start is called before the first frame update
+    
+    private void OnEnable()
+    {
+        bloodCanvas.gameObject.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        bloodCanvas.gameObject.SetActive(false);
+    }
+
     void Start()
     {
         base.Start();
@@ -286,7 +298,7 @@ public class MinotaurMovement : EnemyMovement
            
             anim.SetBool("dead", true);
             //canvas.SetActive(false);
-            GameManager.GetInstance().DelEnemy(gameObject);
+            GetComponentInParent<Room>().DelEnemy(gameObject);
             GetComponent<SpriteRenderer>().color = Color.gray;
             GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
             GetComponent<SpriteRenderer>().sortingOrder = 1;

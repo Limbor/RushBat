@@ -10,12 +10,11 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoSingleton<GameManager>
 {
     private GameObject player;
+    private GameObject portal;
     // 记录未出现过的装备
     private List<string> equipmentList;
     // 记录所有装备
-    private List<string> allEquipemnt;
-    private List<GameObject> enemies;
-    private List<GameObject> doors;
+    private List<string> allEquipment;
     private List<Room> rooms;
     private Room currentRoom;
     private Dictionary<string, EquipmentInfo> equipmentInfoMap;
@@ -30,11 +29,9 @@ public class GameManager : MonoSingleton<GameManager>
     protected override void Init()
     {
         player = null;
-        enemies = new List<GameObject>();
-        doors = new List<GameObject>();
         rooms = new List<Room>();
         equipmentList = new List<string>();
-        allEquipemnt = new List<string>();
+        allEquipment = new List<string>();
         equipmentInfoMap = new Dictionary<string, EquipmentInfo>();
         ReadTextAssets();
     }
@@ -45,15 +42,36 @@ public class GameManager : MonoSingleton<GameManager>
         EquipmentInfoList equipmentInfoList = JsonUtility.FromJson<EquipmentInfoList>(text.text);
         foreach (var equipmentInfo in equipmentInfoList.equipmentList)
         {
-            allEquipemnt.Add(equipmentInfo.enName);
+            allEquipment.Add(equipmentInfo.enName);
             equipmentInfoMap.Add(equipmentInfo.enName, equipmentInfo);
         }
-        allEquipemnt.ForEach(i => equipmentList.Add(i));
+        allEquipment.ForEach(i => equipmentList.Add(i));
     }
 
+    public void GameOver()
+    {
+        UIManager.GetInstance().EndScene(() =>
+        {
+            Reset();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
+    }
+
+    public void NextLevel()
+    {
+        player.GetComponent<PlayerAnimation>().EnterRoom();
+        UIManager.GetInstance().EndScene(() =>
+        {
+            player = null;
+            rooms.Clear();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        });
+    }
+    
     private void LevelComplete()
     {
-       
+        portal.SetActive(true);
     }
 
     public Room GetRoomById(int id)
@@ -79,7 +97,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         player = null;
         equipmentList.Clear();
-        allEquipemnt.ForEach(i => equipmentList.Add(i));
+        allEquipment.ForEach(i => equipmentList.Add(i));
         rooms.Clear();
     }
 
@@ -91,22 +109,6 @@ public class GameManager : MonoSingleton<GameManager>
     public GameObject GetPlayer()
     {
         return player;
-    }
-    
-    public void RegisterEnemy(GameObject enemy)
-    {
-        if (enemies.Contains(enemy)) return;
-        enemies.Add(enemy);
-    }
-
-    public void DelEnemy(GameObject enemy)
-    {
-        if (!enemies.Contains(enemy)) return;
-        enemies.Remove(enemy);
-        if (enemies.Count == 0)
-        {
-            LevelComplete();
-        }
     }
 
     public void RegisterRooms(Room room)
@@ -121,7 +123,16 @@ public class GameManager : MonoSingleton<GameManager>
             room.EnterRoom();
         }
     }
-    
+
+    public void RoomComplete(int id)
+    {
+        foreach (var room in rooms)
+        {
+            if (room.GetRoomId() > id) return;
+        }
+        LevelComplete();
+    }
+
     public string RegisterEquipment(string originName)
     {
         lock (_lock)
@@ -153,14 +164,11 @@ public class GameManager : MonoSingleton<GameManager>
             return originName;
         }
     }
-    
-    public void GameOver()
+
+    public void RegisterExitPortal(GameObject portal)
     {
-        UIManager.GetInstance().EndScene(() =>
-        {
-            Reset();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        });
+        this.portal = portal;
+        this.portal.SetActive(false);
     }
 
     public EquipmentInfo GetEquipmentInfo(string equipmentName)
@@ -172,8 +180,18 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (InputManager.GetKeyDown(KeyCode.Escape))
         {
-            Time.timeScale = 0;
-            UIManager.GetInstance().menu.SetActive(true);
+            var menu = UIManager.GetInstance().menu;
+            if (!menu.activeSelf)
+            {
+                Time.timeScale = 0;
+                menu.GetComponent<RectTransform>().SetAsLastSibling();
+                menu.SetActive(true);
+            }
+            else
+            {
+                Time.timeScale = 1;
+                menu.SetActive(false);
+            }
         }
     }
 }

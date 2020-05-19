@@ -17,7 +17,7 @@ public class Bomb : MonoBehaviour
         else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             int direction = transform.position.x < other.transform.position.x ? 1 : -1;
-            other.GetComponent<EnemyMovement>().getDamage(30f, direction);
+            other.GetComponent<EnemyMovement>().getDamage(100f, direction);
         }
     }
 }

@@ -18,7 +18,7 @@ public class Cover : MonoBehaviour
    {
       if (other.CompareTag("Player"))
       {
-         GetComponent<TilemapRenderer>().sortingLayerName = "Player";
+         GetComponent<TilemapRenderer>().sortingLayerName = "Cover";
       }
    }
 }

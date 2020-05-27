@@ -17,7 +17,8 @@ public class PauseMenu : MonoBehaviour
 
     private List<GameObject> equipmentList;
     private GameObject equipmentGrid;
-
+    private bool isShowing = false;
+    
     private void Awake()
     {
         equipmentGrid = Resources.Load<GameObject>("Prefabs/UI/EquipmentBox");
@@ -53,6 +54,7 @@ public class PauseMenu : MonoBehaviour
         {
             Destroy(equipment);
         }
+        isShowing = false;
     }
 
     private void Resume()
@@ -79,6 +81,8 @@ public class PauseMenu : MonoBehaviour
 
     private void ShowEquipmentList()
     {
+        if(isShowing) return;
+        isShowing = true;
         var playerEquipment = Player.GetInstance().equipments;
         foreach (var equipment in playerEquipment)
         {

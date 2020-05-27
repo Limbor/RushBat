@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -10255,7 +10255,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1287572609
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -12283,7 +12283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftBottom: {x: 51.96, y: 5.83}
-  rightTop: {x: 64.11, y: 8.12}
+  rightTop: {x: 58.98, y: 7.91}
   roomId: 5
 --- !u!4 &1038110056
 Transform:
@@ -22340,12 +22340,12 @@ PrefabInstance:
     - target: {fileID: 4579565956275550586, guid: 18a0d7205d9664c4689402d2fa4b7c87,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.09
+      value: -1.29
       objectReference: {fileID: 0}
     - target: {fileID: 4579565956275550586, guid: 18a0d7205d9664c4689402d2fa4b7c87,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.89
+      value: 1.18
       objectReference: {fileID: 0}
     - target: {fileID: 4579565956275550586, guid: 18a0d7205d9664c4689402d2fa4b7c87,
         type: 3}
@@ -22832,7 +22832,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1287572609
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9a5e8ea0e728d4d219fa99ec9c6c7427, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -23694,8 +23694,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1569865445
-  m_SortingLayer: 6
+  m_SortingLayerID: 1034633819
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -30614,7 +30614,7 @@ MonoBehaviour:
   m_Color: {r: 0.55695975, g: 0.72586274, b: 0.7924528, a: 1}
   m_Intensity: 1
   m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: 00000000e5a0b0e5b983519b292603fd331d08d11bc16da2
+  m_ApplyToSortingLayers: 00000000e5a0b0e5b983519b292603fd331d08d11bc16da25b42ab3d
   m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0
@@ -31647,6 +31647,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 956986400, guid: 14a6e6a9bb40a439b8f7c3f58818717b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -49.99994
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844775667, guid: 14a6e6a9bb40a439b8f7c3f58818717b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -49.99994
+      objectReference: {fileID: 0}
     - target: {fileID: 8003290253145795557, guid: 14a6e6a9bb40a439b8f7c3f58818717b,
         type: 3}
       propertyPath: m_Name

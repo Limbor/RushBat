@@ -84,8 +84,11 @@ public class GameManager : MonoSingleton<GameManager>
                 equipmentList.Add(equipment.equipmentName);
             }
             thisLevelEquipment.Clear();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            if (SceneManager.sceneCountInBuildSettings > SceneManager.GetActiveScene().buildIndex + 1)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+            else SceneManager.LoadScene(0);
         });
     }
     
@@ -96,7 +99,12 @@ public class GameManager : MonoSingleton<GameManager>
 
     public Room GetRoomById(int id)
     {
-        return rooms.FirstOrDefault(room => room.GetRoomId() == id);
+        var targetRoom = rooms.FirstOrDefault(room => room.GetRoomId() == id);
+        if (targetRoom == null)
+        {
+            targetRoom = GameObject.Find("Room" + (id + 1)).GetComponent<Room>();
+        }
+        return targetRoom;
     }
     
     public void NextRoom(float direction, int nextRoomId)

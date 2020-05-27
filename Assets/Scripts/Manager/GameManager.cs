@@ -17,7 +17,12 @@ public class GameManager : MonoSingleton<GameManager>
     private List<string> allEquipment;
     private List<Room> rooms;
     private Room currentRoom;
+    
     private Dictionary<string, EquipmentInfo> equipmentInfoMap;
+    private Dictionary<string, Skill> skillInfoMap;
+        
+    // 当前关卡出现的装备
+    private List<Equipment> thisLevelEquipment;
 
     private static readonly object _lock = new object();
     
@@ -32,13 +37,16 @@ public class GameManager : MonoSingleton<GameManager>
         rooms = new List<Room>();
         equipmentList = new List<string>();
         allEquipment = new List<string>();
+        thisLevelEquipment = new List<Equipment>();
         equipmentInfoMap = new Dictionary<string, EquipmentInfo>();
+        skillInfoMap = new Dictionary<string, Skill>();
         ReadTextAssets();
     }
 
     private void ReadTextAssets()
     {
-        TextAsset text = Resources.Load<TextAsset>("TextAssets/Equipment");
+        // 所有装备信息
+        var text = Resources.Load<TextAsset>("TextAssets/Equipment");
         EquipmentInfoList equipmentInfoList = JsonUtility.FromJson<EquipmentInfoList>(text.text);
         foreach (var equipmentInfo in equipmentInfoList.equipmentList)
         {
@@ -46,6 +54,13 @@ public class GameManager : MonoSingleton<GameManager>
             equipmentInfoMap.Add(equipmentInfo.enName, equipmentInfo);
         }
         allEquipment.ForEach(i => equipmentList.Add(i));
+        // 所有技能信息
+        text = Resources.Load<TextAsset>("TextAssets/Skill");
+        SkillList skillList = JsonUtility.FromJson<SkillList>(text.text);
+        foreach (var skill in skillList.skillList)
+        {
+            skillInfoMap.Add(skill.enName, skill);
+        }
     }
 
     public void GameOver()
@@ -64,6 +79,11 @@ public class GameManager : MonoSingleton<GameManager>
         {
             player = null;
             rooms.Clear();
+            foreach (var equipment in thisLevelEquipment)
+            {
+                equipmentList.Add(equipment.equipmentName);
+            }
+            thisLevelEquipment.Clear();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         });
@@ -133,7 +153,7 @@ public class GameManager : MonoSingleton<GameManager>
         LevelComplete();
     }
 
-    public string RegisterEquipment(string originName)
+    public string RegisterEquipment(string originName, Equipment equipment)
     {
         lock (_lock)
         {
@@ -161,10 +181,16 @@ public class GameManager : MonoSingleton<GameManager>
                 }
                 if (count == equipmentList.Count) originName = "Null";
             }
+            if(!originName.Equals("Null")) thisLevelEquipment.Add(equipment);
             return originName;
         }
     }
 
+    public void DelEquipment(Equipment equipment)
+    {
+        if (thisLevelEquipment.Contains(equipment)) thisLevelEquipment.Remove(equipment);
+    }
+    
     public void RegisterExitPortal(GameObject portal)
     {
         this.portal = portal;
@@ -174,6 +200,11 @@ public class GameManager : MonoSingleton<GameManager>
     public EquipmentInfo GetEquipmentInfo(string equipmentName)
     {
         return equipmentInfoMap[equipmentName];
+    }
+
+    public Skill GetSkillInfo(string skillName)
+    {
+        return skillInfoMap[skillName];
     }
 
     private void Update()

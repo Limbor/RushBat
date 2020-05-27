@@ -58,7 +58,7 @@ MonoBehaviour:
     type: 3}
   woodSpikePrefab: {fileID: 1781755125104260681, guid: a4d33f106d22248018e9a2ed65cdef48,
     type: 3}
-  damageTextPrefab: {fileID: 3009242409315938214, guid: 656af3cb1769a487faf3ba7125efaf8c,
+  damageTextPrefab: {fileID: 3009242409315938214, guid: 42b2709ccaa5e6b46a365c8d9db16b6a,
     type: 3}
 --- !u!1001 &127684593328050840
 PrefabInstance:

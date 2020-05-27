@@ -12,16 +12,17 @@ public class Equipment : Goods
     private float pos;
     private float direction = 1f;
     
-    public String equipmentName;
+    public string equipmentName;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         pos = transform.position.y;
-        equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName);
+        equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName, this);
         if (equipmentName.Equals("Null"))
         {
+            if(isGoods) Destroy(priceTextInstance);
             Destroy(gameObject);
         }
         if (isGoods)
@@ -33,7 +34,7 @@ public class Equipment : Goods
     }
 
     // Update is called once per frame
-    protected virtual void Update()
+    private void Update()
     {
         if (pick)
         {
@@ -48,17 +49,19 @@ public class Equipment : Goods
             }
         }
     }
-    void Pick()
+    private void Pick()
     {
         pick = true;
         AudioManager.GetInstance().PlayPowerUpAudio();
         UIManager.GetInstance().ShowEquipmentInfo(equipmentName);
+        GameManager.GetInstance().DelEquipment(this);
         player.Equip(equipmentName);
         Destroy(gameObject, 1.5f);
     }
 
-    protected void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerStay2D(Collider2D other)
     {
+        base.OnTriggerStay2D(other);
         if (isGoods) return;
         if (!pick && other.CompareTag("Player"))
         {

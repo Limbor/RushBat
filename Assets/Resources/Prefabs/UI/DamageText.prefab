@@ -113,8 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  lifeTime: 0.5
-  text: {fileID: 0}
+  lifeTime: 1
+  text: {fileID: 3009242409933450450}
 --- !u!1 &3009242409933450444
 GameObject:
   m_ObjectHideFlags: 0

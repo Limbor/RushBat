@@ -11,7 +11,7 @@ public class Goods : MonoBehaviour
     protected PlayerProperty player;
     
     private GameObject priceText;
-    private GameObject priceTextInstance;
+    protected GameObject priceTextInstance;
 
     protected virtual void Start()
     {

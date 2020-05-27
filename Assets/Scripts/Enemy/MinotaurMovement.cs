@@ -304,6 +304,7 @@ public class MinotaurMovement : EnemyMovement
             GetComponent<SpriteRenderer>().sortingOrder = 1;
             Destroy(transform.GetComponent<Rigidbody2D>());
             Destroy(transform.GetComponent<CapsuleCollider2D>());
+            bloodCanvas.gameObject.SetActive(false);
             isdead = true;
         }
         else

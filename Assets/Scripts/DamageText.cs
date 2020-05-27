@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,14 @@ public class DamageText : MonoBehaviour
     public float speed;
     public float lifeTime;
     public Text text;
-    
+
+    private Vector3 originScale;
+
+    private void Awake()
+    {
+        originScale = text.transform.localScale;
+    }
+
     void OnEnable()
     {
         StartCoroutine(ReturnPool());
@@ -19,7 +27,7 @@ public class DamageText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
+        transform.Translate(speed * Time.deltaTime * Vector3.up);
     }
 
     public void SetNumber(float number)
@@ -39,7 +47,8 @@ public class DamageText : MonoBehaviour
 
     IEnumerator ReturnPool()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(lifeTime);
+        text.transform.localScale = originScale;
         PoolManager.GetInstance().ReturnDamageTextPool(gameObject);
     }
 }

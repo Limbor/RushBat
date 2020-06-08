@@ -15,7 +15,6 @@ public class PlayerAttack : MonoBehaviour
     public float slashDamage, slashFloatRange;
 
     private GameObject energy;
-    private GameObject dart;
     private GameObject bigDust;
 
     private float scope = 0.2f;
@@ -37,8 +36,7 @@ public class PlayerAttack : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         energy = PoolManager.GetInstance().transform.GetChild(0).gameObject;
-        dart = PoolManager.GetInstance().transform.GetChild(1).gameObject;
-        bigDust = PoolManager.GetInstance().transform.GetChild(2).gameObject;
+        bigDust = PoolManager.GetInstance().transform.GetChild(1).gameObject;
 
         damagesEnemies = new List<GameObject>();
     }
@@ -149,8 +147,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void Throw()
     {
-        dart.transform.position = dartPoint.position;
-        dart.SetActive(true);
+        PoolManager.GetInstance().GetDart(dartPoint.position);
     }
 
     public void Slash()

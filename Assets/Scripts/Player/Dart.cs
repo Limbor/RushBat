@@ -5,11 +5,14 @@ using UnityEngine;
 public class Dart : MonoBehaviour
 {
     private float direction;
+    private bool back;
+    private bool isReturning;
 
     public LayerMask groundLayer;
     public float damage, floatRange;
     
     private float flySpeed = 10f;
+    private float slowdown = -8f;
     private List<GameObject> attackedEnemies = new List<GameObject>();
     private PlayerAttack attack;
 
@@ -17,7 +20,10 @@ public class Dart : MonoBehaviour
     {
         GameObject player = GameManager.GetInstance().GetPlayer();
         attack = player.GetComponent<PlayerAttack>();
+        back = player.GetComponent<PlayerProperty>().HaveSkill("Boomerang");
 
+        flySpeed = 10f;
+        isReturning = false;
         direction = player.transform.localScale.x;
         transform.localScale = new Vector3(direction, 1, 1);
         attackedEnemies.Clear();
@@ -28,7 +34,17 @@ public class Dart : MonoBehaviour
         transform.position = new Vector2(transform.position.x + flySpeed * Time.deltaTime * direction, transform.position.y);
         if (Physics2D.OverlapCircle(transform.position, 0.1f, groundLayer) != null)
         {
-            gameObject.SetActive(false);
+            PoolManager.GetInstance().ReturnDartPool(gameObject);
+        }
+
+        if (back)
+        {
+            flySpeed += slowdown * Time.deltaTime;
+            if (flySpeed < 0 && !isReturning)
+            {
+                isReturning = true;
+                attackedEnemies.Clear();
+            }
         }
     }
 
@@ -40,6 +56,10 @@ public class Dart : MonoBehaviour
             attackedEnemies.Add(collision.gameObject);
             float damage = this.damage + Random.Range(-floatRange, floatRange);
             attack.Damage(collision.gameObject, damage, direction);
+        }
+        else if (isReturning && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            PoolManager.GetInstance().ReturnDartPool(gameObject);
         }
     }
 }

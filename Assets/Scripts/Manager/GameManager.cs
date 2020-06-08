@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Object = System.Object;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    private int currentLevel;
+    
     private GameObject player;
     private GameObject portal;
     // 记录未出现过的装备
@@ -20,6 +24,7 @@ public class GameManager : MonoSingleton<GameManager>
     
     private Dictionary<string, EquipmentInfo> equipmentInfoMap;
     private Dictionary<string, Skill> skillInfoMap;
+    private List<string> skillList;
         
     // 当前关卡出现的装备
     private List<Equipment> thisLevelEquipment;
@@ -33,6 +38,7 @@ public class GameManager : MonoSingleton<GameManager>
     
     protected override void Init()
     {
+        currentLevel = 0;
         player = null;
         rooms = new List<Room>();
         equipmentList = new List<string>();
@@ -40,7 +46,9 @@ public class GameManager : MonoSingleton<GameManager>
         thisLevelEquipment = new List<Equipment>();
         equipmentInfoMap = new Dictionary<string, EquipmentInfo>();
         skillInfoMap = new Dictionary<string, Skill>();
+        skillList = new List<string>();
         ReadTextAssets();
+        LoadGame();
     }
 
     private void ReadTextAssets()
@@ -59,6 +67,7 @@ public class GameManager : MonoSingleton<GameManager>
         SkillList skillList = JsonUtility.FromJson<SkillList>(text.text);
         foreach (var skill in skillList.skillList)
         {
+            this.skillList.Add(skill.enName);
             skillInfoMap.Add(skill.enName, skill);
         }
     }
@@ -79,16 +88,19 @@ public class GameManager : MonoSingleton<GameManager>
         {
             player = null;
             rooms.Clear();
-            foreach (var equipment in thisLevelEquipment)
-            {
-                equipmentList.Add(equipment.equipmentName);
-            }
+            thisLevelEquipment.ForEach(item => equipmentList.Add(item.equipmentName));
             thisLevelEquipment.Clear();
             if (SceneManager.sceneCountInBuildSettings > SceneManager.GetActiveScene().buildIndex + 1)
             {
+                currentLevel += 1;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
-            else SceneManager.LoadScene(0);
+            else
+            {
+                currentLevel = 0;
+                SceneManager.LoadScene(0);
+            }
+            SaveGame();
         });
     }
     
@@ -189,7 +201,7 @@ public class GameManager : MonoSingleton<GameManager>
                 }
                 if (count == equipmentList.Count) originName = "Null";
             }
-            if(!originName.Equals("Null")) thisLevelEquipment.Add(equipment);
+            if(!originName.Equals("Null") && equipment != null) thisLevelEquipment.Add(equipment);
             return originName;
         }
     }
@@ -213,6 +225,43 @@ public class GameManager : MonoSingleton<GameManager>
     public Skill GetSkillInfo(string skillName)
     {
         return skillInfoMap[skillName];
+    }
+
+    public List<string> GetSkillList()
+    {
+        return skillList;
+    }
+
+    public void SaveGame()
+    {
+        var saveData = new SaveData(currentLevel);
+        if (!Directory.Exists(Application.persistentDataPath + "/SaveData"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/SaveData");
+        }
+        var formatter = new BinaryFormatter();
+        var file = File.Create(Application.persistentDataPath + "/SaveData/game.save");
+        var json = JsonUtility.ToJson(saveData);
+        formatter.Serialize(file, json);
+        file.Close();
+    }
+
+    public void LoadGame()
+    {
+        if (!File.Exists(Application.persistentDataPath + "/SaveData/game.save"))
+        {
+            return;
+        }
+        var formatter = new BinaryFormatter();
+        var file = File.Open(Application.persistentDataPath + "/SaveData/game.save", FileMode.Open);
+        var json = (string)formatter.Deserialize(file);
+        var saveData = JsonUtility.FromJson<SaveData>(json);
+        file.Close();
+
+        currentLevel = saveData.level;
+        Player.GetInstance().SetPlayer(saveData.player);
+        saveData.player.equipments.ForEach(item => RegisterEquipment(item, null));
+        SceneManager.LoadScene(currentLevel);
     }
 
     private void Update()

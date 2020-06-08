@@ -27,8 +27,9 @@ public class PlayerProperty : MonoBehaviour
     private int shield;
     private int coin;
     private int key;
-    [SerializeField]
+    
     private List<string> equipments;
+    private List<string> skills;
     private int lastPoisonedTime;
     private int lastBurntTime;
 
@@ -54,6 +55,7 @@ public class PlayerProperty : MonoBehaviour
         if(lastBurntTime != 0) GetBurnt(0);
         
         equipments = player.equipments;
+        skills = player.skills;
         // 恢复环绕型的道具
         foreach (var item in player.surroundingItems)
         {
@@ -82,6 +84,7 @@ public class PlayerProperty : MonoBehaviour
         player.lastPoisonedTime = lastPoisonedTime;
         player.lastBurntTime = lastBurntTime;
         player.equipments = equipments;
+        player.skills = skills;
         
         UIManager.GetInstance().SetDashTime(1.0f / dashCoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(0, 1.0f / skill1CoolDown * Time.deltaTime);
@@ -95,6 +98,11 @@ public class PlayerProperty : MonoBehaviour
         SpecialEquipmentCheck(equipment);
         equipments.Add(equipment);
         anim.Acquire();
+    }
+
+    public void AddSkill(string skill)
+    {
+        skills.Add(skill);
     }
 
     private void SpecialEquipmentCheck(string equipment)
@@ -123,9 +131,20 @@ public class PlayerProperty : MonoBehaviour
 
     public bool HaveEquipment(string equipmentName)
     {
+        if (equipments == null) return false;
         foreach (var equipment in equipments)
         {
             if (equipment.Equals(equipmentName)) return true;
+        }
+        return false;
+    }
+
+    public bool HaveSkill(string skillName)
+    {
+        if (skills == null) return false;
+        foreach (var skill in skills)
+        {
+            if (skill.Equals(skillName)) return true;
         }
         return false;
     }

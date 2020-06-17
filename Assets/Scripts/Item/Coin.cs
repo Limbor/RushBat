@@ -23,6 +23,7 @@ public class Coin : Item
     {
         yield return new WaitForSeconds(3f);
         Destroy(gameObject);
+        AudioManager.GetInstance().PlayBombAudio();
         Instantiate(Resources.Load<GameObject>("Prefabs/FX/Bomb"), 
             transform.position, Quaternion.identity);
     }

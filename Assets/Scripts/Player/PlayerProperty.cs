@@ -119,7 +119,7 @@ public class PlayerProperty : MonoBehaviour
             Instantiate(Resources.Load<GameObject>("Prefabs/Item/" + equipment));
             player.surroundingItems.Add(equipment);
         }
-        else if (equipment.Equals("ShadowBlade") || equipment.Equals("WizardSword"))
+        else if (equipment.Equals("ShadowBlade") || equipment.Equals("WizardSword") || equipment.Equals("SojinSpear"))
         {
             attack += 5;
         }

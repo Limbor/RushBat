@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 6134651076731027909}
   m_Layer: 10
   m_Name: Cobra
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -310,7 +310,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -787997389
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -7241491235832059615, guid: 497680d5ed7ad774f863a407d81057c9,
     type: 3}

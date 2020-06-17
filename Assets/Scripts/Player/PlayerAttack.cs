@@ -81,11 +81,11 @@ public class PlayerAttack : MonoBehaviour
     /// <param name="enemy">敌人对象</param>
     /// <param name="baseDamage">基础伤害</param>
     /// <param name="direction">伤害方向</param>
-    public void Damage(GameObject enemy, float baseDamage, float direction)
+    /// <param name="extraDamage">额外伤害</param>
+    public void Damage(GameObject enemy, float baseDamage, float direction, float extraDamage = 0)
     {
         var enemyMovement = enemy.GetComponent<EnemyMovement>();
         if (!enemyMovement.canGetDamage()) return;
-        float extraDamage = 0;
         int type = 1;
         baseDamage += property.GetAttack();
         if (property.HaveEquipment("SkullSword"))
@@ -106,10 +106,19 @@ public class PlayerAttack : MonoBehaviour
             baseDamage *= 2;
             type += 2;
         }
+        if (extraDamage > 0) type++;
         if (property.HaveEquipment("ShadowBlade") && direction * enemy.transform.localScale.x > 0)
         {
             extraDamage += 10;
-            type += 1;
+            if (type != 2 && type != 4) type++;
+        }
+        if (property.HaveEquipment("EnergyDrink"))
+        {
+            if (Random.Range(0, 1f) < 0.35f)
+            {
+                extraDamage += Random.Range(10, 51);
+                if (type != 2 && type != 4) type++;
+            }
         }
         if (property.HaveEquipment("BloodyFangs"))
         {
@@ -130,11 +139,14 @@ public class PlayerAttack : MonoBehaviour
     {
         // transform.Translate(transform.localScale.x * 0.1f, 0f, 0f);
         Collider2D[] enemies = Physics2D.OverlapCircleAll(damagePoint.position, scope, enemyLayer);
+        if (enemies.Length > 0) AudioManager.GetInstance().PlayHitAudio();
+        float extraDamage = 0;
+        if (enemies.Length > 1 && property.HaveEquipment("SojinSpear")) extraDamage = enemies.Length * 10; 
         foreach (Collider2D enemy in enemies)
         {
-            var direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
+            // var direction = (enemy.transform.position.x > transform.position.x) ? 1 : -1;
             float damage = attackDamage + Random.Range(-attackFloatRange, attackFloatRange);
-            Damage(enemy.gameObject, damage, direction);
+            Damage(enemy.gameObject, damage, transform.localScale.x, extraDamage);
         }
     }
 
@@ -158,6 +170,7 @@ public class PlayerAttack : MonoBehaviour
         bigDust.SetActive(true);
         bigDust.transform.position = transform.position;
         bigDust.transform.localScale = transform.localScale;
+        AudioManager.GetInstance().PlaySlashAudio();
         Camera.main.GetComponent<CameraController>().Shake();
         Camera.main.GetComponent<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }

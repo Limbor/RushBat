@@ -188,6 +188,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (avoidDamage) return;
         if (source.Equals(GameManager.GroundTrap) && property.HaveEquipment("Helmet")) return;
+        if (source.Equals(GameManager.FlyingTrap) && property.HaveEquipment("SubmarineHelmet")) return;
         property.Hurt(damage);
         UIManager.GetInstance().Hurt();
         Camera.main.GetComponent<CameraController>().Shake();
@@ -253,6 +254,7 @@ public class PlayerMovement : MonoBehaviour
         {
             UIManager.GetInstance().ResetDashTime();
             PoolManager.GetInstance().GetDustObject(true);
+            AudioManager.GetInstance().PlayDashAudio();
             Camera.main.GetComponent<CameraController>().Shake();
             Camera.main.GetComponent<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
             dashCoolDown = property.dashCoolDown;

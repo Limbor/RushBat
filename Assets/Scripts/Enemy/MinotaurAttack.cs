@@ -61,25 +61,21 @@ public class MinotaurAttack : MonoBehaviour
                 case "chop":
                     offset1 = chopOffset1;
                     offset2 = chopOffset2;
-                    offset1.x = offset1.x * direction;
-                    offset2.x = offset2.x * direction;
                     damage = chopDamage;
                     break;
                 case "stab":
                     offset1 = stabOffset1;
                     offset2 = stabOffset2;
-                    offset1.x = offset1.x * direction;
-                    offset2.x = offset2.x * direction;
                     damage = stabDamage;
                     break;
                 case "rotate":
                     offset1 = rotateOffset1;
-                    offset2 = rotateOffset2;
-                    offset1.x = offset1.x * direction;
-                    offset2.x = offset2.x * direction;
+                    offset2 = rotateOffset2;                   
                     damage = rotateDamage;
                     break;
             }
+            offset1.x = offset1.x * direction;
+            offset2.x = offset2.x * direction;
 
             Vector2 position = new Vector2(transform.position.x, transform.position.y);
             Collider2D[] players = Physics2D.OverlapAreaAll(position + offset1, position + offset2, playerLayer);

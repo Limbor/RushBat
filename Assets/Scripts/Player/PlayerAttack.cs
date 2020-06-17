@@ -15,7 +15,6 @@ public class PlayerAttack : MonoBehaviour
     public float slashDamage, slashFloatRange;
 
     private GameObject energy;
-    private GameObject dart;
     private GameObject bigDust;
 
     private float scope = 0.2f;
@@ -37,8 +36,7 @@ public class PlayerAttack : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         energy = PoolManager.GetInstance().transform.GetChild(0).gameObject;
-        dart = PoolManager.GetInstance().transform.GetChild(1).gameObject;
-        bigDust = PoolManager.GetInstance().transform.GetChild(2).gameObject;
+        bigDust = PoolManager.GetInstance().transform.GetChild(1).gameObject;
 
         damagesEnemies = new List<GameObject>();
     }
@@ -85,6 +83,8 @@ public class PlayerAttack : MonoBehaviour
     /// <param name="direction">伤害方向</param>
     public void Damage(GameObject enemy, float baseDamage, float direction)
     {
+        var enemyMovement = enemy.GetComponent<EnemyMovement>();
+        if (!enemyMovement.canGetDamage()) return;
         float extraDamage = 0;
         int type = 1;
         baseDamage += property.GetAttack();
@@ -109,10 +109,20 @@ public class PlayerAttack : MonoBehaviour
         if (property.HaveEquipment("ShadowBlade") && direction * enemy.transform.localScale.x > 0)
         {
             extraDamage += 10;
-            type++;
+            type += 1;
+        }
+        if (property.HaveEquipment("BloodyFangs"))
+        {
+            if (!enemy.TryGetComponent(out BloodyFangs bloodyFangs))
+            {
+                bloodyFangs = enemy.AddComponent<BloodyFangs>();
+            }
+            bloodyFangs.AddHurtNumber();
+            extraDamage += bloodyFangs.GetExtraDamage();
+            if (extraDamage > 0 && type != 2 && type != 4) type++;
         }
         float damage = baseDamage + extraDamage;
-        enemy.GetComponent<EnemyMovement>().getDamage(damage, (int)direction);
+        enemyMovement.getDamage(damage, (int)direction);
         PoolManager.GetInstance().GetDamageText(enemy.transform.position, damage, type);
     }
     
@@ -137,8 +147,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void Throw()
     {
-        dart.transform.position = dartPoint.position;
-        dart.SetActive(true);
+        PoolManager.GetInstance().GetDart(dartPoint.position);
     }
 
     public void Slash()

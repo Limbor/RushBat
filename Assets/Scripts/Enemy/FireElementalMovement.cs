@@ -25,6 +25,8 @@ public class FireElementalMovement : EnemyMovement
         length = 0.2f;
         faceright = true;
         attackInterval = 0f;
+
+
     }
 
     // Update is called once per frame
@@ -86,7 +88,7 @@ public class FireElementalMovement : EnemyMovement
         else if (faceright && edis <= 0)
         {
             //面向右，到达终点
-            anim.SetBool("walk", false);
+            anim.SetBool("run", false);
             rb.velocity = new Vector2(0, 0);
             if (waittime > 0)
             {
@@ -109,7 +111,7 @@ public class FireElementalMovement : EnemyMovement
             }
             else
             {
-                anim.SetBool("walk", true);
+                anim.SetBool("run", true);
                 rb.velocity = new Vector2(-1 * walkspeed * Time.deltaTime, rb.velocity.y);
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, length + 0.05f, groundLayer.value);
                 if (hit)

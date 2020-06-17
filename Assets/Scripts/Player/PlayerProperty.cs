@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using Random = UnityEngine.Random;
 
 public class PlayerProperty : MonoBehaviour
@@ -28,8 +27,9 @@ public class PlayerProperty : MonoBehaviour
     private int shield;
     private int coin;
     private int key;
-    [SerializeField]
+    
     private List<string> equipments;
+    private List<string> skills;
     private int lastPoisonedTime;
     private int lastBurntTime;
 
@@ -55,7 +55,8 @@ public class PlayerProperty : MonoBehaviour
         if(lastBurntTime != 0) GetBurnt(0);
         
         equipments = player.equipments;
-        
+        skills = player.skills;
+        // 恢复环绕型的道具
         foreach (var item in player.surroundingItems)
         {
             Instantiate(Resources.Load<GameObject>("Prefabs/Item/" + item));
@@ -83,6 +84,7 @@ public class PlayerProperty : MonoBehaviour
         player.lastPoisonedTime = lastPoisonedTime;
         player.lastBurntTime = lastBurntTime;
         player.equipments = equipments;
+        player.skills = skills;
         
         UIManager.GetInstance().SetDashTime(1.0f / dashCoolDown * Time.deltaTime);
         UIManager.GetInstance().SetSkillTime(0, 1.0f / skill1CoolDown * Time.deltaTime);
@@ -98,9 +100,14 @@ public class PlayerProperty : MonoBehaviour
         anim.Acquire();
     }
 
+    public void AddSkill(string skill)
+    {
+        skills.Add(skill);
+    }
+
     private void SpecialEquipmentCheck(string equipment)
     {
-        if (equipment.Equals("HappyBeer"))
+        if (equipment.Equals("HappyBeer") || equipment.Equals("IceCream"))
         {
             maxHealth += 4;
             player.maxHealth += 4;
@@ -109,35 +116,51 @@ public class PlayerProperty : MonoBehaviour
         }
         else if(equipment.Equals("CrossBlade"))
         {
-            Instantiate(Resources.Load<GameObject>("Prefabs/Item/CrossBlade"));
-            player.surroundingItems.Add("CrossBlade");
+            Instantiate(Resources.Load<GameObject>("Prefabs/Item/" + equipment));
+            player.surroundingItems.Add(equipment);
         }
         else if (equipment.Equals("ShadowBlade") || equipment.Equals("WizardSword"))
         {
             attack += 5;
         }
+        else if (equipment.Equals("LotteryTicket"))
+        {
+            SetCoinNumber(999);
+        }
     }
 
-    public bool HaveEquipment(string name)
+    public bool HaveEquipment(string equipmentName)
     {
+        if (equipments == null) return false;
         foreach (var equipment in equipments)
         {
-            if (equipment.Equals(name)) return true;
+            if (equipment.Equals(equipmentName)) return true;
         }
         return false;
     }
 
-    public void RemoveEquipment(string name)
+    public bool HaveSkill(string skillName)
+    {
+        if (skills == null) return false;
+        foreach (var skill in skills)
+        {
+            if (skill.Equals(skillName)) return true;
+        }
+        return false;
+    }
+
+    public void RemoveEquipment(string equipmentName)
     {
         for (int i = 0; i < equipments.Count; i++)
         {
-            if(equipments[i].Equals(name)) equipments.RemoveAt(i);
+            if(equipments[i].Equals(equipmentName)) equipments.RemoveAt(i);
         }
     }
 
     public void SetCoinNumber(int change)
     {
         coin += change;
+        coin = Mathf.Clamp(coin, 0, 999);
         if (change > 0 && HaveEquipment("SapphireRing"))
         {
             if(Random.Range(0, 1f) < 0.1f) SetShield(1);

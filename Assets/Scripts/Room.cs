@@ -16,8 +16,13 @@ public class Room : MonoBehaviour
     private List<GameObject> enemies = new List<GameObject>();
     private List<Door> doors = new List<Door>();
 
+    private Camera mainCamera;
+    private Camera miniMapCamera;
+
     private void Start()
     {
+        mainCamera = Camera.main;
+        miniMapCamera = GameObject.FindGameObjectWithTag("MiniMapCamera").GetComponent<Camera>();
         GameManager.GetInstance().RegisterRooms(this);
     }
 
@@ -32,10 +37,14 @@ public class Room : MonoBehaviour
                 player.SetHealth(1);
             }
         }
-        CameraController camera = Camera.main.GetComponent<CameraController>();
+        // 调整相机位置
+        CameraController camera = mainCamera.GetComponent<CameraController>();
         camera.maxPos = rightTop;
         camera.minPos = leftBottom;
-        camera.gameObject.transform.position = transform.position;
+        camera.gameObject.transform.position = transform.position + Vector3.back * 10f;
+        miniMapCamera.transform.position = new Vector3(transform.position.x, miniMapCamera.transform.position.y,
+            miniMapCamera.transform.position.z); 
+        
         if (enemies.Count == 0)
         {
             roomComplete = true;
@@ -60,6 +69,7 @@ public class Room : MonoBehaviour
         roomComplete = true;
         OpenDoors();
         AudioManager.GetInstance().PlayDoorAudio();
+        GameManager.GetInstance().RoomComplete(roomId);
     }
     
     public void RegisterEnemy(GameObject enemy)

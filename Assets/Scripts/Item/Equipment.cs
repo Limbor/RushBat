@@ -5,31 +5,36 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Serialization;
 
-public class Equipment : MonoBehaviour
+public class Equipment : Goods
 {
     private bool pick;
     private float floatScope = 0.05f;
-    private PlayerProperty player;
     private float pos;
     private float direction = 1f;
     
-    public String equipmentName;
+    public string equipmentName;
 
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected override void Start()
     {
-        player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerProperty>();
+        base.Start();
         pos = transform.position.y;
-        equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName);
+        equipmentName = GameManager.GetInstance().RegisterEquipment(equipmentName, this);
         if (equipmentName.Equals("Null"))
         {
+            if(isGoods) Destroy(priceTextInstance);
             Destroy(gameObject);
+        }
+        if (isGoods)
+        {
+            price = GameManager.GetInstance().GetEquipmentInfo(equipmentName).price;
+            value.text = price.ToString();
         }
         GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/" + equipmentName);
     }
 
     // Update is called once per frame
-    protected virtual void Update()
+    private void Update()
     {
         if (pick)
         {
@@ -44,17 +49,20 @@ public class Equipment : MonoBehaviour
             }
         }
     }
-    void Pick()
+    private void Pick()
     {
         pick = true;
         AudioManager.GetInstance().PlayPowerUpAudio();
         UIManager.GetInstance().ShowEquipmentInfo(equipmentName);
+        GameManager.GetInstance().DelEquipment(this);
         player.Equip(equipmentName);
         Destroy(gameObject, 1.5f);
     }
 
-    protected void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerStay2D(Collider2D other)
     {
+        base.OnTriggerStay2D(other);
+        if (isGoods) return;
         if (!pick && other.CompareTag("Player"))
         {
             Pick();

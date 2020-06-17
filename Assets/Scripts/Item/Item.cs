@@ -5,24 +5,22 @@ using Unity.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Item : MonoBehaviour
+public class Item : Goods
 {
     // 捡起物体后的特效
     private GameObject pick;
     // 是否能够拾取
     private bool canPick;
-    // 与英雄交互
-    protected PlayerProperty player;
     // 是否有拾取条件
     protected bool pickCondition = false;
     
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         pick = Resources.Load<GameObject>("Prefabs/Item/Pick");
-        player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerProperty>();
         canPick = false;
-        StartCoroutine(CanPick());
+        if(!isGoods) StartCoroutine(CanPick());
     }
 
     // 0.5s后可以拾取
@@ -79,9 +77,10 @@ public class Item : MonoBehaviour
         }
     }
 
-    protected virtual void OnTriggerStay2D(Collider2D other)
+    protected override void OnTriggerStay2D(Collider2D other)
     {
-        if (pickCondition) return;
+        base.OnTriggerStay2D(other);
+        if (isGoods || pickCondition) return;
         if (canPick && other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             Pick();

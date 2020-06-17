@@ -1,0 +1,26 @@
+{
+  "skillList": [
+    {
+      "enName": "Insurance",
+      "name": "人寿保险",
+      "levelList": [
+        {
+          "level": 1,
+          "price": 10,
+          "intro": "让你在下一次轮回复活的时候将拥有之前10%的金币"
+        }
+      ]
+    },
+    {
+      "enName": "Boomerang",
+      "name": "回旋镖",
+      "levelList": [
+        {
+          "level": 1,
+          "price": 50,
+          "intro": "你的飞镖技能现在升级为回旋镖"
+        }
+      ]
+    }
+  ]
+}

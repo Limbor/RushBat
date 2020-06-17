@@ -15,6 +15,7 @@ public class PoolManager : MonoBehaviour
     public GameObject firePrefab;
     public GameObject woodSpikePrefab;
     public GameObject damageTextPrefab;
+    public GameObject dartPrefab;
 
     private int shadowCount = 10;
     private int dustCount = 3;
@@ -22,6 +23,7 @@ public class PoolManager : MonoBehaviour
     private int fireCount = 3;
     private int spikeCount = 3;
     private int damageTextCount = 3;
+    
     private Queue<GameObject> shadowPool;
     private Queue<GameObject> dustPool;
     private Queue<GameObject> wallDustPool;
@@ -29,6 +31,7 @@ public class PoolManager : MonoBehaviour
     private Queue<GameObject> firePool;
     private Queue<GameObject> spikePool;
     private Queue<GameObject> damageTextPool;
+    private Queue<GameObject> dartPool;
 
     private void Awake()
     {
@@ -42,6 +45,7 @@ public class PoolManager : MonoBehaviour
             firePool = new Queue<GameObject>();
             spikePool = new Queue<GameObject>();
             damageTextPool = new Queue<GameObject>();
+            dartPool = new Queue<GameObject>();
             FillShadowPool();
             FillDustPool(true);
             FillDustPool(false);
@@ -253,5 +257,22 @@ public class PoolManager : MonoBehaviour
         text.SetColor(colors[type - 1]);
         if(type == 4) text.SetScale();
         gameObject.SetActive(true);
+    }
+
+    public void GetDart(Vector3 pos)
+    {
+        if (dartPool.Count == 0)
+        {
+            dartPool.Enqueue(Instantiate(dartPrefab, transform));
+        }
+        var dart = dartPool.Dequeue();
+        dart.transform.position = pos;
+        dart.SetActive(true);
+    }
+
+    public void ReturnDartPool(GameObject dart)
+    {
+        dart.SetActive(false);
+        dartPool.Enqueue(dart);
     }
 }

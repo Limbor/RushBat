@@ -7,6 +7,7 @@ TagManager:
   - Ladder
   - Enemy
   - OneWayPlatform
+  - MiniMapCamera
   layers:
   - Default
   - TransparentFX
@@ -61,6 +62,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 2725101851
+    locked: 0
+  - name: Cover
+    uniqueID: 1034633819
     locked: 0
   - name: ForeGround
     uniqueID: 1287572609

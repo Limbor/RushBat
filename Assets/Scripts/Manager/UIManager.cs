@@ -28,7 +28,6 @@ public class UIManager : MonoBehaviour
     public GameObject equipmentPanel;
     private Image shieldPrefab;
     private Image heartPrefab;
-    private Dictionary<string, EquipmentInfo> equipmentInfoMap;
     private List<Image> heartList;
     private List<Image> shieldList;
 
@@ -46,7 +45,6 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         StartScene();
-        ReadAssets();
     }
 
     private void InitUI()
@@ -73,18 +71,7 @@ public class UIManager : MonoBehaviour
         heart.position = new Vector2(pos.x + 60 * index * scaleInverse, pos.y);
         heartList.Add(heartUI);
     }
-    
-    private void ReadAssets()
-    {
-        TextAsset text = Resources.Load<TextAsset>("TextAssets/Equipment");
-        EquipmentInfoList equipmentInfoList = JsonUtility.FromJson<EquipmentInfoList>(text.text);
-        equipmentInfoMap = new Dictionary<string, EquipmentInfo>();
-        foreach (var equipmentInfo in equipmentInfoList.equipmentList)
-        {
-            equipmentInfoMap.Add(equipmentInfo.enName, equipmentInfo);
-        }
-    }
-    
+
     public void Hurt()
     {
         hurt.DOComplete();
@@ -129,7 +116,7 @@ public class UIManager : MonoBehaviour
     
     public void ShowEquipmentInfo(string name)
     {
-        EquipmentInfo equipmentInfo = equipmentInfoMap[name];
+        EquipmentInfo equipmentInfo = GameManager.GetInstance().GetEquipmentInfo(name);
         var profile = Instantiate(equipmentPanel, transform.GetChild(0));
         profile.GetComponent<EquipmentDisplay>().SetContent(equipmentInfo);
     }

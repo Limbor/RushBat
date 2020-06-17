@@ -12,6 +12,7 @@ public class FireElementalAttack : EnemyAttack
     {
         normalDamage = 1;
         normalScope = 0.2f;
+        attacked = false;
     }
 
     // Update is called once per frame

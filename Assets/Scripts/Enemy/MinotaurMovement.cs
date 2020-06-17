@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class MinotaurMovement : EnemyMovement
     public GameObject healPrefab;
     private GameObject healIcon;
 
-    public Transform bloodCanvas;
+    public RectTransform bloodCanvas;
     private Transform blood1;
     private Transform blood2;
     private Transform blood3;
@@ -36,6 +37,17 @@ public class MinotaurMovement : EnemyMovement
     //private float recoverAmount;
     private float attackInterval;
     // Start is called before the first frame update
+    
+    private void OnEnable()
+    {
+        bloodCanvas.gameObject.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        bloodCanvas.gameObject.SetActive(false);
+    }
+
     void Start()
     {
         base.Start();
@@ -191,7 +203,7 @@ public class MinotaurMovement : EnemyMovement
         while (Mathf.Abs(transform.position.x - player.transform.position.x) >= 0.7f)
         {
             //Debug.Log("Distance: " + Mathf.Abs(transform.position.x - player.transform.position.x));
-            rb.velocity = new Vector2(dir * walkspeed * Time.deltaTime, rb.velocity.y);
+            rb.velocity = new Vector2(dir * 1.5f * walkspeed * Time.deltaTime, rb.velocity.y);
             yield return null;
         }
         //anim.SetBool("run", false);
@@ -283,20 +295,21 @@ public class MinotaurMovement : EnemyMovement
         if (blood <= 0)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
-            //死亡后血条瞬间消失
+           
             anim.SetBool("dead", true);
             //canvas.SetActive(false);
-            GameManager.GetInstance().DelEnemy(gameObject);
+            GetComponentInParent<Room>().DelEnemy(gameObject);
             GetComponent<SpriteRenderer>().color = Color.gray;
             GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
             GetComponent<SpriteRenderer>().sortingOrder = 1;
             Destroy(transform.GetComponent<Rigidbody2D>());
             Destroy(transform.GetComponent<CapsuleCollider2D>());
+            bloodCanvas.gameObject.SetActive(false);
             isdead = true;
         }
         else
         {
-            //血条逐渐消失
+            
             hurttime -= Time.deltaTime;
             if (hurttime > 0)
             {
@@ -325,20 +338,16 @@ public class MinotaurMovement : EnemyMovement
         {
             blood -= damage;
             //bloodVolume.GetComponent<Image>().fillAmount = blood / 300;
-
+            bloodVolume.GetComponent<Image>().fillAmount = blood / maxBlood;
 
             //受伤停止攻击
-            //anim.SetBool("attack", false);
-            //attacking = false;
             finishAttackAnimation();
             finishRecover();
-            Debug.Log("getDamage!");
+            //Debug.Log("getDamage!");
             attacking = false;
             anim.SetBool("hurt", true);
             hurt = true;
             //transform.GetComponent<SpriteRenderer>().color;
-
-            bloodtime = 2;         //血条显示时间
 
             if (hurttime <= 0)
             {

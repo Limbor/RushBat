@@ -11,12 +11,13 @@ public class AxeMovement : EnemyMovement
     private float startx;
     private float endx;
 
+    private bool attackType; //true攻击,false防御
     //private bool walking;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("Start??");
         base.Start();
         
         anim.SetBool("jump", false);
@@ -30,9 +31,10 @@ public class AxeMovement : EnemyMovement
         waittime = 1f;
         length = 0.31f;
         faceright = true;
-
+        attackType = true;
         //length = 0.375f;
         //walking = true;
+        
     }
 
     // Update is called once per frame
@@ -45,17 +47,7 @@ public class AxeMovement : EnemyMovement
         //testAttack();
       
     }
-    //public bool attack;
-    //void testAttack()
-    //{
-    //    attacking = attack;
-    //    if (attack)
-    //    {
-    //        anim.SetBool("walk", false);
-    //        anim.SetBool("attack", true);
-    //    }
-       
-    //}
+   
     void FixedUpdate()
     {
         if (isdead) return;
@@ -86,7 +78,7 @@ public class AxeMovement : EnemyMovement
             if (player.transform.position.x > startx && player.transform.position.x < transform.position.x)
             {
                 //玩家在身后，转身
-                if (!attacking && hdis < 0.5 && !block) 
+                if (hdis < 0.5 && !block) 
                 {
                     Flip();
                 }
@@ -171,36 +163,73 @@ public class AxeMovement : EnemyMovement
         {
             //根据和玩家的距离进行攻击
             float distance = player.transform.position.x - transform.position.x;
-            //Debug.Log(distance);
+            //Debug.Log("player: " + player.transform.position.x + ", enemy: " + transform.position.x);
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
-            if (faceright && distance > 0 && distance < 0.65 && heightdis < 0.5)
+            if (faceright && distance > 0 && distance < 0.65 && heightdis < 0.5 || !faceright && distance < 0 && distance > -0.65 && heightdis < 0.5)
             {
-                Debug.Log("Attack!");
-                attacking = true;
+                if (!attacking)
+                {
+                    attacking = true;
+                    anim.SetBool("walk", false);
+                    if (attackType)
+                    {
+                        anim.SetBool("attack", true);
+                    }
+                    else
+                    {
+                        //shield = true;
+                        Invoke("doShield", 1.4f);
+                        anim.SetBool("shield", true);
+                        Invoke("finishShield", 3f);
+                    }
+                    attackType = !attackType;
+                }
 
-                anim.SetBool("walk", false);
-                anim.SetBool("attack", true);
-            
             }
-            else if (!faceright && distance < 0 && distance > -0.65 && heightdis < 0.5)
+            if (shield && (faceright && distance > 0 || !faceright && distance < 0))
             {
-                Debug.Log("Attack!");
-                attacking = true;
-
-                anim.SetBool("walk", false);
-                anim.SetBool("attack", true);
-                
+                Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
+                canHurt = false;
             }
-          
+            else
+            {
+                Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
+                canHurt = true;
+            }
+            //Debug.Log(canHurt);
         }
     }
 
+    private void doShield()
+    {
+        shield = true;
+    }
     public void finishAttack()
     {
         anim.SetBool("attack", false);
         attacking = false;
     }
 
+    public void finishShield()
+    {
+        if (shield)
+        {
+            shield = false;
+            anim.SetBool("shield", false);
+            attacking = false;
+        }
+        
+    }
+
+    public override void getDamage(float damage, int direction)
+    {
+        base.getDamage(damage, direction);
+        if (!isdead && canHurt)
+        {
+            CancelInvoke("doShield");
+            CancelInvoke("finishShield");
+        }
+    }
     protected override void Drop()
     {
         int silverNum = Random.Range(3, 8);

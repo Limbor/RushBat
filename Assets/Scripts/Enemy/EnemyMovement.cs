@@ -135,6 +135,8 @@ public class EnemyMovement : MonoBehaviour
             GetComponent<SpriteRenderer>().color = Color.gray;
             GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
             GetComponent<SpriteRenderer>().sortingOrder = 1;
+            render.material.SetFloat("_FlashAmount", 0);
+            hurt = false;
             Destroy(transform.GetComponent<Rigidbody2D>());
             Destroy(transform.GetComponent<Collider2D>());
         }

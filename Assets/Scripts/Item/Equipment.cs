@@ -24,6 +24,7 @@ public class Equipment : Goods
         {
             if(isGoods) Destroy(priceTextInstance);
             Destroy(gameObject);
+            return;
         }
         if (isGoods)
         {

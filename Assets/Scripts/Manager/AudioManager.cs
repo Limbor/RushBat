@@ -45,13 +45,21 @@ public class AudioManager : MonoBehaviour
         fxAudio.clip = Resources.Load<AudioClip>("Sounds/Collection");
         fxAudio.Play();
     }
-
+    public void PlayRecoverAudio()
+    {
+        fxAudio.clip = Resources.Load<AudioClip>("Sounds/Recovery");
+        fxAudio.Play();
+    }
     public void PlayPowerUpAudio()
     {
         fxAudio.clip = Resources.Load<AudioClip>("Sounds/power_up_04");
         fxAudio.Play();
     }
-
+    public void PlayBombAudio()
+    {
+        fxAudio.clip = Resources.Load<AudioClip>("Sounds/bomb");
+        fxAudio.Play();
+    }
     public void PlayJumpAudio()
     {
         // playerAudio.clip = Resources.Load<AudioClip>("Sounds/jump");
@@ -65,12 +73,24 @@ public class AudioManager : MonoBehaviour
         environmentAudio.Play();
     }
 
-    public void PlayFootstepAudio()
+    public void PlayDashAudio()
     {
-        playerAudio.clip = Resources.Load<AudioClip>("Sounds/Footstep_1");
+        playerAudio.clip = Resources.Load<AudioClip>("Sounds/dash");
         playerAudio.Play();
     }
-    
+
+    public void PlayHitAudio()
+    {
+        playerAudio.clip = Resources.Load<AudioClip>("Sounds/hit");
+        playerAudio.Play();
+    }
+
+    public void PlaySlashAudio()
+    {
+        playerAudio.clip = Resources.Load<AudioClip>("Sounds/slash");
+        playerAudio.Play();
+    }
+
     public static AudioManager GetInstance()
     {
         return _audioManager;

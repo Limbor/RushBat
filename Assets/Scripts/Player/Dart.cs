@@ -55,7 +55,7 @@ public class Dart : MonoBehaviour
             if (attackedEnemies.Contains(collision.gameObject)) return;
             attackedEnemies.Add(collision.gameObject);
             float damage = this.damage + Random.Range(-floatRange, floatRange);
-            attack.Damage(collision.gameObject, damage, direction);
+            attack.Damage(collision.gameObject, damage, isReturning ? -direction : direction);
         }
         else if (isReturning && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {

@@ -57,7 +57,7 @@ public class SimpleEnemyMovement : EnemyMovement
         }
         if (attacking)
         {
-            Debug.Log("Attacking");
+            // Debug.Log("Attacking");
             rb.velocity = new Vector2(0, rb.velocity.y);
             //Debug.Log(rb.velocity);
             return;
@@ -176,7 +176,7 @@ public class SimpleEnemyMovement : EnemyMovement
             }
             else if (!faceright && distance < 0 && distance > -0.5 && heightdis < 0.5)
             {
-                Debug.Log("Attack!");
+                // Debug.Log("Attack!");
                 attacking = true;
 
                 anim.SetBool("run", false);

@@ -6,6 +6,7 @@ using UnityEngine;
 public class BloodyFangs : MonoBehaviour
 {
     [SerializeField] private int hurtNumber;
+    private int baseDamage;
     private float invalidTime;
     private Coroutine invalidProcess;
     private EnemyMovement enemy;
@@ -15,6 +16,7 @@ public class BloodyFangs : MonoBehaviour
     {
         hurtNumber = 1;
         invalidTime = 2f;
+        baseDamage = 10;
         enemy = gameObject.GetComponent<EnemyMovement>();
     }
 
@@ -25,7 +27,7 @@ public class BloodyFangs : MonoBehaviour
 
     public float GetExtraDamage()
     {
-        return hurtNumber / 5 * 5;
+        return hurtNumber / 5 * baseDamage;
     }
     
     public void AddHurtNumber()

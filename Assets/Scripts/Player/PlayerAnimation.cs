@@ -76,16 +76,11 @@ public class PlayerAnimation : MonoBehaviour
         if(!player.canMove) animator.SetBool(acquire, false);
     }
 
-    public void Footstep()
-    {
-        AudioManager.GetInstance().PlayFootstepAudio();
-    }
-    
     public void EnterRoom()
     {
         animator.SetTrigger(roomIn);
     }
-    
+
     public void Acquire()
     {
         if (!player.canMove) return;
@@ -134,6 +129,7 @@ public class PlayerAnimation : MonoBehaviour
         PlayerProperty property = GetComponent<PlayerProperty>();
         if (property.HaveEquipment("GoldenApple") && !Player.GetInstance().hasRelived)
         {
+            AudioManager.GetInstance().PlayRecoverAudio();
             Player.GetInstance().hasRelived = true;
             animator.SetTrigger(relive);
             property.isDead = false;

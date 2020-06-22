@@ -104,7 +104,7 @@ public class GameManager : MonoSingleton<GameManager>
         });
     }
     
-    private void LevelComplete()
+    public void LevelComplete()
     {
         portal.SetActive(true);
     }

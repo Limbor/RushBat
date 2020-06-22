@@ -11,11 +11,13 @@ public class PoolManager : MonoBehaviour
     public GameObject shadowPrefab;
     public GameObject dustPrefab;
     public GameObject wallDustPrefab;
-    public GameObject tearPrefab;
+     public GameObject tearPrefab;
     public GameObject firePrefab;
     public GameObject woodSpikePrefab;
     public GameObject damageTextPrefab;
     public GameObject dartPrefab;
+    public GameObject bulletPrefab;
+    public GameObject energyBallPrefab;
 
     private int shadowCount = 10;
     private int dustCount = 3;
@@ -32,6 +34,8 @@ public class PoolManager : MonoBehaviour
     private Queue<GameObject> spikePool;
     private Queue<GameObject> damageTextPool;
     private Queue<GameObject> dartPool;
+    private Queue<GameObject> bulletPool;
+    private Queue<GameObject> energyBallPool;
 
     private void Awake()
     {
@@ -46,6 +50,8 @@ public class PoolManager : MonoBehaviour
             spikePool = new Queue<GameObject>();
             damageTextPool = new Queue<GameObject>();
             dartPool = new Queue<GameObject>();
+            bulletPool = new Queue<GameObject>();
+            energyBallPool = new Queue<GameObject>();
             FillShadowPool();
             FillDustPool(true);
             FillDustPool(false);
@@ -274,5 +280,39 @@ public class PoolManager : MonoBehaviour
     {
         dart.SetActive(false);
         dartPool.Enqueue(dart);
+    }
+
+      public void GetBullet(Vector3 pos)
+    {
+        if (bulletPool.Count == 0)
+        {
+            bulletPool.Enqueue(Instantiate(bulletPrefab, transform));
+        }
+        var bullet = bulletPool.Dequeue();
+        bullet.transform.position = pos;
+        bullet.SetActive(true);
+    }
+
+    public void ReturnBulletPool(GameObject bullet)
+    {
+        bullet.SetActive(false);
+        bulletPool.Enqueue(bullet);
+    }
+
+       public void GetEnergyBall(Vector3 pos)
+    {
+        if (energyBallPool.Count == 0)
+        {
+            energyBallPool.Enqueue(Instantiate(energyBallPrefab, transform));
+        }
+        var energyBall = energyBallPool.Dequeue();
+        energyBall.transform.position = pos;
+        energyBall.SetActive(true);
+    }
+
+    public void ReturnEnergyBallPool(GameObject energyBall)
+    {
+        energyBall.SetActive(false);
+        energyBallPool.Enqueue(energyBall);
     }
 }

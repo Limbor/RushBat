@@ -113,13 +113,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1246614575762798647}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5e0e1fba3427474ebaedede8890257e, type: 3}
+  m_Script: {fileID: 11500000, guid: bae180af542414881a397813d94a19f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayImage: {fileID: 0}
-  customizeImage: 0
-  content: "\u67E5\u770B"
-  useCollision: 0
 --- !u!61 &1246614575762798603
 BoxCollider2D:
   m_ObjectHideFlags: 0

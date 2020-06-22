@@ -19,8 +19,7 @@ public class TriggerDisplay : MonoBehaviour
 
     private void Start()
     {
-        var hintUI =
-            Instantiate(Resources.Load<GameObject>("Prefabs/UI/InteractiveHint"), transform);
+        var hintUI =Instantiate(Resources.Load<GameObject>("Prefabs/UI/InteractiveHint"), transform);
         var parentScale = transform.localScale;
         hintUI.transform.localScale = new Vector3(1 / parentScale.x, 1 / parentScale.y, 1 / parentScale.z);
         hint = hintUI.GetComponentInChildren<Image>();

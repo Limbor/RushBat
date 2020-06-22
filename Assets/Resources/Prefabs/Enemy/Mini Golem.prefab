@@ -267,9 +267,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 4743065884490762351}
-  heartPrefab: {fileID: 0}
-  goldPrefab: {fileID: 0}
-  silverPrefab: {fileID: 0}
+  heartPrefab: {fileID: 3577134757208604740, guid: ea1679b566e6b4618885b791584ac998,
+    type: 3}
+  goldPrefab: {fileID: 6697429691317462264, guid: 3dba2b04ec7f941d8975b2239f7078f2,
+    type: 3}
+  silverPrefab: {fileID: 2882529177012282320, guid: c89c28fe50f784a2382879457283b99e,
+    type: 3}
   startPos: {fileID: 3314792513767325695}
   endPos: {fileID: 3314792514333736628}
 --- !u!1 &3314792514333736629

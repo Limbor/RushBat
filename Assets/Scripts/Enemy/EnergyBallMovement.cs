@@ -13,7 +13,7 @@ public class EnergyBallMovement : EnemyMovement
     private float endx;
 
     private float attackInterval;
-    // Start is called before the first frame update
+
     void Start()
     {
         base.Start();
@@ -165,8 +165,7 @@ public class EnergyBallMovement : EnemyMovement
                 attacking = true;
 
                 anim.SetBool("run", false);
-
-               
+            
                 anim.SetBool("attack", true);
                 
                 Invoke("finishAttack", 1.5f);

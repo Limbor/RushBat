@@ -282,8 +282,8 @@ GameObject:
   - component: {fileID: 5815479864864972951}
   - component: {fileID: 1326498391440021835}
   - component: {fileID: 4451871774083683580}
-  - component: {fileID: 1868205088529511513}
   - component: {fileID: 2651882908033420851}
+  - component: {fileID: 770466253176737981}
   m_Layer: 10
   m_Name: Imp
   m_TagString: RangedEnemy
@@ -426,23 +426,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.32972956, y: 0.38821614}
   m_EdgeRadius: 0
---- !u!114 &1868205088529511513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5852055471780713314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8feb35e924bdb74f99ddac1b389b694, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  damagePoint: {fileID: 1645443383927236076}
-  shootPoint: {fileID: 5831759565427675174}
 --- !u!114 &2651882908033420851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,6 +447,23 @@ MonoBehaviour:
     type: 3}
   startPos: {fileID: 6221718408240984184}
   endPos: {fileID: 8581831688898826584}
+--- !u!114 &770466253176737981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5852055471780713314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8feb35e924bdb74f99ddac1b389b694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  damagePoint: {fileID: 1645443383927236076}
+  shootPoint: {fileID: 5831759565427675174}
 --- !u!1 &7947845213600566229
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,7 +587,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8363697613797050129}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.19, y: -0.27, z: 0}
+  m_LocalPosition: {x: 0.146, y: -0.146, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8470803007342397422}

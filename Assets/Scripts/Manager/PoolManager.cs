@@ -25,6 +25,8 @@ public class PoolManager : MonoBehaviour
     private int fireCount = 3;
     private int spikeCount = 3;
     private int damageTextCount = 3;
+    private int bulletCount = 3;
+    private int energyBallCount = 3;
     
     private Queue<GameObject> shadowPool;
     private Queue<GameObject> dustPool;
@@ -59,6 +61,8 @@ public class PoolManager : MonoBehaviour
             FillFirePool();
             FillSpikePool();
             FillDamageTextPool();
+            FillBulletPool();
+            FillEnergyBallPool();
             return;
         }
         Destroy(gameObject);
@@ -145,32 +149,6 @@ public class PoolManager : MonoBehaviour
             gameObject.transform.rotation = player.transform.rotation;
             gameObject.transform.localScale = player.transform.localScale;
         }
-        gameObject.SetActive(true);
-    }
-
-    public void FillTearPool()
-    {
-        for (int i = 0; i < tearCount; i++)
-        {
-            GameObject gameObject = Instantiate(tearPrefab, transform);
-            ReturnTearPool(gameObject);
-        }
-    }
-
-    public void ReturnTearPool(GameObject gameObject)
-    {
-        gameObject.SetActive(false);
-        tearPool.Enqueue(gameObject);
-    }
-
-    public void GetTearObject(Vector3 position)
-    {
-        if (tearPool.Count == 0)
-        {
-            FillTearPool();
-        }
-        GameObject gameObject = tearPool.Dequeue();
-        gameObject.transform.position = position;
         gameObject.SetActive(true);
     }
 
@@ -282,15 +260,42 @@ public class PoolManager : MonoBehaviour
         dartPool.Enqueue(dart);
     }
 
+    
+    public void FillTearPool()
+    {
+        for (int i = 0; i < tearCount; i++)
+        {
+            GameObject gameObject = Instantiate(tearPrefab, transform);
+            ReturnTearPool(gameObject);
+        }
+    }
+
+    public void ReturnTearPool(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+        tearPool.Enqueue(gameObject);
+    }
+
+    public void GetTearObject(Vector3 position)
+    {
+        if (tearPool.Count == 0)
+        {
+            FillTearPool();
+        }
+        GameObject gameObject = tearPool.Dequeue();
+        gameObject.transform.position = position;
+        gameObject.SetActive(true);
+    }
+
       public void GetBullet(Vector3 pos)
     {
         if (bulletPool.Count == 0)
         {
-            bulletPool.Enqueue(Instantiate(bulletPrefab, transform));
+            FillBulletPool();
         }
-        var bullet = bulletPool.Dequeue();
-        bullet.transform.position = pos;
-        bullet.SetActive(true);
+        GameObject gameObject = bulletPool.Dequeue();
+        gameObject.transform.position = pos;
+        gameObject.SetActive(true);
     }
 
     public void ReturnBulletPool(GameObject bullet)
@@ -299,13 +304,22 @@ public class PoolManager : MonoBehaviour
         bulletPool.Enqueue(bullet);
     }
 
+      public void FillBulletPool()
+    {
+        for (int i = 0; i < bulletCount; i++)
+        {
+            GameObject gameObject = Instantiate(bulletPrefab, transform);
+            ReturnBulletPool(gameObject);
+        }
+    }
+
        public void GetEnergyBall(Vector3 pos)
     {
         if (energyBallPool.Count == 0)
         {
-            energyBallPool.Enqueue(Instantiate(energyBallPrefab, transform));
+            FillEnergyBallPool();
         }
-        var energyBall = energyBallPool.Dequeue();
+        GameObject energyBall = energyBallPool.Dequeue();
         energyBall.transform.position = pos;
         energyBall.SetActive(true);
     }
@@ -314,5 +328,14 @@ public class PoolManager : MonoBehaviour
     {
         energyBall.SetActive(false);
         energyBallPool.Enqueue(energyBall);
+    }
+
+       public void FillEnergyBallPool()
+    {
+        for (int i = 0; i < bulletCount; i++)
+        {
+            GameObject gameObject = Instantiate(energyBallPrefab, transform);
+            ReturnEnergyBallPool(gameObject);
+        }
     }
 }

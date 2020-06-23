@@ -46,7 +46,6 @@ public class GolemMovement : EnemyMovement
         }
         if (attacking)
         {
-            Debug.Log("Attacking");
             rb.velocity = new Vector2(0, rb.velocity.y);
             return;
         }

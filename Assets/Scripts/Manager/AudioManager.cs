@@ -65,7 +65,6 @@ public class AudioManager : MonoBehaviour
 
     public void PlayPickAudio()
     {
-        // fxAudio.clip = Resources.Load<AudioClip>("Sounds/coin_04");
         fxAudio.clip = Resources.Load<AudioClip>("Sounds/Collection");
         fxAudio.Play();
     }

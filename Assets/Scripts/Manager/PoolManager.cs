@@ -287,7 +287,7 @@ public class PoolManager : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-      public void GetBullet(Vector3 pos)
+      public void GetBullet(Vector3 pos, float direction)
     {
         if (bulletPool.Count == 0)
         {
@@ -296,6 +296,9 @@ public class PoolManager : MonoBehaviour
         GameObject gameObject = bulletPool.Dequeue();
         gameObject.transform.position = pos;
         gameObject.SetActive(true);
+        Vector3 theScale = gameObject.transform.localScale;
+        theScale.x *= direction;
+        gameObject.transform.localScale = theScale;
     }
 
     public void ReturnBulletPool(GameObject bullet)
@@ -313,7 +316,7 @@ public class PoolManager : MonoBehaviour
         }
     }
 
-       public void GetEnergyBall(Vector3 pos)
+       public void GetEnergyBall(Vector3 pos,float direction)
     {
         if (energyBallPool.Count == 0)
         {
@@ -321,6 +324,9 @@ public class PoolManager : MonoBehaviour
         }
         GameObject energyBall = energyBallPool.Dequeue();
         energyBall.transform.position = pos;
+        Vector3 theScale = gameObject.transform.localScale;
+        theScale.x *= direction;
+        energyBall.transform.localScale = theScale;
         energyBall.SetActive(true);
     }
 
@@ -332,7 +338,7 @@ public class PoolManager : MonoBehaviour
 
        public void FillEnergyBallPool()
     {
-        for (int i = 0; i < bulletCount; i++)
+        for (int i = 0; i < energyBallCount; i++)
         {
             GameObject gameObject = Instantiate(energyBallPrefab, transform);
             ReturnEnergyBallPool(gameObject);

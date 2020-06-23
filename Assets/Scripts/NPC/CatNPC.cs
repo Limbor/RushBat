@@ -12,15 +12,15 @@ public class CatNPC : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         tip.SetActive(true);
     }
-     
+    
     private void OnTriggerExit2D(Collider2D other) {
         tip.SetActive(false);
-         GameManager.GetInstance().LevelComplete();
     }
-
+     
     void Update()
     {
         if(tip.activeSelf && InputManager.GetButtonDown("Interact")){
+            tip.SetActive(false);
             talkUI.SetActive(true);
             InputManager.EnterTalkingState();
         }

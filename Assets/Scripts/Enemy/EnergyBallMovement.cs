@@ -149,7 +149,7 @@ public class EnergyBallMovement : EnemyMovement
             //根据和玩家的距离进行攻击
             float distance = player.transform.position.x - transform.position.x;
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
-            if (faceright && distance > 0 && heightdis < 0.5)
+            if (faceright && distance > 0 && distance< 2 && heightdis < 0.5)
             {
                 attacking = true;
 
@@ -160,7 +160,7 @@ public class EnergyBallMovement : EnemyMovement
                 Invoke("finishAttack", 1.5f);
 
             }
-            else if (!faceright && distance < 0 && heightdis < 0.5)
+            else if (!faceright && distance < 0 && distance > -2  && heightdis < 0.5)
             {
                 attacking = true;
 

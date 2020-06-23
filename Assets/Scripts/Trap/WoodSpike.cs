@@ -7,17 +7,25 @@ public class WoodSpike : MonoBehaviour
     [SerializeField]
     private float speed = 8f;
 
+    private float liftTime;
+
     private float direction;
 
     private void OnEnable()
     {
         direction = transform.localScale.x;
+        liftTime = 2f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.right * direction * speed * Time.deltaTime);
+        liftTime -= Time.deltaTime;
+        if (liftTime <= 0)
+        {
+            PoolManager.GetInstance().ReturnSpikePool(gameObject);
+        }
+        transform.Translate( direction * speed * Time.deltaTime * Vector3.right);
         if(Physics2D.Raycast(transform.position, Vector2.right * direction, 0.2f, 1 << LayerMask.NameToLayer("Ground")))
         {
             PoolManager.GetInstance().ReturnSpikePool(gameObject);

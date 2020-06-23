@@ -5,7 +5,11 @@ using UnityEngine.UI;
 
 public class DemonMovement : EnemyMovement
 {
+    public GameObject cat;
     public RectTransform bloodCanvas;
+    public Transform leftBound;
+    public Transform rightBound;
+    
     private Image blood1;
     private Image blood2;
     private Image blood3;
@@ -81,6 +85,7 @@ public class DemonMovement : EnemyMovement
         {
             move = true;
             targetPos = direction * 10f + transform.position.x;
+            Mathf.Clamp(targetPos, leftBound.position.x, rightBound.position.x);
             targetDirection = direction;
         }
         if(move && !attack.IsAttacking() && direction != targetDirection)
@@ -144,6 +149,7 @@ public class DemonMovement : EnemyMovement
         while (moveAttacking)
         {
             yield return new WaitForSeconds(1f);
+            if (!moveAttacking || isdead) break;
             if (DistanceBetweenPlayer() < 0)
             {
                 // Debug.Log("attack flip");
@@ -157,6 +163,11 @@ public class DemonMovement : EnemyMovement
     private float DistanceBetweenPlayer()
     {
         return (player.transform.position.x - transform.position.x) * (faceright ? 1f : -1f);
+    }
+
+    public bool IsDead()
+    {
+        return isdead;
     }
     
     public override void getDamage(float damage, int direction)
@@ -176,7 +187,7 @@ public class DemonMovement : EnemyMovement
     {
         if (blood <= 0)
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.velocity = Vector2.zero;
             anim.SetBool("Recover", true);
             GetComponentInParent<Room>().DelEnemy(gameObject);
             bloodCanvas.gameObject.SetActive(false);
@@ -205,5 +216,13 @@ public class DemonMovement : EnemyMovement
         blood2.fillAmount = blood > 100 ? ((blood - 400) / 200) : 0;
         blood1.fillAmount = blood > 0 ? (blood / 200) : 0;
 
+    }
+
+    private void Transform()
+    {
+        cat.transform.position = transform.position;
+        cat.GetComponent<Collider2D>().enabled = false;
+        cat.SetActive(true);
+        gameObject.SetActive(false);
     }
 }

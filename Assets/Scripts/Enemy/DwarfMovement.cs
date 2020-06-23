@@ -25,7 +25,7 @@ public class DwarfMovement : EnemyMovement
         faceright = true;
 
         attackType = 1;
-        maxBlood = 500;
+        maxBlood = 250;
         blood = maxBlood;
         walkspeed = 100f;
         SpinTime = 3f;

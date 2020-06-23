@@ -4,35 +4,28 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-     public int damage;
+    public int damage;
     public float damageScope;
+    public LayerMask playerLayer;
+    public LayerMask groundLayer;        
+    public float flySpeed;
+    
+
     private CircleCollider2D coll;
+    private GameObject player;
     private Animator animator;
-    private float startTime;
     private float direction;
     private bool collide;
-    private List<GameObject> attackedPlayers = new List<GameObject>();
-    private GunAttack attack;
-    
-    public LayerMask groundLayer;
-    public float flySpeed;
-    public float changeTime;
-
-    private GameObject imp;
     
     private void OnEnable()
     {
-        // imp =GameObject.Find("Imp");
-        // attack = imp.GetComponent<GunAttack>();
-        //
-        // direction = imp.transform.localScale.x;
-        // transform.localScale = new Vector3(direction, 1, 1);
+        player = GameManager.GetInstance().GetPlayer();
+        direction = transform.localScale.x;
+        transform.localScale = new Vector3(direction, 1, 1);
 
         coll = GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
-        startTime = Time.time;
         collide = false;
-        attackedPlayers.Clear();
     }
 
     private void Update()
@@ -41,22 +34,23 @@ public class Bullet : MonoBehaviour
         transform.position = new Vector2(transform.position.x + flySpeed * Time.deltaTime * direction, transform.position.y);
         if (Physics2D.OverlapCircle(transform.position, 0.1f, groundLayer) != null)
         {
-            PoolManager.GetInstance().ReturnBulletPool(gameObject);
+            animator.SetTrigger("collide");
+            collide = true;
         }
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            if (attackedPlayers.Contains(collision.gameObject)) return;
-            attackedPlayers.Add(collision.gameObject);
-            int damage = this.damage ;
-            attack.gunAttack(transform.position,damage, damageScope);
+        {      
+            player.GetComponent<PlayerMovement>().Hurt(damage, new Vector2(transform.localScale.x, 0), GameManager.Enemy); 
         }
-        else {
-            PoolManager.GetInstance().ReturnBulletPool(gameObject);
-        }
+         Disappear();
     }
+
+
+     public void Disappear(){
+          PoolManager.GetInstance().ReturnBulletPool(gameObject);
+     }
+
 }

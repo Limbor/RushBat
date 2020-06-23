@@ -56,6 +56,7 @@ public class DemonAttack : MonoBehaviour
 
     public void StartExplode()
     {
+        if(movement.IsDead()) return;
         isExplode = true;
         anim.SetBool(Explode, isExplode);
         transform.DOMove(transform.position + Vector3.up, 1f).OnComplete(() =>
@@ -79,11 +80,15 @@ public class DemonAttack : MonoBehaviour
     private void EndExplode()
     {
         anim.SetBool(Explode, false);
-        transform.DOMove(transform.position + Vector3.down, 1f);
+        transform.DOMove(transform.position + Vector3.down, 1f).OnComplete(() =>
+        {
+            isExplode = false;
+        });
     }
     
     public void StartSummon()
     {
+        if(movement.IsDead()) return;
         if (summonInterval > 0) return;
         summonInterval = 2f;
         isSummon = true;
@@ -109,6 +114,7 @@ public class DemonAttack : MonoBehaviour
 
     public void StartLaser()
     {
+        if(movement.IsDead()) return;
         if (laserInterval > 0) return;
         laserInterval = 10f;
         isLaser = true;
@@ -132,6 +138,7 @@ public class DemonAttack : MonoBehaviour
     
     public void StartEnergy()
     {
+        if(movement.IsDead()) return;
         if (energyInterval > 0) return;
         energyInterval = 12f;
         isEnergy = true;

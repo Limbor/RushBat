@@ -11,12 +11,13 @@ public class GolemAttack : EnemyAttack
     {
         normalDamage = 1;
         normalScope = 0.2f;
+        attacked = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        golemAttack();
+      
     }
 
     private void golemAttack()
@@ -39,7 +40,6 @@ public class GolemAttack : EnemyAttack
                     direction = -1;
                 }
 
-                Debug.Log("Enemy take damage, Amount: " + players.Length);
                 player.GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction, 0), GameManager.Enemy);
                 break;
             }

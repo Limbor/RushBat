@@ -8,7 +8,7 @@ public class DialogManager : MonoBehaviour
 
     [Header("UI Component")]
     public Text text;
-    public Image faceImage;
+    public Image dialogImage;
 
     [Header("Text File")]
     public TextAsset textFile;
@@ -71,11 +71,11 @@ public class DialogManager : MonoBehaviour
         switch (textList[index])
         {
             case"A":
-              faceImage.sprite=face1;
+              dialogImage.sprite=face1;
               index++;
               break;
             case"B":
-              faceImage.sprite=face2;
+              dialogImage.sprite=face2;
               index++;
               break;
         }

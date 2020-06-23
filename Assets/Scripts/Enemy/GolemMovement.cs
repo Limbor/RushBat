@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GolemMovement : EnemyMovement
 {
-      //控制怪物行动范围
+     //控制怪物行动范围
     public Transform startPos;
     public Transform endPos;
 
@@ -18,17 +18,21 @@ public class GolemMovement : EnemyMovement
         base.Start();
         startx = startPos.position.x;
         endx = endPos.position.x;
-        blood = 50;
+        maxBlood = 100;
+        blood = maxBlood;
         walkspeed = 100f;
       
         length = 0.2f;
         faceright = true;
         attackInterval = 0f;
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isdead) return;
         base.Update();
         Move();
         Attack();
@@ -44,7 +48,6 @@ public class GolemMovement : EnemyMovement
         {
             Debug.Log("Attacking");
             rb.velocity = new Vector2(0, rb.velocity.y);
-            //Debug.Log(rb.velocity);
             return;
         }
 
@@ -84,7 +87,7 @@ public class GolemMovement : EnemyMovement
         else if (faceright && edis <= 0)
         {
             //面向右，到达终点
-            anim.SetBool("walk", false);
+            anim.SetBool("run", false);
             rb.velocity = new Vector2(0, 0);
             if (waittime > 0)
             {
@@ -107,7 +110,7 @@ public class GolemMovement : EnemyMovement
             }
             else
             {
-                anim.SetBool("walk", true);
+                anim.SetBool("run", true);
                 rb.velocity = new Vector2(-1 * walkspeed * Time.deltaTime, rb.velocity.y);
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, length + 0.05f, groundLayer.value);
                 if (hit)
@@ -149,7 +152,6 @@ public class GolemMovement : EnemyMovement
             float heightdis = Mathf.Abs(player.transform.position.y - transform.position.y);
             if (faceright && distance > 0 && distance < 0.5 && heightdis < 0.5)
             {
-               // Debug.Log("Attack!");
                 attacking = true;
 
                 anim.SetBool("run", false);
@@ -165,7 +167,8 @@ public class GolemMovement : EnemyMovement
                 attacking = true;
 
                 anim.SetBool("run", false);
-          
+
+               
                 anim.SetBool("attack", true);
                 
                 Invoke("finishAttack", 1.5f);
@@ -180,5 +183,22 @@ public class GolemMovement : EnemyMovement
         anim.SetBool("attack", false);
         attacking = false;
         attackInterval = 1.5f;
+    }
+    protected override void Drop()
+    {
+        int silverNum = Random.Range(2, 4);
+
+        for (int i = 1; i <= silverNum; i++)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
+
+        float heartDrop = Random.Range(0, 1);
+        if (heartDrop <= 0.2)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
     }
 }

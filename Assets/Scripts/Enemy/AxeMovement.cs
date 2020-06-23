@@ -17,9 +17,7 @@ public class AxeMovement : EnemyMovement
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Start??");
         base.Start();
-        
         anim.SetBool("jump", false);
         anim.SetBool("dead", false);
         anim.SetBool("walk", false);
@@ -188,12 +186,12 @@ public class AxeMovement : EnemyMovement
             }
             if (shield && (faceright && distance > 0 || !faceright && distance < 0))
             {
-                Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
+                // Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
                 canHurt = false;
             }
             else
             {
-                Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
+                // Debug.Log("shield: " + shield + ", faceright: " + faceright + ", distance: " + distance);
                 canHurt = true;
             }
             //Debug.Log(canHurt);

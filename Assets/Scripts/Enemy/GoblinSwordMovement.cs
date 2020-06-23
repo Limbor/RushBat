@@ -221,7 +221,7 @@ public class GoblinSwordMovement : EnemyMovement
             {
                 canHurt = true;
             }
-            Debug.Log(canHurt);
+            // Debug.Log(canHurt);
         }
     }
 

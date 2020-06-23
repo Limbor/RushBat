@@ -341,7 +341,7 @@ public class MinotaurMovement : EnemyMovement
             bloodVolume.GetComponent<Image>().fillAmount = blood / maxBlood;
 
             //受伤停止攻击
-            finishAttackAnimation();
+            // finishAttackAnimation();
             finishRecover();
             //Debug.Log("getDamage!");
             attacking = false;
@@ -357,7 +357,7 @@ public class MinotaurMovement : EnemyMovement
 
             float backDis = direction * 0.2f;
             //怪物受伤后退
-            transform.position = new Vector2(transform.position.x + backDis, transform.position.y);
+            // transform.position = new Vector2(transform.position.x + backDis, transform.position.y);
 
             PoolManager.GetInstance().GetDamageText(transform.position, damage);
         }

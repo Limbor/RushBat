@@ -190,7 +190,7 @@ public class EnemyMovement : MonoBehaviour
         {
             blood -= damage;
             bloodVolume.GetComponent<Image>().fillAmount = blood / maxBlood;
-            Debug.Log("Current health: " + blood);
+            // Debug.Log("Current health: " + blood);
 
             //受伤停止攻击
             //anim.SetBool("attack", false);

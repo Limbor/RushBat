@@ -38,7 +38,7 @@ public class GameManager : MonoSingleton<GameManager>
     
     protected override void Init()
     {
-        currentLevel = 0;
+        currentLevel = 1;
         player = null;
         rooms = new List<Room>();
         equipmentList = new List<string>();
@@ -48,7 +48,6 @@ public class GameManager : MonoSingleton<GameManager>
         skillInfoMap = new Dictionary<string, Skill>();
         skillList = new List<string>();
         ReadTextAssets();
-        LoadGame();
     }
 
     private void ReadTextAssets()
@@ -77,7 +76,7 @@ public class GameManager : MonoSingleton<GameManager>
         UIManager.GetInstance().EndScene(() =>
         {
             Reset();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(1);
         });
     }
 

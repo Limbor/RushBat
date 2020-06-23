@@ -18,10 +18,14 @@ public class Laser : MonoBehaviour
 
     private void OnEnable()
     {
-        if(player == null) player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerMovement>();
         laserHit.SetActive(true);
     }
-    
+
+    private void Start()
+    {
+        if(player == null) player = GameManager.GetInstance().GetPlayer().GetComponent<PlayerMovement>();
+    }
+
     private void FixedUpdate()
     {
         transform.Rotate(Vector3.forward, rotateSpeed * Time.fixedDeltaTime, Space.Self);
@@ -34,7 +38,7 @@ public class Laser : MonoBehaviour
             1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Player"));
         if (hit)
         {
-            Debug.DrawRay(transform.position, orientation * hit.distance);
+            // Debug.DrawRay(transform.position, orientation * hit.distance);
             if (hit.collider.CompareTag("Player"))
             {
                 player.Hurt(1, direction, GameManager.Enemy);

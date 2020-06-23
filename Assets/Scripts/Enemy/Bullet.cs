@@ -4,49 +4,59 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Rigidbody2D rb;
+     public int damage;
+    public float damageScope;
+    private CircleCollider2D coll;
+    private Animator animator;
+    private float startTime;
     private float direction;
-
-    public float speed;
+    private bool collide;
+    private List<GameObject> attackedPlayers = new List<GameObject>();
+    private GunAttack attack;
+    
     public LayerMask groundLayer;
-    public int normalDamage = 3;
-    public float normalScope = 0.1f;
+    public float flySpeed;
+    public float changeTime;
 
-
+    private GameObject imp;
+    
     private void OnEnable()
     {
-        GameObject enemy = GameObject.FindGameObjectWithTag("RangedEnemy");
-        direction = enemy.transform.localScale.x/3;
-        Debug.Log(direction);
-        transform.localScale = new Vector3(direction, 1, 1);
+        // imp =GameObject.Find("Imp");
+        // attack = imp.GetComponent<GunAttack>();
+        //
+        // direction = imp.transform.localScale.x;
+        // transform.localScale = new Vector3(direction, 1, 1);
+
+        coll = GetComponent<CircleCollider2D>();
+        animator = GetComponent<Animator>();
+        startTime = Time.time;
+        collide = false;
+        attackedPlayers.Clear();
     }
 
     private void Update()
     {
-        transform.position = new Vector2(transform.position.x + speed * Time.deltaTime * direction, transform.position.y);
-        if (Physics2D.OverlapCircle(transform.position, normalScope, groundLayer) != null)
+        if (collide) return;
+        transform.position = new Vector2(transform.position.x + flySpeed * Time.deltaTime * direction, transform.position.y);
+        if (Physics2D.OverlapCircle(transform.position, 0.1f, groundLayer) != null)
         {
-            gameObject.SetActive(false);
+            PoolManager.GetInstance().ReturnBulletPool(gameObject);
         }
-    }
 
-    // void Update()
-    // {
-    //     transform.position += new Vector3(speed * direction * Time.deltaTime, 0, 0);
-    // }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-         {
-             collision.GetComponent<PlayerMovement>().Hurt(normalDamage, new Vector2(direction,0), GameManager.Enemy);
-             Destroy(gameObject);
-         }
-
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            if (attackedPlayers.Contains(collision.gameObject)) return;
+            attackedPlayers.Add(collision.gameObject);
+            int damage = this.damage ;
+            attack.gunAttack(transform.position,damage, damageScope);
+        }
+        else {
+            PoolManager.GetInstance().ReturnBulletPool(gameObject);
+        }
     }
-
-    // public void Disappear()
-    // {
-    //     PoolManager.GetInstance().ReturnBulletPool(gameObject);
-    // }
 }

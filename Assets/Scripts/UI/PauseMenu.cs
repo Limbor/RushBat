@@ -77,6 +77,10 @@ public class PauseMenu : MonoBehaviour
     private void AudioSet()
     {
         audioSlider.gameObject.SetActive(!audioSlider.gameObject.activeSelf);
+        audioSlider.onValueChanged.AddListener(value =>
+        {
+            AudioManager.GetInstance().SetMasterVolume(audioSlider);
+        });
     }
 
     private void ShowEquipmentList()

@@ -9,6 +9,7 @@ public class EquipmentDisplay : MonoBehaviour
     private Image image;
     private Text name;
     private Text intro;
+
     // Start is called before the first frame update
     void Start()
     {

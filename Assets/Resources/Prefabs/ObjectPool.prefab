@@ -61,6 +61,10 @@ MonoBehaviour:
     type: 3}
   dartPrefab: {fileID: 7922877217420805158, guid: ea73f2a5814d7d3429d90dbf6ea5a9d3,
     type: 3}
+  bulletPrefab: {fileID: 3059163887637074694, guid: 713e516c6fc2b4a4da266c6174b6ea24,
+    type: 3}
+  energyBallPrefab: {fileID: 9127870843861150206, guid: 0882c55aee84f8a4e8e415d32a598490,
+    type: 3}
 --- !u!1001 &1713137002870525005
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,14 +6,17 @@ public class EnergyBallAttack : EnemyAttack
 {
    
     public Transform shootPoint;
+
     private GameObject energyBall;
 
     private GunMovement gunMovement;
 
-    // Start is called before the first frame update
+     private bool attacked;
+
+    
     void Start()
     {
-        // energyBall = PoolManager.GetInstance().transform.GetChild(2).gameObject;
+        attacked=false;
     }
 
     void Update()
@@ -22,13 +25,14 @@ public class EnergyBallAttack : EnemyAttack
     }
 
     public void shoot(){
-        // energyBall.transform.position  =shootPoint.position;
-        // energyBall.SetActive(true);
         PoolManager.GetInstance().GetEnergyBall(shootPoint.position);
     }
     
      public void gunAttack(Vector3 position,int damage, float damageScope)
     {
+        if(!attacked){
+            attacked=true;
+
             Collider2D[] players = Physics2D.OverlapCircleAll(position, damageScope, playerLayer);
 
             foreach (Collider2D player in players)
@@ -48,5 +52,13 @@ public class EnergyBallAttack : EnemyAttack
                 player.GetComponent<PlayerMovement>().Hurt(damage, new Vector2(direction, 0), GameManager.Enemy);
                 break;
             }
+        }
+          
      }
+
+     
+    private void recover()
+    {
+        attacked = false;   
+    }
 }  

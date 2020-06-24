@@ -246,10 +246,10 @@ public class AxeMovement : EnemyMovement
             //itemList.Add(Instantiate())
         }
 
-        float heartDrop = Random.Range(0, 1);
-        if (heartDrop <= 0.3)
+        float heartDrop = Random.Range(0, 1f);
+        if (heartDrop <= 0.3f)
         {
-            GameObject itemObject = Instantiate(silverPrefab);
+            GameObject itemObject = Instantiate(heartPrefab);
             itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
         }
     }

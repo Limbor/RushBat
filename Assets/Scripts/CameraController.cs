@@ -27,8 +27,7 @@ public class CameraController : MonoBehaviour
             minPos = Vector2.negativeInfinity;
         }
     }
-
-
+    
     private void LateUpdate()
     {
         if (!(Mathf.Abs((target.position + offset).x - transform.position.x) <= xOffset &&

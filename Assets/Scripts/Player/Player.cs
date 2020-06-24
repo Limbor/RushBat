@@ -77,13 +77,16 @@ public class Player
         key = player.key;
         lastPoisonedTime = player.lastPoisonedTime;
         lastBurntTime = player.lastBurntTime;
+        equipments.Clear();
         player.equipments.ForEach(i => equipments.Add(i));
         dashCoolDown = player.dashCoolDown;
         skill1CoolDown = player.skill1CoolDown;
         skill2CoolDown = player.skill2CoolDown;
         skill3CoolDown = player.skill3CoolDown;
         hasRelived = player.hasRelived;
+        surroundingItems.Clear();
         player.surroundingItems.ForEach(i => surroundingItems.Add(i));
+        skills.Clear();
         player.skills.ForEach(i => skills.Add(i));
     }
 }

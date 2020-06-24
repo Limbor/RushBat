@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ExitPortal : MonoBehaviour
 {
+    private bool enter = false;
     private void Awake()
     {
         GameManager.GetInstance().RegisterExitPortal(gameObject);
@@ -12,8 +13,9 @@ public class ExitPortal : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && InputManager.GetButtonDown("Interact"))
+        if (!enter && other.CompareTag("Player") && InputManager.GetButtonDown("Interact"))
         {
+            enter = true;
             GameManager.GetInstance().NextLevel();
         }
     }

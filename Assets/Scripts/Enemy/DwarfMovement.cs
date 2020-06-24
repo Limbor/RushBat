@@ -25,7 +25,7 @@ public class DwarfMovement : EnemyMovement
         faceright = true;
 
         attackType = 1;
-        maxBlood = 250;
+        maxBlood = 200;
         blood = maxBlood;
         walkspeed = 100f;
         SpinTime = 3f;
@@ -178,6 +178,19 @@ public class DwarfMovement : EnemyMovement
     //    }
     //}
 
+    protected override void Drop()
+    {
+        Instantiate(Resources.Load<GameObject>("Prefabs/Item/RandomEquipment"), transform.position,
+            Quaternion.identity);
+        
+        int silverNum = Random.Range(5, 10);
+        for (int i = 1; i <= silverNum; i++)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
+    }
+    
     public override void getDamage(float damage, int direction)
     {
         if (!isdead && !spin)

@@ -193,10 +193,10 @@ public class GolemMovement : EnemyMovement
             itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
         }
 
-        float heartDrop = Random.Range(0, 1);
-        if (heartDrop <= 0.2)
+        float heartDrop = Random.Range(0, 1f);
+        if (heartDrop <= 0.2f)
         {
-            GameObject itemObject = Instantiate(silverPrefab);
+            GameObject itemObject = Instantiate(heartPrefab);
             itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class MinotaurMovement : EnemyMovement
 {
@@ -290,6 +291,26 @@ public class MinotaurMovement : EnemyMovement
 
     }
 
+    protected override void Drop()
+    {
+        Instantiate(Resources.Load<GameObject>("Prefabs/Item/RandomEquipment"), transform.position,
+            Quaternion.identity);
+        
+        int silverNum = Random.Range(8, 15);
+        for (int i = 1; i <= silverNum; i++)
+        {
+            GameObject itemObject = Instantiate(silverPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
+
+        float heartDrop = Random.Range(0, 1f);
+        if (heartDrop <= 0.5f)
+        {
+            GameObject itemObject = Instantiate(heartPrefab);
+            itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
+        }
+    }
+
     protected override void Alive()
     {
         if (blood <= 0)
@@ -306,6 +327,7 @@ public class MinotaurMovement : EnemyMovement
             Destroy(transform.GetComponent<CapsuleCollider2D>());
             bloodCanvas.gameObject.SetActive(false);
             isdead = true;
+            Drop();
         }
         else
         {

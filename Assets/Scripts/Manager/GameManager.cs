@@ -76,7 +76,9 @@ public class GameManager : MonoSingleton<GameManager>
         UIManager.GetInstance().EndScene(() =>
         {
             Reset();
+            currentLevel = 1;
             SceneManager.LoadScene(1);
+            SaveGame();
         });
     }
 

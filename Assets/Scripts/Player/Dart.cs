@@ -34,6 +34,7 @@ public class Dart : MonoBehaviour
         transform.position = new Vector2(transform.position.x + flySpeed * Time.deltaTime * direction, transform.position.y);
         if (Physics2D.OverlapCircle(transform.position, 0.1f, groundLayer) != null)
         {
+            if(back && !isReturning) return;
             PoolManager.GetInstance().ReturnDartPool(gameObject);
         }
 

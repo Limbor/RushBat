@@ -209,10 +209,10 @@ public class SimpleEnemyMovement : EnemyMovement
             //itemList.Add(Instantiate())
         }
 
-        float heartDrop = Random.Range(0, 1);
+        float heartDrop = Random.Range(0, 1f);
         if (heartDrop <= HeartRate)
         {
-            GameObject itemObject = Instantiate(silverPrefab);
+            GameObject itemObject = Instantiate(heartPrefab);
             itemObject.GetComponent<Item>().Emit(transform.position + Vector3.up * 0.2f);
         }
     }

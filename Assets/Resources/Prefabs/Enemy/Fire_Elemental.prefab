@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 2221363862751654471}
-  heartPrefab: {fileID: 3577134757208604740, guid: ea1679b566e6b4618885b791584ac998,
+  heartPrefab: {fileID: 7897922991592905825, guid: 8a3cf5c81e9ce42919600cbcbb68c277,
     type: 3}
   goldPrefab: {fileID: 6697429691317462264, guid: 3dba2b04ec7f941d8975b2239f7078f2,
     type: 3}
